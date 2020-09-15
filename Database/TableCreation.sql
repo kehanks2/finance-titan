@@ -13,6 +13,7 @@ CREATE TABLE Users (
     	UserName varchar(255),
     	FirstName varchar(255),
     	LastName varchar(255),
+	UserType (int),
    	EmailAddress varchar(255),
     	BirthDate DATE,
 	PasswordID int,

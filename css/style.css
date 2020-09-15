@@ -53,9 +53,47 @@ body {
 	margin: auto;	
 }
 
+/* NAV BAR */
+#navbar-logo {
+	width: 30px;
+	height: auto;
+	object-fit: contain;
+	margin: 0 0.75rem 0 0;
+	padding: inherit 0;
+}
+.nav-user-profile {
+  	display: block;
+  	padding: 0.5rem 0.25em;
+	color: #fff;
+	opacity: 0.5;	
+}
+.nav-username {
+	color: #fff !important;
+	opacity: 1.0;
+	padding-right: 1.0em !important;
+}
+#logout {
+	padding: 0.5rem 0 0.5rem 0.25em;
+}
+
 /* WELCOME SCREEN */
 #welcome-buttons {
 	padding-top: 40px;
+}
+
+/* USER HOME */
+.home-screen h2 {
+	font-size: 150%;
+}
+.home-screen h3 {
+	font-size: 125%;	
+}
+.home-screen a {
+	color: #6B99C2;
+}
+.home-screen a:hover, a:focus {
+	color: #738A9F;
+	text-decoration: none;
 }
 
 /* SIGN IN & CREATE ACCOUNT FORMS */

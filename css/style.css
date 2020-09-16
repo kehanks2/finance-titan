@@ -130,11 +130,8 @@ input[type=password] {
 	width: 50%;
 }
 #password {
-	width: 105%;
-	margin-bottom: 0px;
-}
-#signinpassword {
 	width: 100%;
+	margin-bottom: 0px;
 }
 .help-icon {
 	position: relative;

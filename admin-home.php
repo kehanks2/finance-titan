@@ -1,3 +1,7 @@
+<?php
+include('session.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,13 +46,15 @@
 		<ul class="navbar-nav d-flex justify-content-end">			
 			<li class="nav-item nav-user-profile">Logged in as:</li>
 			<li class="nav-item">
-				<a class="nav-link nav-username" href="#">Username</a>
+				<div class="nav-link nav-username" href="#">
+					<?php echo $login_session; ?>
+				</div>
 			</li>
 			<li class="nav-item user-icon">
 				<i class="fa fa-user-o"></i>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id="logout" href="#">Log Out</a>
+				<a class="nav-link" id="logout" href="logout.php">Log Out</a>
 			</li>
 		</ul>
 	</div>
@@ -59,7 +65,7 @@
 		
 		<!-- SIDE BAR -->
 		<div class="col-sm-auto">
-			<h1>Welcome, <a href="#">#USER</a></h1>
+			<h1>Welcome, <?php echo $login_session; ?></h1>
 			<h3>Administrator Account</h3>
 			<hr>
 			<h2>Management Options</h2>

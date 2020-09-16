@@ -1,3 +1,7 @@
+<?php
+include('session.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- META DATA -->
@@ -16,14 +20,14 @@
 <!-- NAVIGATION -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.html">Finance Titan</a>
+	<a class="navbar-brand" href="index.php">Finance Titan</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link disabled" href="#">Messages</a>
@@ -31,7 +35,7 @@
 		</ul>
 		<ul class="navbar-nav d-flex justify-content-end">	
 			<li>
-				<a class="nav-link" id="logout" href="sign-in.html">Log In</a>
+				<a class="nav-link" id="logout" href="login.php">Log In</a>
 			</li>
 		</ul>
 	</div>
@@ -46,12 +50,12 @@
 <section id="welcome-buttons" class="container">
 	<div class="row d-flex justify-content-center">
 		<div class="col-md-6 text-center">
-			<a href="sign-in.html" role="button" class="btn btn-lg">Sign In</a>
+			<a href="login.php" role="button" class="btn btn-lg">Sign In</a>
 		</div>
 	</div>
 	<div class="row d-flex justify-content-center">
 		<div class="col-md-6 text-center">
-			<a href="create-account.html" role="button" class="btn btn-lg">Create Account</a>
+			<a href="create-account.php" role="button" class="btn btn-lg">Create Account</a>
 		</div>
 	</div>
 </section>

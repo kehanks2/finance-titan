@@ -1,3 +1,36 @@
+<?php
+	ini_set('display_startup_errors', true);
+	error_reporting(E_ALL);
+	ini_set('display_errors', true);
+
+   include("config.php");
+   session_start();
+   
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // username and password sent from form 
+      
+      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      
+      $sql = "SELECT UserName FROM Users WHERE UserName = '$myusername' and Password = '$mypassword'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $active = $row['active'];
+      
+      $count = mysqli_num_rows($result);
+      
+      // If result matched $myusername and $mypassword, table row must be 1 row
+		
+      if($count == 1) {
+         $_SESSION['login_user'] = $myusername;
+         
+         header("Location: admin-home.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+   }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<!-- HEADER -->
@@ -45,18 +78,18 @@
 
 <!-- PAGE CONTENT -->
 <section id="sign-in-form" class="d-flex justify-content-center">
-	<form class="col-md-4 sign-in-form">
+	<form class="col-md-4 sign-in-form" method="POST" action="">
 		<div class="text-center">
 			<h2>Sign In</h2>
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" id="username" placeholder="Username">
+			<input type="text" class="form-control" name="username" id="username" required="required" placeholder="Username">
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" id="signinpassword" placeholder="Password">
+			<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Password">
 		</div>
 		<div class="text-center">
-			<button type="submit" class="btn btn-lg">Submit</button>
+			<input type="submit" id="submit" name="submit" class="btn btn-lg" value="SIGN IN">
 		</div>
 		<div class="bottom-links">
 			<p><a href="#">Forgot your password?</a></p>
@@ -71,8 +104,4 @@
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap-4.4.1.js"></script>
 </body>
-	
-	<footer>
-	
-	</footer>
 </html>

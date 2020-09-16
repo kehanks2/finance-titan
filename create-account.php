@@ -17,14 +17,14 @@
 <!-- NAVIGATION -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.html">Finance Titan</a>
+	<a class="navbar-brand" href="index.php">Finance Titan</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link disabled" href="#">Messages</a>
@@ -32,7 +32,7 @@
 		</ul>
 		<ul class="navbar-nav d-flex justify-content-end">	
 			<li>
-				<a class="nav-link" id="logout" href="sign-in.html">Log In</a>
+				<a class="nav-link" id="logout" href="login.php">Log In</a>
 			</li>
 		</ul>
 	</div>
@@ -45,7 +45,7 @@
 
 <!-- PAGE CONTENT -->
 <section id="create-account-form" class="d-flex justify-content-center">
-	<form class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this)" action="index.html">
+	<form class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this)" action="index.php">
 		<div>
 			<h2>Create your account</h2>
 		</div>
@@ -64,7 +64,7 @@
 		</div>
 		<div class="row">
 			<div class="form-group col-6">
-				<input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
+				<input type="password" style="width:105%;"class="form-control" id="password" name="password" placeholder="Password" required="required">
 			</div>
 			<div class="col-1 help-icon">
 				<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"

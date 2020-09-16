@@ -5,16 +5,18 @@ ini_set('display_errors', true);
    include('config.php');
    session_start();
    
-   $user_check = $_SESSION['login_user'];
+	if (isset($_SESSION['login_user']) && $_SESSION['login_user']) {
+   		$user_check = $_SESSION['login_user'];
    
-   $ses_sql = mysqli_query($db,"SELECT UserName FROM Users where UserName = '$user_check' ");
+   		$ses_sql = mysqli_query($db,"SELECT UserName FROM Users where UserName = '$user_check' ");
    
-   $row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
+   		$row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
    
-   $login_session = $user_check;
+   		$login_session = $user_check;
+	}
    
    if(!isset($_SESSION['login_user'])){
-      header("Location: login.php");
+      header("Location: index.php");
       die();
    }
 ?>

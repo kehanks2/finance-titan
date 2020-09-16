@@ -1,4 +1,6 @@
 <?php
+	include('session.php');
+
 	ini_set('display_startup_errors', true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
@@ -50,14 +52,14 @@
 <!-- NAVIGATION -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.html">Finance Titan</a>
+	<a class="navbar-brand" href="index.php">Finance Titan</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link disabled" href="#">Messages</a>
@@ -93,7 +95,7 @@
 		</div>
 		<div class="bottom-links">
 			<p><a href="#">Forgot your password?</a></p>
-			<p><a href="create-account.html">New? Create an account!</a></p>
+			<p><a href="create-account.php">New? Create an account!</a></p>
 		</div>
 	</form>
 </section>

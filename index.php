@@ -1,7 +1,3 @@
-<?php
-include('session.php');
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <!-- META DATA -->

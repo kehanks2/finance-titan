@@ -5,8 +5,6 @@
 <file name="README.md" server="studentweb.kennesaw.edu/html/" local="132444843434980104" remote="132444943300000000" Dst="2" />
 <file name=".donotdelete" server="studentweb.kennesaw.edu/html/" local="132127042070000000" remote="132127042070000000" Dst="2" />
 <file name="config.php" server="studentweb.kennesaw.edu/html/" local="132446847610000000" remote="132446856410000000" Dst="2" />
-<file name="test.php" server="studentweb.kennesaw.edu/html/" local="132446845474508926" remote="132446845600000000" Dst="2" />
-<file name="test.php" server="ftpupload.net/htdocs/" local="132446845474508926" remote="132446957400000000" Dst="2" />
 <file name="README.md" server="ftpupload.net/htdocs/" local="132444843434980104" remote="132446957400000000" Dst="2" />
 <file name="LICENSE" server="ftpupload.net/htdocs/" local="132444843434880191" remote="132446957400000000" Dst="2" />
 <file name="config.php" server="ftpupload.net/htdocs/" local="132447009289116883" remote="132447009600000000" Dst="2" />
@@ -15,9 +13,9 @@
 <file name="files for your website should be uploaded here!" server="ftpupload.net/htdocs/" local="132446911800000000" remote="132446911800000000" Dst="2" />
 <file name="session.php" server="ftpupload.net/htdocs/" local="132447028334939194" remote="132447028800000000" Dst="2" />
 <file name="logout.php" server="ftpupload.net/htdocs/" local="132446987661415788" remote="132446988600000000" Dst="2" />
-<file name="login.php" server="ftpupload.net/htdocs/" local="132447028315934508" remote="132447028800000000" Dst="2" />
-<file name="admin-home.php" server="ftpupload.net/htdocs/" local="132446987320232101" remote="132446988600000000" Dst="2" />
-<file name="index.php" server="ftpupload.net/htdocs/" local="132447028351905163" remote="132447028800000000" Dst="2" />
+<file name="login.php" server="ftpupload.net/htdocs/" local="132447030101827874" remote="132447030000000000" Dst="2" />
+<file name="admin-home.php" server="ftpupload.net/htdocs/" local="132447056669769522" remote="132447056400000000" Dst="2" />
+<file name="index.php" server="ftpupload.net/htdocs/" local="132447056562806985" remote="132447056400000000" Dst="2" />
 <file name="forgot-password.php" server="ftpupload.net/htdocs/" local="132447019290461167" remote="132447019200000000" Dst="2" />
 <file name="create-account.php" server="ftpupload.net/htdocs/" local="132447019185482905" remote="132447019200000000" Dst="2" />
 </dwsync>

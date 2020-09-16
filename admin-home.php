@@ -15,50 +15,10 @@ include('session.php');
     <link href="css/style.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  <body>
+<body>
 	  
   <!-- NAVIGATION -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="admin-home.html">Finance Titan</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="admin-home.html">Admin Home <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Messages</a>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				System Management</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="#">Manage Users</a>
-					<a class="dropdown-item" href="#">Manage Accounts</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Something else here</a>
-				</div>
-			</li>
-		</ul>
-		<ul class="navbar-nav d-flex justify-content-end">			
-			<li class="nav-item nav-user-profile">Logged in as:</li>
-			<li class="nav-item">
-				<div class="nav-link nav-username" href="#">
-					<?php echo $login_session; ?>
-				</div>
-			</li>
-			<li class="nav-item user-icon">
-				<i class="fa fa-user-o"></i>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" id="logout" href="logout.php">Log Out</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+<?php include('include/navbar.php'); ?>
 
 <section id="admin-home" class="container-fluid home-screen">
 	<div class="row">
@@ -77,7 +37,7 @@ include('session.php');
 			    	<div id="user-collapse" class="collapse show" role="tabpanel" aria-labelledby="user-heading" data-parent="#admin-accordion">
 			      		<div class="card-body">
 							<p><a href="#">User Report</a></p>
-							<p><a href="#">Other stuff</a></p>
+							<p><a href="#">Password Report</a></p>
 						</div>
 		        	</div>
 				</div>

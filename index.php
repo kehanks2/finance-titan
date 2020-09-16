@@ -1,3 +1,6 @@
+<?php	
+	include('session.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <!-- META DATA -->
@@ -14,33 +17,10 @@
 </head>
 <body>
 <!-- NAVIGATION -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.php">Finance Titan</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link disabled" href="#">Messages</a>
-			</li>			
-		</ul>
-		<ul class="navbar-nav d-flex justify-content-end">	
-			<li>
-				<a class="nav-link" id="logout" href="login.php">Log In</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+<?php include('include/navbar.php');?>
 		
 <!-- BANNER -->
-<section id="banner" class="text-center logo-background"> <img src="images/logo.jpeg" alt="Finance Titan Logo" max-width="225px" height="200px" class="logo"/>
-	<p class="lead">Seize Control of Your Finances</p>
-</section>
+<?php include('include/banner.php');?>
 		
 <!-- PAGE CONTENT -->
 <section id="welcome-buttons" class="container">

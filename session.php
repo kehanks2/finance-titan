@@ -16,7 +16,7 @@ ini_set('display_errors', true);
 	}
    
    if(!isset($_SESSION['login_user'])){
-      header("Location: index.php");
+      header("Location: login.php");
       die();
    }
 ?>

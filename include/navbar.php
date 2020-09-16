@@ -27,7 +27,7 @@ if (!isset($_SESSION['login_user'])) {
 	echo 
 		'<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<img src="images/logo-no-bg.png" id="navbar-logo">
-			<a class="navbar-brand" href="index.php">Finance Titan</a>
+			<a class="navbar-brand" href="admin-home.php">Finance Titan</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -53,9 +53,9 @@ if (!isset($_SESSION['login_user'])) {
 				<ul class="navbar-nav d-flex justify-content-end">			
 					<li class="nav-item nav-user-profile">Logged in as:</li>
 					<li class="nav-item">
-						<div class="nav-link nav-username" href="#">
-							<?php echo $login_session; ?>
-						</div>
+						<div class="nav-link nav-username" href="#">';
+	echo $login_session;
+	echo 				'</div>
 					</li>
 					<li class="nav-item user-icon">
 						<i class="fa fa-user-o"></i>

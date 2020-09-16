@@ -109,11 +109,17 @@ body {
 .sign-in-form {
 	margin: 20px 0 20px 0;
 	padding: 20px 20px 40px 20px;
-	border-radius: 12px;
-	border: 1.5px solid #2B3450
 }
 .sign-in-form .bottom-links {
 	margin-top: 20px;
+}
+#login-accordian a {
+	text-decoration: none !important;
+	color: #1C3246 !important;
+}
+#login-accordian a:hover, a:focus {
+	text-decoration: none !important;
+	color: #1C3246 !important;
 }
 .sign-in-form h2 {
 	margin-bottom: 15px;

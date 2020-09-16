@@ -54,25 +54,46 @@
 <?php include('include/banner.php'); ?>
 
 <!-- PAGE CONTENT -->
-<section id="sign-in-form" class="d-flex justify-content-center">
-	<form class="col-md-4 sign-in-form" method="POST" action="">
-		<div class="text-center">
-			<h2>Sign In</h2>
+<section id="sign-in-form" class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div id="home-accordion" role="tablist">
+				<div class="card">			
+					<div class="card-header" role="tab" id="login-heading">
+						<h2 class="mb-0 text-center"> <a id="login-accordian" data-toggle="collapse" href="#login-collapse" role="button" aria-expanded="false" aria-controls="login-collapse">Sign In</a></h2>
+					</div>
+					<div id="login-collapse" class="collapse" role="tabpanel" aria-labelledby="login-heading" data-parent="#home-accordion">
+			      		<div class="card-body">
+							<form class="sign-in-form" method="POST" action="">
+								<div class="form-group">
+									<input type="text" class="form-control" name="username" id="username" required="required" placeholder="Username">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Password">
+								</div>
+								<div class="text-center">
+									<input type="submit" id="submit" name="submit" class="btn btn-lg" value="SIGN IN">
+								</div>
+								<div class="bottom-links">
+									<p><a href="#">Forgot your password?</a></p>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" role="tab" id="create-account-heading">
+						<h2 class="mb-0 text-center"> <a id="login-accordian" href="#create-account-collapse" role="button" data-toggle="collapse" expanded="false" aria-controls="create-account-collapse">New? Sign up for an account</a></h2>
+					</div>
+					<div id="create-account-collapse" class="collapse" role="tabpanel" aria-labelledby="create-account-heading" data-parent="#home-accordion">
+			      		<div class="card-body text-center">
+							<p><a href="create-account.php" role="button" class="btn btn-lg">Create Account Form</a></p>
+						</div>
+					</div>
+				</div>			  
+		  	</div>
 		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" name="username" id="username" required="required" placeholder="Username">
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Password">
-		</div>
-		<div class="text-center">
-			<input type="submit" id="submit" name="submit" class="btn btn-lg" value="SIGN IN">
-		</div>
-		<div class="bottom-links">
-			<p><a href="#">Forgot your password?</a></p>
-			<p><a href="create-account.php">New? Create an account!</a></p>
-		</div>
-	</form>
+	</div>	
 </section>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 <script src="js/jquery-3.4.1.min.js"></script>

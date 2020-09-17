@@ -12,7 +12,7 @@
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT UserName FROM Users WHERE UserName = '$myusername' and Password = '$mypassword'";
+      $sql = "SELECT Users.UserName, Passwords.CurrentPassword from Users,Passwords WHERE Passwords.PasswordID = Users.PasswordID and UserName = '$myusername' and CurrentPassword = '$mypassword'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];

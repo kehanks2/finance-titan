@@ -1,5 +1,12 @@
 <?php
 include('session.php');
+if ($_SESSION['user_type'] != 'accountant') {
+	if ($_SESSION['user_type'] == 'admin') {
+		header("Location: admin-home.php");
+	} elseif ($_SESSION['user_type'] == 'manager') {
+		header("Location: manager-home.php");
+	}
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,8 +2,8 @@
 ini_set('display_startup_errors', true);
 error_reporting(E_ALL);
 ini_set('display_errors', true);
-   include('config.php');
-   session_start();
+include('config.php');
+session_start();
    
 	if (isset($_SESSION['login_user']) && $_SESSION['login_user']) {
    		$user_check = $_SESSION['login_user'];

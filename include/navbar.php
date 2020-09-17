@@ -54,7 +54,7 @@ if (!isset($_SESSION['login_user'])) {
 					<li class="nav-item nav-user-profile">Logged in as:</li>
 					<li class="nav-item">
 						<div class="nav-link nav-username" href="#">';
-	echo $login_session;
+	echo $_SESSION['login_user'];
 	echo 				'</div>
 					</li>
 					<li class="nav-item user-icon">

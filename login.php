@@ -12,19 +12,30 @@
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT Users.UserName, Passwords.CurrentPassword from Users,Passwords WHERE Passwords.PasswordID = Users.PasswordID and UserName = '$myusername' and CurrentPassword = '$mypassword'";
+      $sql = "SELECT Users.*, Passwords.CurrentPassword from Users,Passwords WHERE Passwords.PasswordID = Users.PasswordID and UserName = '$myusername' and CurrentPassword = '$mypassword'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
+	       
+      $count = mysqli_num_rows($result);	   
+	  
+	  $row2 = mysqli_fetch_assoc($result);
+	  $myusertype = $row['UserType'];
       
       // If result matched $myusername and $mypassword, table row must be 1 row
+	  // send user to home page for their account type
 		
       if($count == 1) {
          $_SESSION['login_user'] = $myusername;
+		 $_SESSION['user_type'] = $myusertype;
+		 if ($myusertype == 'admin') {			 
+         	header("Location: admin-home.php");
+		 } elseif ($myusertype == 'accountant') {
+			header("Location: accountant-home.php");
+		 } elseif ($myusertype == 'manager') {
+			header("Location: manager-home.php");
+		 }
          
-         header("Location: admin-home.php");
       }else {
          $error = "Your Login Name or Password is invalid";
       }

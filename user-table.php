@@ -15,7 +15,7 @@ if ($_SESSION['user_type'] != 'admin') {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Finance Titan - Home</title>
+    <title>Finance Titan - User Table</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
@@ -67,6 +67,44 @@ if ($_SESSION['user_type'] != 'admin') {
 		        	</div>
 		      	</div>			  
 		  	</div>
+		</div>
+		<div class="col-sm-9">
+			<h2>View/Edit Users</h2>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Last Name</th>
+							<th scope="col">First Name</th>
+							<th scope="col">Username</th>
+							<th scope="col">Email</th>
+							<th scope="col">User Type</th>
+							<th scope="col">Active?</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+							$query = "SELECT * FROM Users";
+							$result = mysqli_query($db, $query);
+
+							if ($result) {
+								while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+									echo "<tr><td>" . $row["FirstName"] . "</td>";
+									echo "<td>" . $row["LastName"] . "</td>";
+									echo "<td>" . $row["UserName"] . "</td>";
+									echo "<td>" . $row["EmailAddress"] . "</td>";
+									if ($row['UserType'] != "Inactive") {
+										echo "<td>" . $row["UserType"] . "</td><td>Yes</td>";
+									} else {
+										echo "<td>--</td><td>No</td>";
+									}
+									echo "</tr>";
+								}
+							}			
+						?>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </section>

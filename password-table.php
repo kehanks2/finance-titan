@@ -15,7 +15,7 @@ if ($_SESSION['user_type'] != 'admin') {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Finance Titan - Home</title>
+    <title>Finance Titan - Password Report</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
@@ -67,6 +67,44 @@ if ($_SESSION['user_type'] != 'admin') {
 		        	</div>
 		      	</div>			  
 		  	</div>
+		</div>
+		<div class="col-sm-9">
+			<h2>Password Report</h2>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">First Name</th>
+							<th scope="col">Last Name</th>
+							<th scope="col">Username</th>
+							<th scope="col">Password Expiry Date</th>
+							<th scope="col">Expired?</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+							$query = "SELECT Users.*, Passwords.ExpiryDate FROM Users, Passwords WHERE Users.PasswordID = Passwords.PasswordID";
+							$result = mysqli_query($db, $query);
+							$currentDate = new DateTime();
+
+							if ($result) {
+								while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+									echo "<tr><td>" . $row["FirstName"] . "</td>";
+									echo "<td>" . $row["LastName"] . "</td>";
+									echo "<td>" . $row["UserName"] . "</td>";
+									echo "<td>" . $row["ExpiryDate"] . "</td>";
+									if ($row['ExpiryDate'] > $currentDate) {
+										echo "<td>Yes</td>";
+									} else {
+										echo "<td>No</td>";
+									}
+									echo "</tr>";
+								}
+							}			
+						?>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </section>

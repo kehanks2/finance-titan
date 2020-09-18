@@ -5,6 +5,9 @@
 
    include("config.php");
    session_start();
+
+	$error_inactive = false;
+	$error_login = false;
    
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form 
@@ -15,17 +18,17 @@
       $sql = "SELECT Users.*, Passwords.CurrentPassword from Users,Passwords WHERE Passwords.PasswordID = Users.PasswordID and UserName = '$myusername' and CurrentPassword = '$mypassword'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
 	       
-      $count = mysqli_num_rows($result);	   
+      $count = mysqli_num_rows($result);
 	  
-	  $row2 = mysqli_fetch_assoc($result);
-	  $myusertype = $row['UserType'];
-      
       // If result matched $myusername and $mypassword, table row must be 1 row
 	  // send user to home page for their account type
 		
       if($count == 1) {
+		  
+	  	 $row2 = mysqli_fetch_assoc($result);
+	  	 $myusertype = $row['UserType'];
+      
          $_SESSION['login_user'] = $myusername;
 		 $_SESSION['user_type'] = $myusertype;
 		 if ($myusertype == 'admin') {			 
@@ -34,10 +37,12 @@
 			header("Location: accountant-home.php");
 		 } elseif ($myusertype == 'manager') {
 			header("Location: manager-home.php");
+		 } elseif ($myusertype == 'inactive') {
+			$error_inactive = true;
 		 }
          
       }else {
-         $error = "Your Login Name or Password is invalid";
+         $error_login = true;
       }
    }
 ?>
@@ -71,9 +76,9 @@
 			<div id="home-accordion" role="tablist">
 				<div class="card">			
 					<div class="card-header" role="tab" id="login-heading">
-						<h2 class="mb-0 text-center"> <a id="login-accordian" data-toggle="collapse" href="#login-collapse" role="button" aria-expanded="false" aria-controls="login-collapse">Sign In</a></h2>
+						<h2 class="mb-0 text-center"> <a id="login-accordian" data-toggle="collapse" href="#login-collapse" role="button" aria-expanded="true" aria-controls="login-collapse">Sign In</a></h2>
 					</div>
-					<div id="login-collapse" class="collapse" role="tabpanel" aria-labelledby="login-heading" data-parent="#home-accordion">
+					<div id="login-collapse" class="collapse show" role="tabpanel" aria-labelledby="login-heading" data-parent="#home-accordion">
 			      		<div class="card-body">
 							<form class="sign-in-form" method="POST" action="">
 								<div class="form-group">
@@ -85,10 +90,19 @@
 								<div class="text-center">
 									<input type="submit" id="submit" name="submit" class="btn btn-lg" value="SIGN IN">
 								</div>
-								<div class="bottom-links">
-									<p><a href="#">Forgot your password?</a></p>
-								</div>
 							</form>
+							<?php
+								if ($error_login) { ?>
+									<div class="alert alert-warning">The username and password combination you enter is incorrect.</div>
+									<?php $error_login = false;
+								} elseif ($error_inactive) { ?>
+									<div class="alert alert-danger"><strong>Your account is inactive.</strong> Contact the system administrator to reactivate your account.</div>
+									<?php $error_inactive = false;
+								}
+							?>
+							<div class="bottom-links">
+								<p><a href="#">Forgot your password?</a></p>
+							</div>
 						</div>
 					</div>
 				</div>

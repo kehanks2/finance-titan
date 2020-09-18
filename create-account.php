@@ -1,3 +1,35 @@
+ <?php
+	/* will finish after work
+	ini_set('display_startup_errors', true);
+	error_reporting(E_ALL);
+	ini_set('display_errors', true);
+
+   include("config.php");
+   session_start();
+   
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // values sent from form 
+      
+      $myfirstname = mysqli_real_escape_string($db,$_POST['fname']);
+      $mylastname = mysqli_real_escape_string($db,$_POST['lname']);
+      $myemail = mysqli_real_escape_string($db,$_POST['email']);
+      $mydateofbirth = mysqli_real_escape_string($db,$_POST['dob']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      $mysqquestion = mysqli_real_escape_string($db,$_POST['security-question']);	   
+      $mysqanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
+      $creationyear = date("Y");
+     //Creating a username
+      $username = $myfirstname[0] . $mylastname . date("m") . $creationyear[2] . $creationyear[3];    
+      $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$mypassword', '$mysqqueston', '$mysqanswer')";
+      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth')";
+      $resultPassword = mysqli_query($db,$sqlPasswordInsert);
+      $resultUser = mysqli_query($db,$sqlUserInsert)
+  }
+	*/   
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- HEADER -->

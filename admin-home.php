@@ -65,6 +65,7 @@ if ($_SESSION['user_type'] != 'admin') {
 		<!-- MAIN CONTENT -->
 		<div class="col-sm-8">
 			<h3>stuff goes here</h3>
+			<?php include('admin/user-table.php'); ?>
 		</div>
 	</div>
 	<div class="row">

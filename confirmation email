@@ -1,0 +1,18 @@
+function format_email($info, $format){
+ 
+    //set the root
+    $root = $_SERVER['DOCUMENT_ROOT'].'Root detectory location'; //need to add root directory location
+ 
+    //grab the template content
+    $template = file_get_contents($root.'/signup_template.'.$format);// need email template
+             
+    //replace all the tags
+    $template = pre_replace('{USERNAME}', $info['username'], $template);
+    $template = pre_replace('{EMAIL}', $info['EmailAddress'], $template);
+    $template = pre_replace('{KEY}', $info['key'], $template);
+    $template = pre_replace('{SITEPATH}','Enter site path', $template);  //need site path
+         
+    //return the html of the template
+    return $template;
+ 
+}

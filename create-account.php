@@ -1,11 +1,11 @@
  <?php
-	/* will finish after work
 	ini_set('display_startup_errors', true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
    include("config.php");
    session_start();
-   
+ 	$error_inactive = false;
+	$error_login = false;
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // values sent from form 
       
@@ -22,9 +22,9 @@
       $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$mypassword', '$mysqqueston', '$mysqanswer')";
       $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth')";
       $resultPassword = mysqli_query($db,$sqlPasswordInsert);
-      $resultUser = mysqli_query($db,$sqlUserInsert)
+      $resultUser = mysqli_query($db,$sqlUserInsert);
   }
-	*/   
+	  
 ?>
 
 

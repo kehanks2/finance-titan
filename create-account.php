@@ -2,10 +2,13 @@
 	ini_set('display_startup_errors', true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
+
    include("config.php");
    session_start();
- 	$error_inactive = false;
+   
+    $error_inactive = false;
 	$error_login = false;
+
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // values sent from form 
       
@@ -20,10 +23,11 @@
      //Creating a username
       $username = $myfirstname[0] . $mylastname . date("m") . $creationyear[2] . $creationyear[3];    
       $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$mypassword', '$mysqqueston', '$mysqanswer')";
-      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth')";
-      $resultPassword = mysqli_query($db,$sqlPasswordInsert);
-      $resultUser = mysqli_query($db,$sqlUserInsert);
-  }
+      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate,PasswordID) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth',
+      (SELECT PasswordID FROM Passwords WHERE '$mypassword' = CurrentPassword and '$mysqanswer' =SecurityAnswer))";
+      mysqli_query($db,$sqlPasswordInsert);
+      mysqli_query($db,$sqlUserInsert);
+   }  
 	  
 ?>
 

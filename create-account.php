@@ -24,7 +24,7 @@
       $username = $myfirstname[0] . $mylastname . date("m") . $creationyear[2] . $creationyear[3];    
       $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$mypassword', '$mysqqueston', '$mysqanswer')";
       $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate,PasswordID) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth',
-      (SELECT PasswordID FROM Passwords WHERE '$mypassword' = CurrentPassword and '$mysqanswer' =SecurityAnswer))";
+      (SELECT PasswordID FROM Passwords WHERE '$mypassword' = CurrentPassword and '$mysqanswer' = SecurityAnswer))";
       mysqli_query($db,$sqlPasswordInsert);
       mysqli_query($db,$sqlUserInsert);
    }  

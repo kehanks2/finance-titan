@@ -88,7 +88,7 @@
 									<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Password">
 								</div>
 								<div class="text-center">
-									<input type="submit" id="submit" name="submit" class="btn btn-lg" value="SIGN IN">
+									<input type="submit" id="submit" name="submit" class="btn btn-lg btn-primary" value="SIGN IN">
 								</div>
 							</form>
 							<?php
@@ -112,7 +112,7 @@
 					</div>
 					<div id="create-account-collapse" class="collapse" role="tabpanel" aria-labelledby="create-account-heading" data-parent="#home-accordion">
 			      		<div class="card-body text-center">
-							<p><a href="create-account.php" role="button" class="btn btn-lg">Create Account Form</a></p>
+							<p><a href="create-account.php" role="button" class="btn btn-lg btn-primary">Create Account Form</a></p>
 						</div>
 					</div>
 				</div>			  

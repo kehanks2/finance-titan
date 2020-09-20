@@ -79,9 +79,8 @@ if ($_SESSION['user_type'] != 'admin') {
 			<div class="table-responsive">
 				<br />
 				<div align="left">
-					<button name="add" id="add" type="button" class="btn btn-link" style="font-weight: 600; width:auto;">Add</button>
+					<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;">Add</button>
 				</div>
-				<br />
 				<div id="alert_message"></div>
 				<br />
 				<table id="user-table" class="table table-striped" style="width:100%;">

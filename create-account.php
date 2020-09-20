@@ -133,7 +133,7 @@ include("include/config.php");
 			<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Security Answer" required="required">
 		</div>
 		<div class="text-center">
-			<input type="submit" id="submit" class="btn btn-lg" name="submit" value="Create Account">
+			<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" value="Create Account">
 		</div>
 	</form>
 </section>

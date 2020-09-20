@@ -5,6 +5,8 @@ if ($_SESSION['user_type'] != 'admin') {
 		header("Location: accountant-home.php");
 	} elseif ($_SESSION['user_type'] == 'manager') {
 		header("Location: manager-home.php");
+	} else {
+		header("Location: login.php");
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['login_user'])) {
+if (!isset($_SESSION['login_user']) || $_SESSION['user_type'] == "inactive") {
 	echo 
 		'<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<img src="images/logo-no-bg.png" id="navbar-logo">

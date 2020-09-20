@@ -16,7 +16,7 @@ session_start();
 	}
    
    if(!isset($_SESSION['login_user'])){
-      header("Location: login.php");
+      header("Location: ../login.php");
       die();
    }
 ?>

@@ -1,5 +1,5 @@
 <?php
-include('session.php');
+include('include/session.php');
 if ($_SESSION['user_type'] != 'admin') {
 	if ($_SESSION['user_type'] == 'accountant') {
 		header("Location: accountant-home.php");

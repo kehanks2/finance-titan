@@ -1,5 +1,5 @@
 <?php
-include('session.php');
+include('include/session.php');
 if ($_SESSION['user_type'] != 'admin') {
 	if ($_SESSION['user_type'] == 'accountant') {
 		header("Location: accountant-home.php");
@@ -122,7 +122,7 @@ if ($_SESSION['user_type'] != 'admin') {
 					"dom": '<"top"f>t<"bottom"ip>',
 					"order" : [],
 					"ajax" : {
-						url:"fetch.php",
+						url:"include/fetch.php",
 						type:"POST"
 					}
 				});
@@ -130,7 +130,7 @@ if ($_SESSION['user_type'] != 'admin') {
 
 			function update_data(id, column_name, value) {
 				$.ajax({
-					url:"update.php",
+					url:"include/update.php",
 					method:"POST",
 					data:{id:id, column_name:column_name, value:value},
 					success:function(data) {
@@ -171,7 +171,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				var usertype = $('#UserType').text();
 				if(username != '' && firstname != '' && lastname != '' && email != '' && usertype !='') {
 					$.ajax({
-						url:"insert.php",
+						url:"include/insert.php",
 						method:"POST",
 						data: {
 							username: username,

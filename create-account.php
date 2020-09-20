@@ -4,7 +4,7 @@
 	ini_set('display_errors', true);
 
 	session_start();
-include("config.php");
+include("include/config.php");
 
    if(isset($_POST["submit"])) {
       // values sent from form 

@@ -3,7 +3,7 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
 
-   include("config.php");
+   include("include/config.php");
    session_start();
 
 	$error_inactive = false;
@@ -101,7 +101,7 @@
 								}
 							?>
 							<div class="bottom-links">
-								<p><a href="#">Forgot your password?</a></p>
+								<p><a href="forgot-password.php">Forgot your password?</a></p>
 							</div>
 						</div>
 					</div>

@@ -1,5 +1,5 @@
 <?php
-include('session.php');
+include('include/session.php');
 if ($_SESSION['user_type'] != 'accountant') {
 	if ($_SESSION['user_type'] == 'admin') {
 		header("Location: admin-home.php");
@@ -27,6 +27,7 @@ if ($_SESSION['user_type'] != 'accountant') {
   <!-- NAVIGATION -->
 <?php include('include/navbar.php'); ?>
 
+<!-- CONTENT -->
 <section id="admin-home" class="container-fluid home-screen">
 	<div class="row">
 		

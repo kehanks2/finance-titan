@@ -61,7 +61,7 @@ if (!isset($_SESSION['login_user'])) {
 						<i class="fa fa-user-o"></i>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="logout" href="../logout.php">Log Out</a>
+						<a class="nav-link" id="logout" href="include/logout.php">Log Out</a>
 					</li>
 				</ul>
 			</div>

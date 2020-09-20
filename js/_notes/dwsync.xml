@@ -3,7 +3,8 @@
 <file name="jquery-3.4.1.min.js" server="studentweb.kennesaw.edu/html/" local="132351616100000000" remote="132444942660000000" Dst="2" />
 <file name="popper.min.js" server="studentweb.kennesaw.edu/html/" local="132351616120000000" remote="132444942670000000" Dst="2" />
 <file name="bootstrap-4.4.1.js" server="studentweb.kennesaw.edu/html/" local="132351616100000000" remote="132444942670000000" Dst="2" />
-<file name="popper.min.js" server="ftpupload.net/htdocs/" local="132351616120000000" remote="132446958000000000" Dst="2" />
-<file name="jquery-3.4.1.min.js" server="ftpupload.net/htdocs/" local="132351616100000000" remote="132446958000000000" Dst="2" />
-<file name="bootstrap-4.4.1.js" server="ftpupload.net/htdocs/" local="132351616100000000" remote="132446958000000000" Dst="2" />
+<file name="popper.min.js" server="ftpupload.net/htdocs/" local="132449383800000000" remote="132449383800000000" Dst="2" />
+<file name="jquery-3.4.1.min.js" server="ftpupload.net/htdocs/" local="132449383800000000" remote="132449383800000000" Dst="2" />
+<file name="bootstrap-4.4.1.js" server="ftpupload.net/htdocs/" local="132449383800000000" remote="132449383800000000" Dst="2" />
+<file name="bstable.js" server="ftpupload.net/htdocs/" local="132450285725360586" remote="132450285600000000" Dst="2" />
 </dwsync>

@@ -5,46 +5,21 @@
 body {
 	padding-top: 50px;
 }
+a:hover {
+	cursor: pointer;
+}
 .row {
 	margin-top: 25px;
 }
 .btn {
-	background-color: #51D251;
   	border-radius: 5px;
 	width: 75%;
-	text-transform: uppercase;
-	color: #fff;
-	font-weight: 600;
-	font-size: 130%;	
-	box-shadow: 0 5px 4px #445262;
-}
-.btn:focus {
-	border: 0;
-	box-shadow: 0 5px 4px #445262;
-	color: #fff;
-  	background-color: #51D251;
-}
-.btn:hover {
-	background-color: #30b830;
-	color: #fff;
-	cursor: pointer;
-}
-.btn:active {
-	background-color: #30b830;
-	box-shadow: 0 2px 1px #343f4b;
-	transform: translateY(2px);
-}
-.search-btn {
-	width: auto;
-	font-weight: auto;
-	font-size: 95%;	
+	text-transform: uppercase;	
 }
 .logo-background {	
-	margin: 0;
 	background-color: #000;
-	padding-bottom: 50px;
+	padding: 50px 0 50px 0;
 	height: 100%;
-	max-height: 346px;
 }
 .logo-background p {
 	color: #FFF;
@@ -104,8 +79,8 @@ body {
 
 /* SIGN IN & CREATE ACCOUNT FORMS */
 .sign-in-form {
-	margin: 20px 0 0px 0;
-	padding: 20px 20px 20px 20px;
+	margin: 20px 0 20px 0;
+	padding: 20px 20px 40px 20px;
 }
 .sign-in-form .bottom-links {
 	margin-top: 20px;

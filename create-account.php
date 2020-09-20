@@ -3,32 +3,37 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
 
-   include("config.php");
-   session_start();
-   
-    $error_inactive = false;
-	$error_login = false;
+	session_start();
+include("config.php");
 
-   if($_SERVER["REQUEST_METHOD"] == "POST") {
+   if(isset($_POST["submit"])) {
       // values sent from form 
       
-      $myfirstname = mysqli_real_escape_string($db,$_POST['fname']);
-      $mylastname = mysqli_real_escape_string($db,$_POST['lname']);
-      $myemail = mysqli_real_escape_string($db,$_POST['email']);
-      $mydateofbirth = mysqli_real_escape_string($db,$_POST['dob']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
-      $mysqquestion = mysqli_real_escape_string($db,$_POST['security-question']);	   
-      $mysqanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
+      $fname = mysqli_real_escape_string($db,$_POST['fname']);
+      $lname = mysqli_real_escape_string($db,$_POST['lname']);
+      $email = mysqli_real_escape_string($db,$_POST['email']);
+      $dob = mysqli_real_escape_string($db,$_POST['dob']);
+      $password = mysqli_real_escape_string($db,$_POST['password']); 
+      $squestion = mysqli_real_escape_string($db,$_POST['security-question']);	   
+      $sanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
       $creationyear = date("Y");
      //Creating a username
-      $username = $myfirstname[0] . $mylastname . date("m") . $creationyear[2] . $creationyear[3];    
-      $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$mypassword', '$mysqqueston', '$mysqanswer')";
-      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate,PasswordID) VALUES ('$username', '$myfirstname', '$mylastname', '$myemail', '$mydateofbirth',
-      (SELECT PasswordID FROM Passwords WHERE '$mypassword' = CurrentPassword and '$mysqanswer' = SecurityAnswer))";
-      mysqli_query($db,$sqlPasswordInsert);
-      mysqli_query($db,$sqlUserInsert);
-   }  
-	  
+      $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];    
+	   
+      $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$password', '$squestion', '$sanswer')";
+	   
+      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate, PasswordID) VALUES ('$username', '$fname', '$lname', '$email', '$dob',
+      (SELECT PasswordID FROM Passwords WHERE '$password' = CurrentPassword and '$sanswer' = SecurityAnswer))";
+	   
+	   if(mysqli_query($db, $sqlPasswordInsert)) {
+		  if(mysqli_query($db, $sqlUserInsert)) {
+		   	header("Location: login.php");
+		  }
+	   } else {
+		   	echo alert("There was an error connecting to the server.");
+		   	header("Location: login.php");
+	   }
+   } 
 ?>
 
 
@@ -79,34 +84,34 @@
 </section>
 
 <!-- PAGE CONTENT -->
-<section id="create-account-form" class="d-flex justify-content-center">
-	<form class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this)" action="index.php">
+<section class="d-flex justify-content-center">
+	<form id="create-account-form" class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 		<div>
 			<h2>Create your account</h2>
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" id="fname" placeholder="First Name" required="required">
+			<input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" required="required">
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" id="lname" placeholder="Last Name" required="required">
+			<input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" required="required">
 		</div>
 		<div class="form-group">
-			<input type="email" class="form-control" id="email" placeholder="Enter Email" required="required">
+			<input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required="required">
 		</div>
 		<div class="form-group">
 			<label for="dob" class="form-text">Enter Date of Birth:</label>
-			<input type="date" class="form-control" id="dob" placeholder="mm/dd/yyyy" required="required">
+			<input type="date" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" required="required">
 		</div>
 		<div class="row">
 			<div class="form-group col-6">
-				<input type="password" style="width:105%;"class="form-control" id="password" name="password" placeholder="Password" required="required">
+				<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Password" required="required">
 			</div>
 			<div class="col-1 help-icon">
 				<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
 				   data-content="<ul>
 								 <li>use 8+ characters</li>
 								 <li>starts with a letter</li>
-								 <li>include at least one letter, one number, and one special character(such as ! . ? * or
+								 <li>include at least one letter, one number, and one special character (such as ! . ? * or
 								 	&)</li></ul>">
 				</i>
 			</div>
@@ -115,7 +120,7 @@
 			<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype Password" required="required">
 		</div>
 		<div class="form-group">
-			<select name="security-question" class="form-control" required="required">
+			<select name="security-question" id="security-question" class="form-control" required="required">
 				<option hidden disabled selected value>Select a security question</option>
 				<option value="mother-maiden">What is your mother's maiden name?</option>
 				<option value="father-middle">What is your father's middle name?</option>
@@ -125,10 +130,10 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" id="security-answer" placeholder="Security Answer" required="required">
+			<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Security Answer" required="required">
 		</div>
 		<div class="text-center">
-			<button type="submit" class="btn btn-lg">Create Account</button>
+			<input type="submit" id="submit" class="btn btn-lg" name="submit" value="Create Account">
 		</div>
 	</form>
 </section>
@@ -155,7 +160,7 @@
 
 		// If password doesn't match retype password 
 		if (password1 != password2) { 
-			alert ("\nPasswords did not match. Please try again.") 
+			alert ("\nPasswords did not match. Please try again."); 
 			return false; 
 		}
 		
@@ -176,6 +181,7 @@
 		if (checkPassword(form)) {
 			alert("\nSuccess!\nYour acount has been created.\nYou will receive an email when the administrator approves your account!");
 		}
+		
 	}
 </script>
 </body>

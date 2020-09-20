@@ -21,6 +21,7 @@ if ($_SESSION['user_type'] != 'admin') {
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css">
   </head>
 <body>
 	  
@@ -37,8 +38,9 @@ if ($_SESSION['user_type'] != 'admin') {
 		</div>
 	</div>
 	
-	<!-- SIDE BAR ACCORDION -->
+
 	<div class="row">
+		<!-- SIDE BAR ACCORDION -->
 		<div class="col-sm-3">
 			<h2>Management Options</h2>
 			<div id="admin-accordion" role="tablist">
@@ -68,41 +70,31 @@ if ($_SESSION['user_type'] != 'admin') {
 		      	</div>			  
 		  	</div>
 		</div>
+		
+		<!-- MAIN CONTENT -->
 		<div class="col-sm-9">
-			<h2>View/Edit Users</h2>
+			<div class="row">
+				<h2>View/Edit Users</h2>
+			</div>
 			<div class="table-responsive">
-				<table class="table table-striped">
+				<br />
+				<div align="left">
+					<button name="add" id="add" type="button" class="btn btn-link" style="font-weight: 600; width:auto;">Add</button>
+				</div>
+				<br />
+				<div id="alert_message"></div>
+				<br />
+				<table id="user-table" class="table table-striped" style="width:100%;">
+					<br />
 					<thead>
 						<tr>
-							<th scope="col">Last Name</th>
-							<th scope="col">First Name</th>
-							<th scope="col">Username</th>
-							<th scope="col">Email</th>
-							<th scope="col">User Type</th>
-							<th scope="col">Active?</th>
+							<th>Username</th>
+							<th>Last Name</th>
+							<th>First Name</th>
+							<th>Email</th>
+							<th>User Type</th>
 						</tr>
 					</thead>
-					<tbody>
-						<?php
-							$query = "SELECT * FROM Users";
-							$result = mysqli_query($db, $query);
-
-							if ($result) {
-								while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
-									echo "<tr><td>" . $row["FirstName"] . "</td>";
-									echo "<td>" . $row["LastName"] . "</td>";
-									echo "<td>" . $row["UserName"] . "</td>";
-									echo "<td>" . $row["EmailAddress"] . "</td>";
-									if ($row['UserType'] != "Inactive") {
-										echo "<td>" . $row["UserType"] . "</td><td>Yes</td>";
-									} else {
-										echo "<td>--</td><td>No</td>";
-									}
-									echo "</tr>";
-								}
-							}			
-						?>
-					</tbody>
 				</table>
 			</div>
 		</div>
@@ -113,7 +105,96 @@ if ($_SESSION['user_type'] != 'admin') {
     <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
 
     <!-- Include all compiled plugins (below), or include individual files as needed --> 
+  	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
+  	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript" language="javascript" >
+		$(document).ready(function(){
+
+			fetch_data();
+
+			function fetch_data() {
+				var dataTable = $('#user-table').DataTable({
+					"processing" : true,
+					"serverSide" : true,
+					"dom": '<"top"f>t<"bottom"ip>',
+					"order" : [],
+					"ajax" : {
+						url:"fetch.php",
+						type:"POST"
+					}
+				});
+			}
+
+			function update_data(id, column_name, value) {
+				$.ajax({
+					url:"update.php",
+					method:"POST",
+					data:{id:id, column_name:column_name, value:value},
+					success:function(data) {
+						$('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
+						$('#user-table').DataTable().destroy();
+						fetch_data();
+					}
+				});
+				setInterval(function(){
+					$('#alert_message').html('');
+				}, 5000);
+			}
+
+			$(document).on('blur', '.update', function(){
+				var id = $(this).data("id");
+				var column_name = $(this).data("column");
+				var value = $(this).text();
+				update_data(id, column_name, value);
+			});
+
+			$('#add').click(function(){
+				var html = '<tr>';
+				html += '<td contenteditable id="UserName"></td>';
+				html += '<td contenteditable id="LastName"></td>';
+				html += '<td contenteditable id="FirstName"></td>';
+				html += '<td contenteditable id="EmailAddress"></td>';
+				html += '<td contenteditable id="UserType"></td>';
+				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link">Insert</button></td>';
+				html += '</tr>';
+				$('#user-table tbody').prepend(html);
+			});
+
+			$(document).on('click', '#insert', function(){
+				var username = $('#UserName').text();	
+				var lastname = $('#LastName').text();
+				var firstname = $('#FirstName').text();			
+				var email = $('#EmailAddress').text();				
+				var usertype = $('#UserType').text();
+				if(username != '' && firstname != '' && lastname != '' && email != '' && usertype !='') {
+					$.ajax({
+						url:"insert.php",
+						method:"POST",
+						data: {
+							username: username,
+							lastname: lastname,
+							firstname: firstname,
+							email: email,
+							usertype: usertype
+						},
+						success:function(data) {
+							$('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
+							$('#user-table').DataTable().destroy();
+							fetch_data();
+						}
+					});
+					setInterval(function(){
+						$('#alert_message').html('');
+					}, 5000);
+				} else {
+					alert("All fields are required");
+				}
+			});
+		});
+		</script>
+ 
   </body>
 </html>

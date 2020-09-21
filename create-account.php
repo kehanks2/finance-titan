@@ -18,7 +18,7 @@
       $sanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
       $creationyear = date("Y");
       //Hashing the password
-      $password = password_hash($password,PASSWORD_DEFAULT);
+      //$password = password_hash($password,PASSWORD_DEFAULT);
       //Creating a username  
       $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];    
 	   

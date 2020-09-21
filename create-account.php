@@ -17,7 +17,9 @@
       $squestion = mysqli_real_escape_string($db,$_POST['security-question']);	   
       $sanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
       $creationyear = date("Y");
-     //Creating a username
+      //Hashing the password
+      $password = password_hash($password,PASSWORD_DEFAULT);
+      //Creating a username  
       $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];    
 	   
       $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$password', '$squestion', '$sanswer')";

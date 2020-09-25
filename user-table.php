@@ -5,6 +5,8 @@ if ($_SESSION['user_type'] != 'admin') {
 		header("Location: accountant-home.php");
 	} elseif ($_SESSION['user_type'] == 'manager') {
 		header("Location: manager-home.php");
+	} else {
+		header("Location: login.php");
 	}
 }
 ?>
@@ -63,7 +65,7 @@ if ($_SESSION['user_type'] != 'admin') {
 		        	</div>
 			    	<div id="account-collapse" class="collapse" role="tabpanel" aria-labelledby="account-heading" data-parent="#admin-accordion">
 			      		<div class="card-body">					
-							<p><a href="#account-table">View/Edit Accounts</a></p>
+							<p><a href="account-table.php">View/Edit Accounts</a></p>
 							<p><a href="#">Other stuff</a></p>
 						</div>
 		        	</div>
@@ -90,8 +92,10 @@ if ($_SESSION['user_type'] != 'admin') {
 							<th>Username</th>
 							<th>Last Name</th>
 							<th>First Name</th>
+							<th>Date of Birth</th>
 							<th>Email</th>
 							<th>User Type</th>
+							<th>Edit</th>
 						</tr>
 					</thead>
 				</table>
@@ -127,11 +131,25 @@ if ($_SESSION['user_type'] != 'admin') {
 				});
 			}
 
-			function update_data(id, column_name, value) {
+			function update_data(id, values) {
+				var username = values[0];
+				var lastname = values[1];
+				var firstname = values[2];
+				var dob = values[3]
+				var email = values[4];
+				var usertype = $('#user-type option:selected').text();
 				$.ajax({
 					url:"include/update.php",
 					method:"POST",
-					data:{id:id, column_name:column_name, value:value},
+					data:{
+						id:id,
+						username: username,
+						lastname: lastname,
+						firstname: firstname,
+						dob: dob,
+						email: email,
+						usertype: usertype
+					},
 					success:function(data) {
 						$('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
 						$('#user-table').DataTable().destroy();
@@ -142,21 +160,62 @@ if ($_SESSION['user_type'] != 'admin') {
 					$('#alert_message').html('');
 				}, 5000);
 			}
+			
+			$('#user-table').on('click', '#edit', function() {
+				var currentTD = $(this).parents('tr').find('td');
+				if ($(this).html() == 'Edit') {                  
+              		$.each(currentTD, function () {
+                  		$(this).find('.edt').prop('contenteditable', true);
+              		});
+					currentTD.find('#user-type').prop("disabled", false);
+					var options = ['inactive', 'accountant', 'manager', 'admin'];
+					var cur_op = $('#option1').text();
+					if (cur_op == options[0]) {
+						currentTD.find('#option2').text(options[1]);
+						currentTD.find('#option3').text(options[2]);
+						currentTD.find('#option4').text(options[3]);
+					} else if (cur_op == options[1]) {
+						currentTD.find('#option2').text(options[2]);
+						currentTD.find('#option3').text(options[3]);
+						currentTD.find('#option4').text(options[0]);
+					} else if (cur_op == options[2]) {
+						currentTD.find('#option2').text(options[1]);
+						currentTD.find('#option3').text(options[3]);
+						currentTD.find('#option4').text(options[0]);
+					} else if (cur_op == options[3]) {
+						currentTD.find('#option2').text(options[1]);
+						currentTD.find('#option3').text(options[2]);
+						currentTD.find('#option4').text(options[0]);
+					} else {
+						currentTD.find('#option1').text(options[0]);
+						currentTD.find('#option2').text(options[1]);
+						currentTD.find('#option3').text(options[2]);
+						currentTD.find('#option4').text(options[3]);
+					};
+					
+          		} else {
+					var id = $(this).parents('tr').find('td').find('div').data("id");
+					var values = [];
+             		$.each(currentTD, function () {
+                  		$(this).find('.edt').prop('contenteditable', false);
+						values.push($(this).text());						
+              		});
+					currentTD.find('#user-type').prop("disabled", true);
+					update_data(id, values);
+          		}
 
-			$(document).on('blur', '.update', function(){
-				var id = $(this).data("id");
-				var column_name = $(this).data("column");
-				var value = $(this).text();
-				update_data(id, column_name, value);
+          		$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+
 			});
-
+			
 			$('#add').click(function(){
 				var html = '<tr>';
-				html += '<td contenteditable id="UserName"></td>';
-				html += '<td contenteditable id="LastName"></td>';
-				html += '<td contenteditable id="FirstName"></td>';
-				html += '<td contenteditable id="EmailAddress"></td>';
-				html += '<td contenteditable id="UserType"></td>';
+				html += '<td contenteditable="true" id="UserName"></td>';
+				html += '<td contenteditable="true" id="LastName"></td>';
+				html += '<td contenteditable="true" id="FirstName"></td>';
+				html += '<td contenteditable="true" id="BirthDate"></td>';
+				html += '<td contenteditable="true" id="EmailAddress"></td>';
+				html += '<td id="UserType"><select id="user-type"><option>inactive</option><option>accountant</option><option>manager</option><option>admin</option></select></td>';
 				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link">Insert</button></td>';
 				html += '</tr>';
 				$('#user-table tbody').prepend(html);
@@ -165,10 +224,11 @@ if ($_SESSION['user_type'] != 'admin') {
 			$(document).on('click', '#insert', function(){
 				var username = $('#UserName').text();	
 				var lastname = $('#LastName').text();
-				var firstname = $('#FirstName').text();			
+				var firstname = $('#FirstName').text();
+				var dob = $('BirthDate').text();
 				var email = $('#EmailAddress').text();				
-				var usertype = $('#UserType').text();
-				if(username != '' && firstname != '' && lastname != '' && email != '' && usertype !='') {
+				var usertype = $('#user-type option:selected').text();
+				if(username != '' && firstname != '' && lastname != '' && email != '') {
 					$.ajax({
 						url:"include/insert.php",
 						method:"POST",
@@ -176,11 +236,12 @@ if ($_SESSION['user_type'] != 'admin') {
 							username: username,
 							lastname: lastname,
 							firstname: firstname,
+							dob: dob,
 							email: email,
 							usertype: usertype
 						},
 						success:function(data) {
-							$('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
+							$('#alert_message').html('<div class="alert alert-success">Account Created. Please have user set up a password by going to the reset password form.</div>');
 							$('#user-table').DataTable().destroy();
 							fetch_data();
 						}

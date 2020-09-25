@@ -12,10 +12,11 @@
 <file name="admin-home.php" server="ftpupload.net/htdocs/" local="132450979194969832" remote="132450979800000000" Dst="2" />
 <file name="index.php" server="ftpupload.net/htdocs/" local="132450986623950160" remote="132450986400000000" Dst="2" />
 <file name="forgot-password.php" server="ftpupload.net/htdocs/" local="132450935150066116" remote="132450934800000000" Dst="2" />
-<file name="create-account.php" server="ftpupload.net/htdocs/" local="132450960549076384" remote="132450979800000000" Dst="2" />
+<file name="create-account.php" server="ftpupload.net/htdocs/" local="132455373396659223" remote="132455430000000000" Dst="2" />
 <file name="manager-home.php" server="ftpupload.net/htdocs/" local="132450979398381052" remote="132450979800000000" Dst="2" />
 <file name="accountant-home.php" server="ftpupload.net/htdocs/" local="132450979264626476" remote="132450979800000000" Dst="2" />
 <file name=".htaccess" server="ftpupload.net/htdocs/" local="132447649800000000" remote="132447649800000000" Dst="2" />
-<file name="password-table.php" server="ftpupload.net/htdocs/" local="132450832734056893" remote="132450838200000000" Dst="2" />
-<file name="user-table.php" server="ftpupload.net/htdocs/" local="132450943090192498" remote="132450942600000000" Dst="2" />
+<file name="password-table.php" server="ftpupload.net/htdocs/" local="132455508989382411" remote="132455509200000000" Dst="2" />
+<file name="user-table.php" server="ftpupload.net/htdocs/" local="132455508830315146" remote="132455509200000000" Dst="2" />
+<file name="account-table.php" server="ftpupload.net/htdocs/" local="132455508926124989" remote="132455509200000000" Dst="2" />
 </dwsync>

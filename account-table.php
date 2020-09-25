@@ -71,39 +71,16 @@ if ($_SESSION['user_type'] != 'admin') {
 		  	</div>
 		</div>
 		<div class="col-sm-9">
-			<h2>Password Report</h2>
+			<h2>View/Edit Accounts</h2>
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th scope="col">First Name</th>
-							<th scope="col">Last Name</th>
-							<th scope="col">Username</th>
-							<th scope="col">Password Expiry Date</th>
-							<th scope="col">Expired?</th>
+							
 						</tr>
 					</thead>
 					<tbody>
-						<?php
-							$query = "SELECT Users.*, Passwords.ExpiryDate FROM Users, Passwords WHERE Users.PasswordID = Passwords.PasswordID";
-							$result = mysqli_query($db, $query);
-							$currentDate = new DateTime();
-
-							if ($result) {
-								while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
-									echo "<tr><td>" . $row["FirstName"] . "</td>";
-									echo "<td>" . $row["LastName"] . "</td>";
-									echo "<td>" . $row["UserName"] . "</td>";
-									echo "<td>" . $row["ExpiryDate"] . "</td>";
-									if ($row['ExpiryDate'] > $currentDate) {
-										echo "<td>Yes</td>";
-									} else {
-										echo "<td>No</td>";
-									}
-									echo "</tr>";
-								}
-							}			
-						?>
+						
 					</tbody>
 				</table>
 			</div>

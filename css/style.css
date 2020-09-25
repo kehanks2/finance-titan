@@ -76,6 +76,10 @@ a:hover {
 	color: #738A9F;
 	text-decoration: none;
 }
+[contenteditable="true"] {
+	border: 1px solid #333;
+	cursor: text;
+}
 
 /* SIGN IN & CREATE ACCOUNT FORMS */
 .sign-in-form {

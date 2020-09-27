@@ -6,7 +6,8 @@ CREATE TABLE Passwords (
 	LastChangedDate DATE,
 	ExpiryDate DATE,
 	SecurityQuestion varchar(255),
-	SecurityAnswer varchar(255)
+	SecurityAnswer varchar(255),
+	Strikes int
 );
 CREATE TABLE Users (
     	UserID int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -19,3 +20,20 @@ CREATE TABLE Users (
 	PasswordID int,
     	FOREIGN KEY (PasswordID) REFERENCES Passwords(PasswordID)    
 ); 
+CREATE TABLE Accounts (
+    	AccountNumber int PRIMARY KEY NOT NULL,
+    	AccountName varchar(255),
+    	Description varchar,
+    	NormalSide enum('left','right'),
+	Category vachar(255),
+	SubCategory varchar(255)
+	InitialBalance double,
+	Debit double,
+	Credit double,
+	CurrentBalance double,
+	DateAdded DATE,
+   	CreatorID int,  
+	AccountOrder int,
+	AccountStatement varchar(255),
+	Comment varchar
+	);

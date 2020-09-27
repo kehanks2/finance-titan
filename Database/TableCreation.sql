@@ -23,9 +23,9 @@ CREATE TABLE Users (
 CREATE TABLE Accounts (
     	AccountNumber int PRIMARY KEY NOT NULL,
     	AccountName varchar(255),
-    	Description varchar,
+    	Description varchar(2555),
     	NormalSide enum('left','right'),
-	Category vachar(255),
+	Category varchar(255),
 	SubCategory varchar(255)
 	InitialBalance double,
 	Debit double,
@@ -35,5 +35,5 @@ CREATE TABLE Accounts (
    	CreatorID int,  
 	AccountOrder int,
 	AccountStatement varchar(255),
-	Comment varchar
+	Comment varchar(2555)
 	);

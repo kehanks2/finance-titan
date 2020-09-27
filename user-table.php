@@ -225,7 +225,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				var username = $('#UserName').text();	
 				var lastname = $('#LastName').text();
 				var firstname = $('#FirstName').text();
-				var dob = $('BirthDate').text();
+				var dob = $('#BirthDate').text();
 				var email = $('#EmailAddress').text();				
 				var usertype = $('#user-type option:selected').text();
 				if(username != '' && firstname != '' && lastname != '' && email != '') {

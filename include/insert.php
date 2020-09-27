@@ -4,11 +4,10 @@ if(isset($_POST["username"], $_POST["firstname"], $_POST["lastname"], $_POST["do
  	$username = mysqli_real_escape_string($db, $_POST["username"]);
 	$firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
  	$lastname = mysqli_real_escape_string($db, $_POST["lastname"]);	
-	$date = DateTime::createFromFormat('Y-m-d', $_POST['dob']);
-	$dob = $date->format('Y-m-d');
+	$date = mysqli_real_escape_string($db, $_POST['dob']);
  	$email = mysqli_real_escape_string($db, $_POST["email"]);
  	$usertype = mysqli_real_escape_string($db, $_POST["usertype"]);
- 	$query = "INSERT INTO Users(LastName, FirstName, BirthDate, UserName, EmailAddress, UserType) VALUES('$lastname', '$firstname', '$dob', '$username', '$email', '$usertype')";
+ 	$query = "INSERT INTO Users(LastName, FirstName, BirthDate, UserName, EmailAddress, UserType) VALUES('$lastname', '$firstname', '$date' , '$username', '$email', '$usertype')";
  	if(mysqli_query($db, $query)) {
   		echo 'Data Inserted';
 		echo $query;

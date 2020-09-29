@@ -1,5 +1,5 @@
 <?php
-include("config.php");
+include("../include/config.php");
 if(isset($_POST["username"], $_POST["firstname"], $_POST["lastname"], $_POST["dob"], $_POST["email"], $_POST["usertype"])) {
  	$username = mysqli_real_escape_string($db, $_POST["username"]);
 	$firstname = mysqli_real_escape_string($db, $_POST["firstname"]);

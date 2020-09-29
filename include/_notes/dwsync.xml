@@ -4,10 +4,6 @@
 <file name="head.php" server="ftpupload.net/htdocs/" local="132447046026416141" remote="132447055200000000" Dst="2" />
 <file name="banner.php" server="ftpupload.net/htdocs/" local="132449385600000000" remote="132449385600000000" Dst="2" />
 <file name="config.php" server="ftpupload.net/htdocs/" local="132449385000000000" remote="132450838200000000" Dst="2" />
-<file name="delete.php" server="ftpupload.net/htdocs/" local="132450835672599783" remote="132450838200000000" Dst="2" />
-<file name="fetch.php" server="ftpupload.net/htdocs/" local="132455480461841809" remote="132455481000000000" Dst="2" />
-<file name="insert.php" server="ftpupload.net/htdocs/" local="132455504836187662" remote="132455504400000000" Dst="2" />
 <file name="logout.php" server="ftpupload.net/htdocs/" local="132450833589923250" remote="132450838200000000" Dst="2" />
 <file name="session.php" server="ftpupload.net/htdocs/" local="132450833739704833" remote="132450838200000000" Dst="2" />
-<file name="update.php" server="ftpupload.net/htdocs/" local="132455496982248274" remote="132455496600000000" Dst="2" />
 </dwsync>

@@ -39,44 +39,27 @@ if ($_SESSION['user_type'] != 'admin') {
 		</div>
 	</div>
 	
-	<!-- SIDE BAR ACCORDION -->
-	<div class="row">
-		<div class="col-sm-3">
-			<h2>Management Options</h2>
-			<div id="admin-accordion" role="tablist">
-				<!-- USER CARD -->
-				<div class="card">
-			    	<div class="card-header" role="tab" id="user-heading">
-			      		<h5 class="mb-0"> <a data-toggle="collapse" href="#user-collapse" role="button" aria-expanded="true" aria-controls="user-collapse">User Information</a> </h5>
-		        	</div>
-			    	<div id="user-collapse" class="collapse show" role="tabpanel" aria-labelledby="user-heading" data-parent="#admin-accordion">
-			      		<div class="card-body">
-							<p><a href="user-table.php">View/Edit Users</a></p>
-							<p><a href="password-table.php">Password Report</a></p>
-						</div>
-		        	</div>
-				</div>
-				<!-- ACCOUNT CARD -->
-			  	<div class="card">
-			    	<div class="card-header" role="tab" id="account-heading">
-			      		<h5 class="mb-0"> <a class="collapsed" data-toggle="collapse" href="#account-collapse" role="button" aria-expanded="false" aria-controls="account-collapse">Accounts</a> </h5>
-		        	</div>
-			    	<div id="account-collapse" class="collapse" role="tabpanel" aria-labelledby="account-heading" data-parent="#admin-accordion">
-			      		<div class="card-body">					
-							<p><a href="account-table.php">View/Edit Accounts</a></p>
-							<p><a href="#">Other stuff</a></p>
-						</div>
-		        	</div>
-		      	</div>			  
-		  	</div>
-		</div>
-		<div class="col-sm-9">
+	<!-- MAIN CONTENT -->
+	<div class="row">		
+		<div class="col-sm-12">
 			<h2>View/Edit Accounts</h2>
 			<div class="table-responsive">
-				<table class="table table-striped">
+				<table id="account-table" class="table table-striped">
 					<thead>
 						<tr>
-							
+							<th>#</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Category</th>
+							<th>Subcategory</th>
+							<th>Initial Balance</th>
+							<th>Debit</th>
+							<th>Credit</th>
+							<th>Current Balance</th>
+							<th>Normal Side</th>
+							<th>Date Added</th>
+							<th>Creator</th>
+							<th>Edit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -94,5 +77,28 @@ if ($_SESSION['user_type'] != 'admin') {
     <!-- Include all compiled plugins (below), or include individual files as needed --> 
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
-  </body>
+	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			fetch_data();
+			
+			function fetch_data() {
+				var dataTable = $("#account-table").DataTable({
+					"processing": true,
+					"serverSide": true,
+					"dom": '<"top"f>t<"bottom"ip>',
+					"order": [],
+					"ajax": {
+						url: "accounts/fetch.php",
+						type: "POST"
+					}
+				});
+			}
+			
+			
+			
+		})
+	</script>
+</body>
 </html>

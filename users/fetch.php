@@ -1,6 +1,6 @@
 <?php
 //fetch.php
-	include("config.php");
+	include("../include/config.php");
 	$columns = array('LastName', 'FirstName', 'UserName', 'EmailAddress', 'UserType');
 
 	$query = "SELECT * FROM Users ";

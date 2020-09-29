@@ -125,7 +125,7 @@ if ($_SESSION['user_type'] != 'admin') {
 					"dom": '<"top"f>t<"bottom"ip>',
 					"order" : [],
 					"ajax" : {
-						url:"include/fetch.php",
+						url:"users/fetch.php",
 						type:"POST"
 					}
 				});
@@ -139,7 +139,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				var email = values[4];
 				var usertype = $('#user-type option:selected').text();
 				$.ajax({
-					url:"include/update.php",
+					url:"users/update.php",
 					method:"POST",
 					data:{
 						id:id,
@@ -230,7 +230,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				var usertype = $('#user-type option:selected').text();
 				if(username != '' && firstname != '' && lastname != '' && email != '') {
 					$.ajax({
-						url:"include/insert.php",
+						url:"users/insert.php",
 						method:"POST",
 						data: {
 							username: username,

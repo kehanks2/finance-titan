@@ -227,7 +227,7 @@ if ($_SESSION['user_type'] != 'admin') {
 						$('#alert_message').html('');
 					}, 5000);
 				} else {
-					$('#alert_message').html('<div class="alert alert-success">Account ID and Name are required.</div>');
+					$('#alert_message').html('<div class="alert alert-warning">Account ID and Name are required.</div>');
 				}
 			});
 			

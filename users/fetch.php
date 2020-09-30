@@ -1,7 +1,7 @@
 <?php
 //fetch.php
 	include("../include/config.php");
-	$columns = array('LastName', 'FirstName', 'UserName', 'EmailAddress', 'UserType');
+	$columns = array('UserName', 'LastName', 'FirstName', 'BirthDate', 'EmailAddress', 'UserType');
 
 	$query = "SELECT * FROM Users ";
 
@@ -19,7 +19,7 @@
  		$query .= 'ORDER BY '.$columns[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' 
  		';
 	} else {
- 		$query .= 'ORDER BY UserID DESC ';
+ 		$query .= 'ORDER BY UserID ASC ';
 	}
 
 	$query1 = '';

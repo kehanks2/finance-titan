@@ -39,38 +39,9 @@ if ($_SESSION['user_type'] != 'admin') {
 		</div>
 	</div>
 	
-	<!-- SIDE BAR ACCORDION -->
+	<!-- MAIN CONTENT -->
 	<div class="row">
-		<div class="col-sm-3">
-			<h2>Management Options</h2>
-			<div id="admin-accordion" role="tablist">
-				<!-- USER CARD -->
-				<div class="card">
-			    	<div class="card-header" role="tab" id="user-heading">
-			      		<h5 class="mb-0"> <a data-toggle="collapse" href="#user-collapse" role="button" aria-expanded="true" aria-controls="user-collapse">User Information</a> </h5>
-		        	</div>
-			    	<div id="user-collapse" class="collapse show" role="tabpanel" aria-labelledby="user-heading" data-parent="#admin-accordion">
-			      		<div class="card-body">
-							<p><a href="user-table.php">View/Edit Users</a></p>
-							<p><a href="password-table.php">Password Report</a></p>
-						</div>
-		        	</div>
-				</div>
-				<!-- ACCOUNT CARD -->
-			  	<div class="card">
-			    	<div class="card-header" role="tab" id="account-heading">
-			      		<h5 class="mb-0"> <a class="collapsed" data-toggle="collapse" href="#account-collapse" role="button" aria-expanded="false" aria-controls="account-collapse">Accounts</a> </h5>
-		        	</div>
-			    	<div id="account-collapse" class="collapse" role="tabpanel" aria-labelledby="account-heading" data-parent="#admin-accordion">
-			      		<div class="card-body">					
-							<p><a href="account-table.php">View/Edit Accounts</a></p>
-							<p><a href="#">Other stuff</a></p>
-						</div>
-		        	</div>
-		      	</div>			  
-		  	</div>
-		</div>
-		<div class="col-sm-9">
+		<div class="col-sm-12">
 			<h2>Password Report</h2>
 			<div class="table-responsive">
 				<table class="table table-striped">

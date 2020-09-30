@@ -1,17 +1,43 @@
 <?php
 include("../include/config.php");
-if(isset($_POST["username"], $_POST["firstname"], $_POST["lastname"], $_POST["dob"], $_POST["email"], $_POST["usertype"])) {
- 	$username = mysqli_real_escape_string($db, $_POST["username"]);
-	$firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
- 	$lastname = mysqli_real_escape_string($db, $_POST["lastname"]);	
-	$date = DateTime::createFromFormat('Y-m-d', $_POST['dob']);
-	$dob = $date->format('Y-m-d');
- 	$email = mysqli_real_escape_string($db, $_POST["email"]);
- 	$usertype = mysqli_real_escape_string($db, $_POST["usertype"]);
- 	$query = "INSERT INTO Users(LastName, FirstName, BirthDate, UserName, EmailAddress, UserType) VALUES('$lastname', '$firstname', '$dob', '$username', '$email', '$usertype')";
- 	if(mysqli_query($db, $query)) {
-  		echo 'Data Inserted';
-		echo $query;
- 	}
+if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat"], $_POST["subcat"], $_POST["initbal"], $_POST["debit"], $_POST["credit"], $_POST["currbal"], $_POST["nside"], $_POST["dateadded"], $_POST["creator"])) {
+ 	$accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
+	$accountname = mysqli_real_escape_string($db, $_POST["accountname"]);
+ 	$desc = mysqli_real_escape_string($db, $_POST["desc"]);	
+	$cat = mysqli_real_escape_string($db, $_POST["cat"]);
+	$subcat = mysqli_real_escape_string($db, $_POST["subcat"]);
+ 	$initbal = mysqli_real_escape_string($db, $_POST["initbal"]);
+ 	$debit = mysqli_real_escape_string($db, $_POST["debit"]);
+	$credit = mysqli_real_escape_string($db, $_POST["credit"]);
+	$currbal = mysqli_real_escape_string($db, $_POST["currbal"]);
+	$nside = mysqli_real_escape_string($db, $_POST["nside"]);
+	$dateadded = mysqli_real_escape_string($db, $_POST["dateadded"]);
+	$creator = mysqli_real_escape_string($db, $_POST["creator"]);
+	
+	$sql_check = "SELECT AccountNumber, AccountName FROM Accounts";
+	$result_check = mysqli_query($db, $sql_check);
+	
+	while($row = mysqli_fetch_array($result_check)) {
+		
+		if ($row["AccountNumber"] == $accountID) {
+			$data = 1;
+			break;
+		} else if ($row["AccountName"] == $accountname) {
+			$data = 2;
+			break;
+		}
+	}
+	
+	if ($data != 1 && $data != 2) {
+		$query = "INSERT INTO Accounts(AccountNumber, AccountName, Description, Category, SubCategory, InitialBalance, Debit, Credit, CurrentBalance, NormalSide, DateAdded, CreatorID) VALUES('$accountID', '$accountname', '$desc', '$cat', '$subcat', '$iniitbal', '$debit', '$credit', '$currbal', '$nside', '$dateadded', '$creator')";
+ 			if(mysqli_query($db, $query)) {
+  				$data = 0;
+ 			} else {
+				$data = 4;
+			}
+	}
+	
+	echo $data;
+	
 }
 ?>

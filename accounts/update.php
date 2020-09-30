@@ -1,17 +1,23 @@
 <?php
 include("../include/config.php");
-if(isset($_POST["username"], $_POST["firstname"], $_POST["lastname"], $_POST['dob'], $_POST["email"], $_POST["usertype"])) {
- 	$username = mysqli_real_escape_string($db, $_POST["username"]);
-	$firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
- 	$lastname = mysqli_real_escape_string($db, $_POST["lastname"]);	
-	$dob = mysqli_real_escape_string($db, $_POST["dob"]);
-	$date = strtotime($dob);
-	$date = date('Y-m-d', $date);
- 	$email = mysqli_real_escape_string($db, $_POST["email"]);
- 	$usertype = mysqli_real_escape_string($db, $_POST["usertype"]);
- 	$query = "UPDATE Users SET UserName='".$username."', FirstName = '".$firstname."', LastName = '".$lastname."', BirthDate = '".$date."', EmailAddress = '".$email."', UserType = '".$usertype."' WHERE UserID = '".$_POST["id"]."'";
- 	if(mysqli_query($db, $query)) {
-  		echo 'Data Updated';
- 	}
+if(isset($_POST["accountID"], $_POST["desc"], $_POST["cat"], $_POST["subcat"], $_POST["initbal"], $_POST["debit"], $_POST["credit"], $_POST["currbal"], $_POST["nside"])) {
+	$accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
+ 	$desc = mysqli_real_escape_string($db, $_POST["desc"]);	
+	$cat = mysqli_real_escape_string($db, $_POST["cat"]);
+	$subcat = mysqli_real_escape_string($db, $_POST["subcat"]);
+ 	$initbal = mysqli_real_escape_string($db, $_POST["initbal"]);
+ 	$debit = mysqli_real_escape_string($db, $_POST["debit"]);
+	$credit = mysqli_real_escape_string($db, $_POST["credit"]);
+	$currbal = mysqli_real_escape_string($db, $_POST["currbal"]);
+	$nside = mysqli_real_escape_string($db, $_POST["nside"]);
+		
+	$query = "UPDATE Accounts SET Description = '".$desc."', Category = '".$cat."', SubCategory = '".$subcat."', InitialBalance = '".$initbal."', Debit = '".$debit."', Credit = '".$credit."', CurrentBalance = '".$currbal."', NormalSide = '".$nside."' WHERE AccountNumber = '".$_POST["accountID"]."'";
+	if(mysqli_query($db, $query)) {
+		$data = 0;
+	} else {
+		$data = 3;
+	}
+	
+	echo $data;
 }
 ?>

@@ -63,7 +63,7 @@ if ($_SESSION['user_type'] != 'admin') {
 		        	</div>
 			    	<div id="account-collapse" class="collapse" role="tabpanel" aria-labelledby="account-heading" data-parent="#admin-accordion">
 			      		<div class="card-body">					
-							<p><a href="#account-table">View/Edit Accounts</a></p>
+							<p><a href="account-table.php">View/Edit Accounts</a></p>
 							<p><a href="#">Other stuff</a></p>
 						</div>
 		        	</div>

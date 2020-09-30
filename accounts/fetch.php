@@ -1,7 +1,7 @@
 <?php
 //fetch.php
 	include("../include/config.php");
-	$columns = array('AccountNumber', 'AccountName', 'Description', 'Category', 'SubCategory', 'InitialBalance', 'Debit', 'Credit', 'CurrentBalance', 'DateAdded', 'CreatorID');
+	$columns = array('AccountNumber', 'AccountName', 'Description', 'Category', 'SubCategory', 'InitialBalance', 'Debit', 'Credit', 'CurrentBalance', 'NormalSide', 'DateAdded', 'CreatorID');
 
 	$query = "SELECT * FROM Accounts ";
 
@@ -10,7 +10,7 @@
  			WHERE AccountName LIKE "%'.$_POST["search"]["value"].'%"
 			OR AccountNumber LIKE "%'.$_POST["search"]["value"].'%"
  			OR Category LIKE "%'.$_POST["search"]["value"].'%" 
- 			OR Subcategory LIKE "%'.$_POST["search"]["value"].'%"
+ 			OR SubCategory LIKE "%'.$_POST["search"]["value"].'%"
  			';
 	}
 
@@ -18,7 +18,7 @@
  		$query .= 'ORDER BY '.$columns[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' 
  		';
 	} else {
- 		$query .= 'ORDER BY AccountID DESC ';
+ 		$query .= 'ORDER BY AccountNumber ASC ';
 	}
 
 	$query1 = '';
@@ -35,17 +35,30 @@
 
 	while($row = mysqli_fetch_array($result)) {
  		$sub_array = array();
- 		$sub_array[] = $row["AccountNumber"];
-		$sub_array[] = $row["AccountName"];
-		$sub_array[] = $row["Description"];
-		$sub_array[] = $row["Category"];
-		$sub_array[] = $row["SubCategory"];
-		$sub_array[] = $row["InitialBalance"];
-		$sub_array[] = $row["Debit"];
-		$sub_array[] = $row["Credit"];
-		$sub_array[] = $row["CurrentBalance"];
-		$sub_array[] = $row["DateAdded"];
-		$sub_array[] = $row["CreatorID"];		
+ 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountName">'. $row["AccountName"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Description">'. $row["Description"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Category">'. $row["Category"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="SubCategory">'. $row["SubCategory"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="InitialBalance">'. $row["InitialBalance"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Debit">'. $row["Debit"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Credit">'. $row["Credit"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance">'. $row["CurrentBalance"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="NormalSide">'. $row["NormalSide"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="DateAdded">'. $row["DateAdded"].'</div>';
+		
+		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="CreatorID">'. $row["CreatorID"].'</div>';	
+		
 		$sub_array[] = '<button name="edit" id="edit" class="btn btn-link edit-btn">Edit</button></td>';
  		$data[] = $sub_array;
 	}
@@ -60,9 +73,7 @@
  		"draw"    => intval($_POST["draw"]),
  		"recordsTotal"  =>  get_all_data($db),
  		"recordsFiltered" => $number_filter_row,
- 		"data"    => $data,
-		"DT_RowId" => $row["AccountNumber"],
-		"DT_RowClass" => "update edt"
+ 		"data"    => $data
 	);
 
 	echo json_encode($output);

@@ -150,9 +150,16 @@ if ($_SESSION['user_type'] != 'admin') {
              		$.each(currentTD, function () {
                   		$(this).find('.edt').prop('contenteditable', false);
 						if($(this).find('div').hasClass('edt')) {
-							values.push($(this).text());
+							if ($(this).hasClass('num')) {
+								var nextval = $(this).text();
+								nextval = parseFloat(nextval.toFixed(2));
+								values.push(nextval);
+							} else {
+								values.push($(this).text());
+							}
 						}						
               		});
+					
 					update_data(id, values);
           		}
 
@@ -193,41 +200,47 @@ if ($_SESSION['user_type'] != 'admin') {
 				var desc = $('#Description').text();
 				var cat = $('#Category').text();
 				var subcat = $('#SubCategory').text();				
-				var initbal = $('#InitialBalance').text();
-				var debit = $('#Debit').text();				
-				var credit = $('#Credit').text();
-				var currbal = $('#CurrentBalance').text();				
+				var initbal = parseFloat($('#InitialBalance').text().toFixed(2));
+				var debit = parseFloat($('#Debit').text().toFixed(2));				
+				var credit = parseFloat($('#Credit').text().toFixed(2));
+				var currbal = parseFloat($('#CurrentBalance').text().toFixed(2));				
 				var nside = $('#NormalSide').text();
 				var dateadded = $('#DateAdded').text();				
 				var creator = $('#CreatorID').text();
-				if(accountID != '' && accountname != '') {
-					$.ajax({
-						url:"accounts/insert.php",
-						method:"POST",
-						dataType: "JSON",
-						data: {
-							accountID: accountID,
-							accountname: accountname,
-							desc: desc,
-							cat: cat,
-							subcat: subcat,
-							initbal: initbal,
-							debit: debit,
-							credit: credit,
-							currbal: currbal,
-							nside: nside,
-							dateadded: dateadded,
-							creator: creator
-						},
-						success:function(data) {
-							getAlert(data);
-						}
-					});
-					setInterval(function(){
-						$('#alert_message').html('');
-					}, 5000);
+				
+				if(isNaN(accountID)) {
+					$('#alert_message').html('<div class="alert alert-warning">Account ID must be a number.</div>');
 				} else {
-					$('#alert_message').html('<div class="alert alert-warning">Account ID and Name are required.</div>');
+				
+					if(accountID != '' && accountname != '') {
+						$.ajax({
+							url:"accounts/insert.php",
+							method:"POST",
+							dataType: "JSON",
+							data: {
+								accountID: accountID,
+								accountname: accountname,
+								desc: desc,
+								cat: cat,
+								subcat: subcat,
+								initbal: initbal,
+								debit: debit,
+								credit: credit,
+								currbal: currbal,
+								nside: nside,
+								dateadded: dateadded,
+								creator: creator
+							},
+							success:function(data) {
+								getAlert(data);
+							}
+						});
+						setInterval(function(){
+							$('#alert_message').html('');
+						}, 5000);
+					} else {
+						$('#alert_message').html('<div class="alert alert-warning">Account ID and Name are required.</div>');
+					}
 				}
 			});
 			

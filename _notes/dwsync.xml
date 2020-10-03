@@ -18,6 +18,7 @@
 <file name=".htaccess" server="ftpupload.net/htdocs/" local="132447649800000000" remote="132447649800000000" Dst="2" />
 <file name="password-table.php" server="ftpupload.net/htdocs/" local="132458869975153324" remote="132458869800000000" Dst="2" />
 <file name="user-table.php" server="ftpupload.net/htdocs/" local="132458889430433013" remote="132458891400000000" Dst="2" />
-<file name="account-table.php" server="ftpupload.net/htdocs/" local="132459744835265928" remote="132459744600000000" Dst="2" />
+<file name="account-table.php" server="ftpupload.net/htdocs/" local="132459925810000000" remote="132462210600000000" Dst="2" />
 <file name="account-view.php" server="ftpupload.net/htdocs/" local="132459774079939367" remote="132459774000000000" Dst="2" />
+<file name="event-log.php" server="ftpupload.net/htdocs/" local="132462213230159738" remote="132462213000000000" Dst="2" />
 </dwsync>

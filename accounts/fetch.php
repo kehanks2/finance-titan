@@ -34,6 +34,11 @@
 	$data = array();
 
 	while($row = mysqli_fetch_array($result)) {
+		$initbal = number_format($row["InitialBalance"], 2);
+		$debit = number_format($row["Debit"], 2);
+		$credit = number_format($row["Credit"], 2);
+		$currbal = number_format($row["CurrentBalance"], 2);
+		
  		$sub_array = array();
  		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
 		
@@ -45,13 +50,13 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="SubCategory">'. $row["SubCategory"].'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="InitialBalance">'. $row["InitialBalance"].'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="InitialBalance">'. $initbal .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Debit">'. $row["Debit"].'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="Debit">'. $debit .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Credit">'. $row["Credit"].'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="Credit">'. $credit .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance">'. $row["CurrentBalance"].'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance">'. $currbal .'</div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="NormalSide">'. $row["NormalSide"].'</div>';
 		

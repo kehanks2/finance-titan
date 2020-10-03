@@ -3,6 +3,7 @@
 <file name="config.php" server="ftpupload.net/htdocs/" local="132449385000000000" remote="132462210600000000" Dst="2" />
 <file name="head.php" server="ftpupload.net/htdocs/" local="132447046026416141" remote="132447055200000000" Dst="2" />
 <file name="logout.php" server="ftpupload.net/htdocs/" local="132450833589923250" remote="132462210600000000" Dst="2" />
-<file name="navbar.php" server="ftpupload.net/htdocs/" local="132462209934722077" remote="132462210600000000" Dst="2" />
+<file name="navbar.php" server="ftpupload.net/htdocs/" local="132462368475153531" remote="132462368400000000" Dst="2" />
 <file name="session.php" server="ftpupload.net/htdocs/" local="132450833739704833" remote="132462210600000000" Dst="2" />
+<file name="fetch-events.php" server="ftpupload.net/htdocs/" local="132462225260321594" remote="132462262200000000" Dst="2" />
 </dwsync>

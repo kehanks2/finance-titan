@@ -2,15 +2,23 @@
 //fetch.php
 	include("../include/config.php");
 	$columns = array('AccountNumber', 'AccountName', 'Description', 'Category', 'SubCategory', 'InitialBalance', 'Debit', 'Credit', 'CurrentBalance', 'NormalSide', 'DateAdded', 'CreatorID');
-
+	
 	$query = "SELECT * FROM Accounts ";
+	$active = "";
 
 	if(isset($_POST["search"]["value"])) {
+		if ($_POST["search"]["value"] == "active"){
+			$active = 1;
+		} else if ($_POST["search"]["value"] == "inactive") {
+			$active = 0;
+		}
+		
  		$query .= '
  			WHERE AccountName LIKE "%'.$_POST["search"]["value"].'%"
 			OR AccountNumber LIKE "%'.$_POST["search"]["value"].'%"
  			OR Category LIKE "%'.$_POST["search"]["value"].'%" 
  			OR SubCategory LIKE "%'.$_POST["search"]["value"].'%"
+			OR IsActive LIKE "%'.$active.'%"
  			';
 	}
 

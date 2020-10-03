@@ -35,7 +35,7 @@ if ($_SESSION['user_type'] != 'admin') {
 
 <section id="admin-home" class="container-fluid home-screen">	
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-4">
 			<h1>Welcome, <?php echo $login_session; ?></h1>
 			<h3>Administrator Account</h3>
 		</div>

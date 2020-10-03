@@ -57,7 +57,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				<div class="row">
 					<div class="col-sm-2"><h2>Event Log</h2></div>
 				</div>
-				<div id="alert_message"></div>
+				<div id="alert_message"><br><br></div>
 				<table id="event-table" class="table table-striped" style="width:100%;">
 					<br />
 					<thead>

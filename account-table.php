@@ -54,7 +54,7 @@ if ($_SESSION['user_type'] != 'admin') {
 						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;">Add</button>
 					</div>
 				</div>
-				<div id="alert_message"></div>
+				<div id="alert_message"><br><br></div>
 				<table id="account-table" class="table table-striped" style="width:100%;">
 					<thead>
 						<tr>
@@ -132,7 +132,7 @@ if ($_SESSION['user_type'] != 'admin') {
 					}
 				});
 				setInterval(function(){
-					$('#alert_message').html('');
+					$('#alert_message').html('<br><br>');
 				}, 5000);
 			};
 			
@@ -152,7 +152,7 @@ if ($_SESSION['user_type'] != 'admin') {
 					}
 				});
 				setInterval(function(){
-					$('#alert_message').html('');
+					$('#alert_message').html('<br><br>');
 				}, 5000);
 			};
 			
@@ -274,7 +274,7 @@ if ($_SESSION['user_type'] != 'admin') {
 							}
 						});
 						setInterval(function(){
-							$('#alert_message').html('');
+							$('#alert_message').html('<br><br>');
 						}, 5000);
 					} else {
 						$('#alert_message').html('<div class="alert alert-warning">Account ID and Name are required.</div>');

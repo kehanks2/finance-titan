@@ -38,6 +38,14 @@
 		$debit = number_format($row["Debit"], 2);
 		$credit = number_format($row["Credit"], 2);
 		$currbal = number_format($row["CurrentBalance"], 2);
+		$isActive = "";
+		if ($row["IsActive"] == 1) {
+			$isActive = "Active";
+			$edit = "";
+		} else if ($row["IsActive"] == 0) {
+			$isActive = "Inactive";
+			$edit = "disabled";
+		}
 		
  		$sub_array = array();
  		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
@@ -56,7 +64,7 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="Credit">'. $credit .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance">'. $currbal .'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance" id="CurrentBalance">'. $currbal .'</div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="NormalSide">'. $row["NormalSide"].'</div>';
 		
@@ -64,7 +72,7 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="CreatorID">'. $row["CreatorID"].'</div>';	
 		
-		$sub_array[] = '<button name="edit" id="edit" class="btn btn-link edit-btn">Edit</button></td>';
+		$sub_array[] = '<div class="btn-group" role="group"><button type="button" name="edit" id="edit" class="btn btn-secondary edit-btn '. $edit .'">Edit</button><button type="button" class="btn btn-secondary active-btn" name="active" id="active">'. $isActive .'</button></div></td>';
  		$data[] = $sub_array;
 	}
 

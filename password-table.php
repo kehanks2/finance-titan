@@ -62,7 +62,7 @@ if ($_SESSION['user_type'] != 'admin') {
 						<?php
 							$query = "SELECT Users.*, Passwords.ExpiryDate FROM Users, Passwords WHERE Users.PasswordID = Passwords.PasswordID";
 							$result = mysqli_query($db, $query);
-							$currentDate = new DateTime();
+							$currentDate = date("Y-m-d");
 
 							if ($result) {
 								while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
@@ -70,7 +70,9 @@ if ($_SESSION['user_type'] != 'admin') {
 									echo "<td>" . $row["LastName"] . "</td>";
 									echo "<td>" . $row["UserName"] . "</td>";
 									echo "<td>" . $row["ExpiryDate"] . "</td>";
-									if ($row['ExpiryDate'] > $currentDate) {
+									
+									$expiryDate = strtotime($row['ExpiryDate']);
+									if ($expiryDate > $currentDate) {
 										echo "<td>Yes</td>";
 									} else {
 										echo "<td>No</td>";

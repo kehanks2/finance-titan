@@ -56,7 +56,6 @@ if ($_SESSION['user_type'] != 'admin') {
 				</div>
 				<div id="alert_message"></div>
 				<table id="account-table" class="table table-striped" style="width:100%;">
-					<br />
 					<thead>
 						<tr>
 							<th>#</th>
@@ -64,10 +63,10 @@ if ($_SESSION['user_type'] != 'admin') {
 							<th>Description</th>
 							<th>Category</th>
 							<th>Subcategory</th>
-							<th>Initial Bal</th>
+							<th>Initial</th>
 							<th>Debit</th>
 							<th>Credit</th>
-							<th>Current Bal</th>
+							<th>Current</th>
 							<th>Normal Side</th>
 							<th>Date Added</th>
 							<th>Creator</th>
@@ -137,33 +136,74 @@ if ($_SESSION['user_type'] != 'admin') {
 				}, 5000);
 			};
 			
+			function update_active(id, activeStatus) {
+				var accountID = id;
+				var isActive = activeStatus;
+				$.ajax({
+					url: "accounts/update-active.php",
+					method: "POST",
+					dataType: "JSON",
+					data: {
+						accountID: accountID,
+						isActive: isActive
+					},
+					success:function(data) {
+						getAlert(data);
+					}
+				});
+				setInterval(function(){
+					$('#alert_message').html('');
+				}, 5000);
+			};
+			
+			$('#account-table').on('click', '#active', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				var bal = $(this).parents('tr').find('#CurrentBalance').text();
+				if ($(this).html() == 'Active') {
+					if (bal == 0) {						
+						update_active(id, 0);					
+						$(this).html() = 'Inactive';
+					} else {
+						$('#alert_message').html('<div class="alert alert-warning">Accounts with a balance cannot be deactivated.</div>');
+					}
+				} else if ($(this).html() == 'Inactive') {
+					update_active(id, 1);
+					$(this).html() = 'Active';
+				}
+			});
+			
 			$('#account-table').on('click', '#edit', function() {
-				var currentTD = $(this).parents('tr').find('td');
-				if ($(this).html() == 'Edit') {                  
-              		$.each(currentTD, function () {
-                  		$(this).find('.edt').prop('contenteditable', true);
-              		});
-					
-          		} else {
-					var id = $(this).parents('tr').find('td').find('div').data("id");
-					var values = [];
-             		$.each(currentTD, function () {
-                  		$(this).find('.edt').prop('contenteditable', false);
-						if($(this).find('div').hasClass('edt')) {
-							if ($(this).hasClass('num')) {
-								var nextval = $(this).text();
-								nextval = parseFloat(nextval.toFixed(2));
-								values.push(nextval);
-							} else {
-								values.push($(this).text());
-							}
-						}						
-              		});
-					
-					update_data(id, values);
-          		}
+				var isActive = $(this).parents('tr').find('#active').text();
+				if (isActive == 'Active') {
+					var currentTD = $(this).parents('tr').find('td');
+					if ($(this).html() == 'Edit') {                  
+						$.each(currentTD, function () {
+							$(this).find('.edt').prop('contenteditable', true);
+						});
 
-          		$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+					} else {
+						var id = $(this).parents('tr').find('td').find('div').data("id");
+						var values = [];
+						$.each(currentTD, function () {
+							$(this).find('.edt').prop('contenteditable', false);
+							if($(this).find('div').hasClass('edt')) {
+								if ($(this).hasClass('num')) {
+									var nextval = $(this).text();
+									nextval = parseFloat(nextval.toFixed(2));
+									values.push(nextval);
+								} else {
+									values.push($(this).text());
+								}
+							}						
+						});
+
+						update_data(id, values);
+					}
+
+					$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+				} else {
+					$('#alert_message').html('<div class="alert alert-warning">Cannot edit inactive accounts.</div>');
+				}
 
 			});
 			
@@ -186,9 +226,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				html += '<td contenteditable="true" id="CurrentBalance"></td>';
 				html += '<td contenteditable="true" id="NormalSide"></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
-				html += '<td contenteditable="false" id="CreatorID">';
-				html += $('#currentuser').text();
-				html += '</td>';
+				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
 				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link">Insert</button></td>';
 				html += '</tr>';
 				$('#account-table tbody').prepend(html);

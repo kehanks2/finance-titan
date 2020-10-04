@@ -1,11 +1,13 @@
 <?php
 include('include/session.php');
-if ($_SESSION['user_type'] == 'admin') {
-	header("Location: admin-home.php");
-} else if ($_SESSION['user_type'] == 'inactive') {
+if (isset($_SESSION['inactive'])) {
 	header("Location: login.php");
-} else if ($_SESSION['user_type'] == '') {
-	header("Location: login.php");
+} else {
+	if ($_SESSION['user_type'] == 'admin') {
+		header("Location: account-table.php");
+	} else if (!isset($_SESSION['user_type'])) {
+		header("Location: login.php");
+	}
 }
 ?>
 
@@ -101,6 +103,26 @@ if ($_SESSION['user_type'] == 'admin') {
 					}
 				});
 			};
+			
+			function to_ledger(id, accountName) {
+				$.ajax({
+					url: "accounts/to-ledger.php",
+					method: "POST",
+					data: {
+						accountID: id,
+						accountName: accountName
+					},
+					success: function(data) {
+						window.location.assign(data);
+					}
+				})
+			}
+			
+			$('#account-table').on('click', '#ledger', function() {
+				var accountName = $(this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				to_ledger(id, accountName);
+			});
 		})
 	</script>
 </body>

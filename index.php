@@ -28,6 +28,11 @@
 		
 <!-- PAGE CONTENT -->
 <section id="sign-in-form" class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
+	</div>
 	<div class="row justify-content-center">
 		<div class="col-md-6">			
 			<div class="text-center">

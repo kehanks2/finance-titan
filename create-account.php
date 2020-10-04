@@ -61,87 +61,71 @@
 	
 <body>
 <!-- NAVIGATION -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.php">Finance Titan</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link disabled" href="#">Messages</a>
-			</li>			
-		</ul>
-		<ul class="navbar-nav d-flex justify-content-end">	
-			<li>
-				<a class="nav-link" id="logout" href="login.php">Log In</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+<?php include('include/navbar.php'); ?>
 
 <!-- BANNER -->
-<section id="banner" class="text-center logo-background"> <img src="images/logo.jpeg" alt="Finance Titan Logo" max-width="225px" height="200px" class="logo"/>
-	<p class="lead">Seize Control of Your Finances</p>
-</section>
+<?php include('include/banner.php'); ?>
 
 <!-- PAGE CONTENT -->
-<section class="d-flex justify-content-center">
-	<form id="create-account-form" class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-		<div>
-			<h2>Create your account</h2>
+<section class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
 		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first Name" required="required">
-		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last Name" required="required">
-		</div>
-		<div class="form-group">
-			<input type="email" class="form-control" name="email" id="email" placeholder="Enter email address" required="required">
-		</div>
-		<div class="form-group">
-			<label for="dob" class="form-text">Enter Date of Birth:</label>
-			<input type="date" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" required="required">
-		</div>
-		<div class="row">
-			<div class="form-group col-6">
-				<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Enter password" required="required">
+	</div>
+	<div class="d-flex justify-content-center">
+		<form id="create-account-form" class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<div>
+				<h2>Create your account</h2>
 			</div>
-			<div class="col-1 help-icon">
-				<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
-				   data-content="<ul>
-								 <li>use 8+ characters</li>
-								 <li>starts with a letter</li>
-								 <li>include at least one letter, one number, and one special character (such as ! . ? * or
-								 	&)</li></ul>">
-				</i>
+			<div class="form-group">
+				<input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first Name" required="required">
 			</div>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype password" required="required">
-		</div>
-		<div class="form-group">
-			<select name="security-question" id="security-question" class="form-control" required="required">
-				<option hidden disabled selected value>Select a security question</option>
-				<option value="mother-maiden">What is your mother's maiden name?</option>
-				<option value="father-middle">What is your father's middle name?</option>
-				<option value="first-pet">What is the name of your first pet?</option>
-				<option value="first-car">What was your first car?</option>
-				<option value="birth-city">What is the city you were born in?</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Enter security answer" required="required">
-		</div>
-		<div class="text-center">
-			<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to create your account" value="Create Account">
-		</div>
-	</form>
+			<div class="form-group">
+				<input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last Name" required="required">
+			</div>
+			<div class="form-group">
+				<input type="email" class="form-control" name="email" id="email" placeholder="Enter email address" required="required">
+			</div>
+			<div class="form-group">
+				<label for="dob" class="form-text">Enter Date of Birth:</label>
+				<input type="date" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" required="required">
+			</div>
+			<div class="row">
+				<div class="form-group col-6">
+					<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Enter password" required="required">
+				</div>
+				<div class="col-1 help-icon">
+					<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
+					   data-content="<ul>
+									 <li>use 8+ characters</li>
+									 <li>starts with a letter</li>
+									 <li>include at least one letter, one number, and one special character (such as ! . ? * or
+										&)</li></ul>">
+					</i>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype password" required="required">
+			</div>
+			<div class="form-group">
+				<select name="security-question" id="security-question" class="form-control" required="required">
+					<option hidden disabled selected value>Select a security question</option>
+					<option value="mother-maiden">What is your mother's maiden name?</option>
+					<option value="father-middle">What is your father's middle name?</option>
+					<option value="first-pet">What is the name of your first pet?</option>
+					<option value="first-car">What was your first car?</option>
+					<option value="birth-city">What is the city you were born in?</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Enter security answer" required="required">
+			</div>
+			<div class="text-center">
+				<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to create your account" value="Create Account">
+			</div>
+		</form>
+	</div>
 </section>
 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 

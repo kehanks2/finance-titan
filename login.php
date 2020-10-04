@@ -28,18 +28,24 @@
 		  
 	  	 $row2 = mysqli_fetch_assoc($result);
 	  	 $myusertype = $row['UserType'];
+		 $isActive = $row['IsActive'];
       
          $_SESSION['login_user'] = $myusername;
 		 $_SESSION['user_type'] = $myusertype;
-		 if ($myusertype == 'admin') {			 
-         	header("Location: admin-home.php");
-		 } elseif ($myusertype == 'accountant') {
-			header("Location: accountant-home.php");
-		 } elseif ($myusertype == 'manager') {
-			header("Location: manager-home.php");
-		 } elseif ($myusertype == 'inactive') {
+		  if ($isActive == 0) {			  
 			$error_inactive = true;
-		 }
+			$_SESSION['inactive'] = $isActive;
+		  } else {
+			  unset($_SESSION['inactive']);
+			if ($myusertype == 'admin') {			 
+         		header("Location: admin-home.php");
+		 	} elseif ($myusertype == 'accountant') {
+				header("Location: accountant-home.php");
+		 	} elseif ($myusertype == 'manager') {
+				header("Location: manager-home.php");
+		 	}
+		  }
+		 
          
       }else {
          $error_login = true;
@@ -75,6 +81,11 @@
 
 <!-- PAGE CONTENT -->
 <section id="sign-in-form" class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
+	</div>
 	<div class="row justify-content-center">
 		<div class="col-md-6">
 			<div id="home-accordion" role="tablist">

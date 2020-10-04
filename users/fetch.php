@@ -35,14 +35,45 @@
 	$data = array();
 
 	while($row = mysqli_fetch_array($result)) {
+		$ut = array('', '', '');
+		if ($row['UserType'] == 'admin') {
+			$ut[0] = 'admin';
+			$ut[1] = 'accountant';
+			$ut[2] = 'manager';
+		} else if ($row['UserType'] == 'accountant') {
+			$ut[0] = 'accountant';
+			$ut[1] = 'manager';
+			$ut[2] = 'admin';
+		} else if ($row['UserType'] == 'manager') {
+			$ut[0] = 'manager';
+			$ut[1] = 'accountant';
+			$ut[2] = 'admin';
+		};
+		
+		$isActive = "";
+		if ($row["IsActive"] == 1) {
+			$isActive = "Active";
+			$edit = "";
+		} else if ($row["IsActive"] == 0) {
+			$isActive = "Inactive";
+			$edit = "disabled";
+		}
+		
  		$sub_array = array();
- 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="UserName">'. $row["UserName"].'</div>';
+ 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["UserID"].'" data-column="UserName">'. $row["UserName"].'</div>';
+		
  		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="LastName">'. $row["LastName"].'</div>';
+		
  		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="FirstName">'. $row["FirstName"].'</div>';
+		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="BirthDate">'. $row["BirthDate"].'</div>';
- 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="EmailAddress">'.$row["EmailAddress"].'</div>';
- 		$sub_array[] = '<div class="update" data-id="'.$row["UserID"].'" data-column="UserType"><select id="user-type" disabled><option id="option1">'.$row["UserType"].'</option><option id="option2"></option><option id="option3"></option><option id="option4"></option></select></div>';
-		$sub_array[] = '<button name="edit" id="edit" class="btn btn-link edit-btn" data-toggle="tooltip" data-placement="right" title="Change user information">Edit</button></td>';
+		
+ 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="EmailAddress">'. $row["EmailAddress"] .'</div>';
+		
+ 		$sub_array[] = '<div class="update" data-id="'.$row["UserID"].'" data-column="UserType"><select id="user-type" disabled><option id="option1">'. $ut[0] .'</option><option id="option2">'. $ut[1] .'</option><option id="option3">'. $ut[2] .'</option></select></div>';
+		
+		$sub_array[] = '<div class="btn-group" role="group"><button type="button" name="edit" id="edit" data-toggle="tooltip" data-placement="bottom" title="Make changes to this account" class="btn btn-secondary btn-divider-right edit-btn '. $edit .'">Edit</button><button type="button" data-toggle="tooltip" data-placement="bottom" title="Change active status of this account" class="btn btn-secondary active-btn" name="active" id="active">'. $isActive .'</button></div></td>';
+		
  		$data[] = $sub_array;
 	}
 

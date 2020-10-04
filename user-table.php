@@ -1,12 +1,16 @@
 <?php
 include('include/session.php');
-if ($_SESSION['user_type'] != 'admin') {
-	if ($_SESSION['user_type'] == 'accountant') {
-		header("Location: accountant-home.php");
-	} elseif ($_SESSION['user_type'] == 'manager') {
-		header("Location: manager-home.php");
-	} else {
-		header("Location: login.php");
+if (isset($_SESSION['inactive'])) {
+	header("Location: login.php");
+} else {
+	if ($_SESSION['user_type'] != 'admin') {
+		if ($_SESSION['user_type'] == 'accountant') {
+			header("Location: accountant-home.php");
+		} else if ($_SESSION['user_type'] == 'manager') {
+			header("Location: manager-home.php");
+		} else {
+			header("Location: login.php");
+		}
 	}
 }
 ?>
@@ -105,18 +109,17 @@ if ($_SESSION['user_type'] != 'admin') {
 			}
 
 			function update_data(id, values) {
-				var username = values[0];
-				var lastname = values[1];
-				var firstname = values[2];
-				var dob = values[3]
-				var email = values[4];
+				var lastname = values[0];
+				var firstname = values[1];
+				var dob = values[2]
+				var email = values[3];
 				var usertype = $('#user-type option:selected').text();
 				$.ajax({
 					url:"users/update.php",
 					method:"POST",
+					dataType: "JSON",
 					data:{
 						id:id,
-						username: username,
 						lastname: lastname,
 						firstname: firstname,
 						dob: dob,
@@ -124,9 +127,7 @@ if ($_SESSION['user_type'] != 'admin') {
 						usertype: usertype
 					},
 					success:function(data) {
-						$('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-						$('#user-table').DataTable().destroy();
-						fetch_data();
+						getAlert(data);
 					}
 				});
 				setInterval(function(){
@@ -141,30 +142,7 @@ if ($_SESSION['user_type'] != 'admin') {
                   		$(this).find('.edt').prop('contenteditable', true);
               		});
 					currentTD.find('#user-type').prop("disabled", false);
-					var options = ['inactive', 'accountant', 'manager', 'admin'];
 					var cur_op = $('#option1').text();
-					if (cur_op == options[0]) {
-						currentTD.find('#option2').text(options[1]);
-						currentTD.find('#option3').text(options[2]);
-						currentTD.find('#option4').text(options[3]);
-					} else if (cur_op == options[1]) {
-						currentTD.find('#option2').text(options[2]);
-						currentTD.find('#option3').text(options[3]);
-						currentTD.find('#option4').text(options[0]);
-					} else if (cur_op == options[2]) {
-						currentTD.find('#option2').text(options[1]);
-						currentTD.find('#option3').text(options[3]);
-						currentTD.find('#option4').text(options[0]);
-					} else if (cur_op == options[3]) {
-						currentTD.find('#option2').text(options[1]);
-						currentTD.find('#option3').text(options[2]);
-						currentTD.find('#option4').text(options[0]);
-					} else {
-						currentTD.find('#option1').text(options[0]);
-						currentTD.find('#option2').text(options[1]);
-						currentTD.find('#option3').text(options[2]);
-						currentTD.find('#option4').text(options[3]);
-					};
 					
           		} else {
 					var id = $(this).parents('tr').find('td').find('div').data("id");
@@ -181,6 +159,37 @@ if ($_SESSION['user_type'] != 'admin') {
 
 			});
 			
+			function update_active(id, activeStatus) {
+				var userID = id;
+				var isActive = activeStatus;
+				$.ajax({
+					url: "users/update-active.php",
+					method: "POST",
+					dataType: "JSON",
+					data: {
+						userID: userID,
+						isActive: isActive
+					},
+					success:function(data) {
+						getAlert(data);
+					}
+				});
+				setInterval(function(){
+					$('#alert_message').html('<br><br>');
+				}, 5000);
+			};
+			
+			$('#user-table').on('click', '#active', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				if ($(this).html() == 'Active') {
+					update_active(id, 0);					
+					$(this).html() = 'Inactive';
+				} else if ($(this).html() == 'Inactive') {
+					update_active(id, 1);
+					$(this).html() = 'Active';
+				}
+			});
+			
 			$('#add').click(function(){
 				var html = '<tr>';
 				html += '<td contenteditable="true" id="UserName"></td>';
@@ -188,7 +197,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				html += '<td contenteditable="true" id="FirstName"></td>';
 				html += '<td contenteditable="true" id="BirthDate"></td>';
 				html += '<td contenteditable="true" id="EmailAddress"></td>';
-				html += '<td id="UserType"><select id="user-type"><option>inactive</option><option>accountant</option><option>manager</option><option>admin</option></select></td>';
+				html += '<td id="UserType"><select id="user-type"><option>accountant</option><option>manager</option><option>admin</option></select></td>';
 				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="Add new user account">Insert</button></td>';
 				html += '</tr>';
 				$('#user-table tbody').prepend(html);
@@ -205,6 +214,7 @@ if ($_SESSION['user_type'] != 'admin') {
 					$.ajax({
 						url:"users/insert.php",
 						method:"POST",
+						dataType: "JSON",
 						data: {
 							username: username,
 							lastname: lastname,
@@ -214,9 +224,7 @@ if ($_SESSION['user_type'] != 'admin') {
 							usertype: usertype
 						},
 						success:function(data) {
-							$('#alert_message').html('<div class="alert alert-success">Account Created. Please have user set up a password by going to the reset password form.</div>');
-							$('#user-table').DataTable().destroy();
-							fetch_data();
+							getAlert(data);
 						}
 					});
 					setInterval(function(){
@@ -226,6 +234,20 @@ if ($_SESSION['user_type'] != 'admin') {
 					alert("All fields are required");
 				}
 			});
+			
+			function getAlert(data) {
+				if (data == "0") {
+					$('#alert_message').html('<div class="alert alert-success">Account Saved.</div>');
+					$('#user-table').DataTable().destroy();
+					fetch_data();
+				} else if (data == "1") {
+					$('#alert_message').html('<div class="alert alert-success">Account Created. Please have user set up a password by going to the reset password form.</div>');
+					$('#user-table').DataTable().destroy();
+					fetch_data();
+				} else {
+					$('#alert_message').html('<div class="alert alert-danger">Something went wrong. Try again.</div>');
+				}
+			};
 		});
 		</script>
  

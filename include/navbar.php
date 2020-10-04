@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['login_user']) || $_SESSION['user_type'] == "inactive") {
+if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 ?> 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">

@@ -3,7 +3,7 @@ CREATE TRIGGER ai_data AFTER INSERT ON Accounts
 	FOR EACH ROW
 	BEGIN
 	  INSERT INTO AccountEvents (AccountAffected,AccountAffectedID,DebitBefore,DebitAfter,CreditBefore,CreditAfter,BalanceBefore,BalanceAfter,ActivityBefore,ActivityAfter)
-	  VALUES(AccountName,AccountNumber,OLD.Debit,NEW.Debit,OLD.Credit,NEW.Credit,OLD.CurrentBalance,NEW.CurrentBalance,OLD.IsActive,NEW.IsActive);
+	   VALUES(AccountName,AccountNumber,NEW.Debit,NEW.Credit,NEW.CurrentBalance,NEW.IsActive);
 	END$$
 
 	CREATE TRIGGER au_data AFTER UPDATE ON Accounts

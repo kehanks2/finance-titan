@@ -113,7 +113,7 @@ if (isset($_SESSION['inactive'])) {
 				var firstname = values[1];
 				var dob = values[2]
 				var email = values[3];
-				var usertype = $('#user-type option:selected').text();
+				var usertype = $('#user-type :selected').val();
 				$.ajax({
 					url:"users/update.php",
 					method:"POST",
@@ -137,25 +137,33 @@ if (isset($_SESSION['inactive'])) {
 			
 			$('#user-table').on('click', '#edit', function() {
 				var currentTD = $(this).parents('tr').find('td');
-				if ($(this).html() == 'Edit') {                  
-              		$.each(currentTD, function () {
-                  		$(this).find('.edt').prop('contenteditable', true);
-              		});
-					currentTD.find('#user-type').prop("disabled", false);
-					var cur_op = $('#option1').text();
-					
-          		} else {
-					var id = $(this).parents('tr').find('td').find('div').data("id");
-					var values = [];
-             		$.each(currentTD, function () {
-                  		$(this).find('.edt').prop('contenteditable', false);
-						values.push($(this).text());						
-              		});
-					currentTD.find('#user-type').prop("disabled", true);
-					update_data(id, values);
-          		}
+				var isActive = $(this).parents('tr').find('#active').text();
+				if (isActive == 'Active') {
+					if ($(this).html() == 'Edit') {                  
+						$.each(currentTD, function () {
+							$(this).find('.edt').prop('contenteditable', true);
+						});
+						currentTD.find('#user-type').prop("disabled", false);
 
-          		$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+					} else {
+						var id = $(this).parents('tr').find('td').find('div').data("id");
+						var values = [];
+						$.each(currentTD, function () {
+							$(this).find('.edt').prop('contenteditable', false);
+							values.push($(this).text());						
+						});
+						currentTD.find('#user-type').prop("disabled", true);
+						update_data(id, values);
+					}
+
+					$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+				} else {
+					$('#alert_message').html('<div class="alert alert-warning">Cannot edit inactive accounts.</div>');
+										
+					setInterval(function(){
+						$('#alert_message').html('<br><br>');
+					},5000);
+				}
 
 			});
 			

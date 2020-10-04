@@ -41,6 +41,9 @@ if ($_SESSION['user_type'] != 'admin') {
 			<h1>Welcome, <?php echo $login_session; ?></h1>
 			<h3>Administrator Account</h3>
 		</div>
+		<div class="col-sm-8" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
 		<div id="currentuser" hidden><?php echo $login_session; ?></div>
 	</div>
 	
@@ -108,9 +111,8 @@ if ($_SESSION['user_type'] != 'admin') {
 				var subcat = values[2];				
 				var initbal = values[3];
 				var debit = values[4];				
-				var credit = values[5];
-				var currbal = values[6];				
-				var nside = values[7];
+				var credit = values[5];				
+				var nside = values[6];
 				var accountID = id;
 				$.ajax({
 					url:"accounts/update.php",
@@ -123,7 +125,6 @@ if ($_SESSION['user_type'] != 'admin') {
 						initbal: initbal,
 						debit: debit,
 						credit: credit,
-						currbal: currbal,
 						nside: nside,
 						accountID: accountID
 					},
@@ -135,42 +136,6 @@ if ($_SESSION['user_type'] != 'admin') {
 					$('#alert_message').html('<br><br>');
 				}, 5000);
 			};
-			
-			function update_active(id, activeStatus) {
-				var accountID = id;
-				var isActive = activeStatus;
-				$.ajax({
-					url: "accounts/update-active.php",
-					method: "POST",
-					dataType: "JSON",
-					data: {
-						accountID: accountID,
-						isActive: isActive
-					},
-					success:function(data) {
-						getAlert(data);
-					}
-				});
-				setInterval(function(){
-					$('#alert_message').html('<br><br>');
-				}, 5000);
-			};
-			
-			$('#account-table').on('click', '#active', function() {
-				var id = $(this).parents('tr').find('td').find('div').data("id");
-				var bal = $(this).parents('tr').find('#CurrentBalance').text();
-				if ($(this).html() == 'Active') {
-					if (bal == 0) {						
-						update_active(id, 0);					
-						$(this).html() = 'Inactive';
-					} else {
-						$('#alert_message').html('<div class="alert alert-warning">Accounts with a balance cannot be deactivated.</div>');
-					}
-				} else if ($(this).html() == 'Inactive') {
-					update_active(id, 1);
-					$(this).html() = 'Active';
-				}
-			});
 			
 			$('#account-table').on('click', '#edit', function() {
 				var isActive = $(this).parents('tr').find('#active').text();
@@ -203,8 +168,72 @@ if ($_SESSION['user_type'] != 'admin') {
 					$(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
 				} else {
 					$('#alert_message').html('<div class="alert alert-warning">Cannot edit inactive accounts.</div>');
+										
+					setInterval(function(){
+						$('#alert_message').html('<br><br>');
+					},5000);
 				}
 
+			});
+			
+			function update_active(id, activeStatus) {
+				var accountID = id;
+				var isActive = activeStatus;
+				$.ajax({
+					url: "accounts/update-active.php",
+					method: "POST",
+					dataType: "JSON",
+					data: {
+						accountID: accountID,
+						isActive: isActive
+					},
+					success:function(data) {
+						getAlert(data);
+					}
+				});
+				setInterval(function(){
+					$('#alert_message').html('<br><br>');
+				}, 5000);
+			};
+			
+			$('#account-table').on('click', '#active', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				var bal = $(this).parents('tr').find('#CurrentBalance').text();
+				if ($(this).html() == 'Active') {
+					if (bal == 0) {						
+						update_active(id, 0);					
+						$(this).html() = 'Inactive';
+					} else {
+						$('#alert_message').html('<div class="alert alert-warning">Accounts with a balance cannot be deactivated.</div>');
+						
+						setInterval(function(){
+							$('#alert_message').html('<br><br>');
+						}, 5000);
+					}
+				} else if ($(this).html() == 'Inactive') {
+					update_active(id, 1);
+					$(this).html() = 'Active';
+				}
+			});
+			
+			function to_ledger(id, accountName) {
+				$.ajax({
+					url: "accounts/to-ledger.php",
+					method: "POST",
+					data: {
+						accountID: id,
+						accountName: accountName
+					},
+					success: function(data) {
+						window.location.assign(data);
+					}
+				})
+			}
+			
+			$('#account-table').on('click', '#ledger', function() {
+				var accountName = $(this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				to_ledger(id, accountName);
 			});
 			
 			$('#add').click(function(){
@@ -223,7 +252,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				html += '<td contenteditable="true" id="InitialBalance"></td>';
 				html += '<td contenteditable="true" id="Debit"></td>';
 				html += '<td contenteditable="true" id="Credit"></td>';
-				html += '<td contenteditable="true" id="CurrentBalance"></td>';
+				html += '<td contenteditable="false" id="CurrentBalance"></td>';
 				html += '<td contenteditable="true" id="NormalSide"></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
 				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
@@ -240,11 +269,17 @@ if ($_SESSION['user_type'] != 'admin') {
 				var subcat = $('#SubCategory').text();				
 				var initbal = parseFloat($('#InitialBalance').text().toFixed(2));
 				var debit = parseFloat($('#Debit').text().toFixed(2));				
-				var credit = parseFloat($('#Credit').text().toFixed(2));
-				var currbal = parseFloat($('#CurrentBalance').text().toFixed(2));				
+				var credit = parseFloat($('#Credit').text().toFixed(2));				
 				var nside = $('#NormalSide').text();
 				var dateadded = $('#DateAdded').text();				
 				var creator = $('#CreatorID').text();
+				
+				var currbal = 0;
+				if (nside == "right") {
+					currbal = initbal + credit - debit;
+				} else if (nside == "left") {
+					currbal = initbal + debit - credit;
+				}
 				
 				if(isNaN(accountID)) {
 					$('#alert_message').html('<div class="alert alert-warning">Account ID must be a number.</div>');

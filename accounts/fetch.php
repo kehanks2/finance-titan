@@ -58,7 +58,7 @@
  		$sub_array = array();
  		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountName">'. $row["AccountName"].'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountName"><a href="#" id="ledger" class="ledger">'. $row["AccountName"].'</a></div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Description">'. $row["Description"].'</div>';
 		
@@ -68,11 +68,11 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="InitialBalance">'. $initbal .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="Debit">'. $debit .'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update edt nm" data-id="'.$row["AccountNumber"].'" data-column="Debit">'. $debit .'</div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="Credit">'. $credit .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance" id="CurrentBalance">'. $currbal .'</div>';
+		$sub_array[] = '<div contenteditable="false" class="update num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance" id="CurrentBalance">'. $currbal .'</div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="NormalSide">'. $row["NormalSide"].'</div>';
 		

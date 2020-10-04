@@ -42,6 +42,9 @@ if ($_SESSION['user_type'] != 'manager') {
 			<h3>Manager Account</h3>
 			<hr>
 		</div>
+		<div class="col-sm-8" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
 	</div>
 </section>
 	

@@ -47,6 +47,9 @@ if ($_SESSION['user_type'] != 'admin') {
 				}
 			?>
 		</div>
+		<div class="col-sm-8" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
 		<div id="currentuser" hidden><?php echo $login_session; ?></div>
 	</div>
 	

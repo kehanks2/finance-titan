@@ -54,6 +54,7 @@ if (!isset($_SESSION['login_user']) || $_SESSION['user_type'] == "inactive") {
 					<a class="dropdown-item" href="password-table.php">Password Report</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="account-table.php">Manage Accounts</a>
+					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
 			</li>
@@ -104,6 +105,7 @@ if (!isset($_SESSION['login_user']) || $_SESSION['user_type'] == "inactive") {
 				System Management</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown2">
 					<a class="dropdown-item" href="account-view.php">Manage Accounts</a>
+					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
 			</li>			
@@ -154,6 +156,7 @@ if (!isset($_SESSION['login_user']) || $_SESSION['user_type'] == "inactive") {
 				System Management</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
 					<a class="dropdown-item" href="account-view.php">Manage Accounts</a>
+					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
 			</li>			

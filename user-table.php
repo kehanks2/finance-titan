@@ -54,7 +54,9 @@ if ($_SESSION['user_type'] != 'admin') {
 				<div class="row">
 					<div class="col-sm-2"><h2>View/Edit Users</h2></div>
 					<div class="col-sm-1">
-						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;">Add</button>
+						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;" data-toggle="tooltip" data-placement="right" title="Click to add a new user">
+							Add
+						</button>
 					</div>
 				</div>
 				<div id="alert_message"><br><br></div>
@@ -62,12 +64,12 @@ if ($_SESSION['user_type'] != 'admin') {
 					<br />
 					<thead>
 						<tr>
-							<th>Username</th>
-							<th>Last Name</th>
-							<th>First Name</th>
-							<th>Date of Birth</th>
-							<th>Email</th>
-							<th>User Type</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by username">Username</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by last name">Last Name</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by first name">First Name</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date of birth">Date of Birth</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by email address">Email</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by user type">User Type</th>
 							<th>Edit</th>
 						</tr>
 					</thead>
@@ -87,6 +89,7 @@ if ($_SESSION['user_type'] != 'admin') {
 		$(document).ready(function(){
 
 			fetch_data();
+			$('[data-toggle="tooltip"]').tooltip();
 
 			function fetch_data() {
 				var dataTable = $('#user-table').DataTable({
@@ -186,7 +189,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				html += '<td contenteditable="true" id="BirthDate"></td>';
 				html += '<td contenteditable="true" id="EmailAddress"></td>';
 				html += '<td id="UserType"><select id="user-type"><option>inactive</option><option>accountant</option><option>manager</option><option>admin</option></select></td>';
-				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link">Insert</button></td>';
+				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="Add new user account">Insert</button></td>';
 				html += '</tr>';
 				$('#user-table tbody').prepend(html);
 			});

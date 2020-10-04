@@ -139,3 +139,8 @@ input[type=password] {
 input[type=date] {
 	width: 50%;
 }
+
+/* TABLES */
+.btn-divider-right{
+    border-right: 1px solid #383D41;
+}

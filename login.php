@@ -86,13 +86,13 @@
 			      		<div class="card-body">
 							<form class="sign-in-form" method="POST" action="">
 								<div class="form-group">
-									<input type="text" class="form-control" name="username" id="username" required="required" placeholder="Username">
+									<input type="text" class="form-control" name="username" id="username" required="required" placeholder="Enter your username">
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Password">
+									<input type="password" class="form-control" name="password" id="password" required="required" placeholder="Enter your password">
 								</div>
 								<div class="text-center">
-									<input type="submit" id="submit" name="submit" class="btn btn-lg btn-primary" value="SIGN IN">
+									<input type="submit" id="submit" name="submit" class="btn btn-lg btn-primary" value="SIGN IN" data-toggle="tooltip" data-placement="bottom" title="Click to sign in">
 								</div>
 							</form>
 							<?php
@@ -105,7 +105,7 @@
 								}
 							?>
 							<div class="bottom-links">
-								<p><a href="forgot-password.php">Forgot your password?</a></p>
+								<p><a href="forgot-password.php" data-toggle="tooltip" data-placement="bottom" title="Click to change your password">Forgot your password?</a></p>
 							</div>
 						</div>
 					</div>
@@ -116,7 +116,7 @@
 					</div>
 					<div id="create-account-collapse" class="collapse" role="tabpanel" aria-labelledby="create-account-heading" data-parent="#home-accordion">
 			      		<div class="card-body text-center">
-							<p><a href="create-account.php" role="button" class="btn btn-lg btn-primary">Create Account Form</a></p>
+							<p><a href="create-account.php" role="button" class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="bottom" title="Click to create a new account">Create Account Form</a></p>
 						</div>
 					</div>
 				</div>			  
@@ -129,5 +129,10 @@
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap-4.4.1.js"></script>	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
 </body>
 </html>

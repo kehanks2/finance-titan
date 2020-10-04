@@ -54,11 +54,11 @@ if ($_SESSION['user_type'] != 'admin') {
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th scope="col">First Name</th>
-							<th scope="col">Last Name</th>
-							<th scope="col">Username</th>
-							<th scope="col">Password Expiry Date</th>
-							<th scope="col">Expired?</th>
+							<th scope="col" data-toggle="tooltip" data-placement="bottom" title="Sort by first name">First Name</th>
+							<th scope="col" data-toggle="tooltip" data-placement="bottom" title="Sort by last name">Last Name</th>
+							<th scope="col" data-toggle="tooltip" data-placement="bottom" title="Sort by username">Username</th>
+							<th scope="col" data-toggle="tooltip" data-placement="bottom" title="Sort by expiry date">Password Expiry Date</th>
+							<th scope="col" data-toggle="tooltip" data-placement="bottom" title="Sort by expired status">Expired?</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -93,6 +93,10 @@ if ($_SESSION['user_type'] != 'admin') {
 	<!-- Include all compiled plugins (below), or include individual files as needed --> 
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script><script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
   </body>
 </html>

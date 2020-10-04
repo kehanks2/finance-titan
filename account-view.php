@@ -55,18 +55,18 @@ if ($_SESSION['user_type'] == 'admin') {
 					<br />
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Category</th>
-							<th>Subcategory</th>
-							<th>Initial Bal</th>
-							<th>Debit</th>
-							<th>Credit</th>
-							<th>Current Bal</th>
-							<th>Normal Side</th>
-							<th>Date Added</th>
-							<th>Creator</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account #">#</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account name">Name</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by description">Description</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by category">Category</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by subcategory">Subcategory</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by initial balance">Initial</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by debit amount">Debit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by credit amount">Credit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by current balance">Current</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by normal side">Normal Side</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date added">Date Added</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>	
 						</tr>
 					</thead>
 				</table>
@@ -79,7 +79,11 @@ if ($_SESSION['user_type'] == 'admin') {
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script><script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
 	<script type="text/javascript" language="javascript">
 		$(document).ready(function() {
 			

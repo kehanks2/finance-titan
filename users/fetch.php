@@ -42,7 +42,7 @@
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="BirthDate">'. $row["BirthDate"].'</div>';
  		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["UserID"].'" data-column="EmailAddress">'.$row["EmailAddress"].'</div>';
  		$sub_array[] = '<div class="update" data-id="'.$row["UserID"].'" data-column="UserType"><select id="user-type" disabled><option id="option1">'.$row["UserType"].'</option><option id="option2"></option><option id="option3"></option><option id="option4"></option></select></div>';
-		$sub_array[] = '<button name="edit" id="edit" class="btn btn-link edit-btn">Edit</button></td>';
+		$sub_array[] = '<button name="edit" id="edit" class="btn btn-link edit-btn" data-toggle="tooltip" data-placement="right" title="Change user information">Edit</button></td>';
  		$data[] = $sub_array;
 	}
 

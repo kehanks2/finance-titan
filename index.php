@@ -31,10 +31,10 @@
 	<div class="row justify-content-center">
 		<div class="col-md-6">			
 			<div class="text-center">
-				<a href="login.php" role="button" id="signin" name="signin" class="btn btn-lg btn-primary">Sign In</a><br><br>
+				<a href="login.php" role="button" id="signin" name="signin"  data-toggle="tooltip" data-placement="bottom" title="Click to sign in to your account" class="btn btn-lg btn-primary">Sign In</a><br><br>
 			</div>
 			<div class="text-center">
-				<a href="create-account.php" role="button" id="createaccount" name="createaccount" class="btn btn-lg btn-primary">Create Account Form</a>
+				<a href="create-account.php" role="button" id="createaccount" name="createaccount" data-toggle="tooltip" data-placement="bottom" title="Click to create a new account" class="btn btn-lg btn-primary">Create Account Form</a>
 			</div>
 		</div>
 	</div>	

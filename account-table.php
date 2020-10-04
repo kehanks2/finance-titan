@@ -54,25 +54,27 @@ if ($_SESSION['user_type'] != 'admin') {
 				<div class="row">
 					<div class="col-sm-2"><h2>Chart of Accounts</h2></div>
 					<div class="col-sm-1">
-						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;">Add</button>
+						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;" data-toggle="tooltip" data-placement="right" title="Click to add a new account">
+							Add
+						</button>
 					</div>
 				</div>
 				<div id="alert_message"><br><br></div>
 				<table id="account-table" class="table table-striped" style="width:100%;">
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Category</th>
-							<th>Subcategory</th>
-							<th>Initial</th>
-							<th>Debit</th>
-							<th>Credit</th>
-							<th>Current</th>
-							<th>Normal Side</th>
-							<th>Date Added</th>
-							<th>Creator</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account #">#</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account name">Name</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by description">Description</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by category">Category</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by subcategory">Subcategory</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by initial balance">Initial</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by debit amount">Debit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by credit amount">Credit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by current balance">Current</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by normal side">Normal Side</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date added">Date Added</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>
 							<th>Edit</th>
 						</tr>
 					</thead>
@@ -86,11 +88,11 @@ if ($_SESSION['user_type'] != 'admin') {
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript" language="javascript">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script><script type="text/javascript" language="javascript">
 		$(document).ready(function() {
 			
 			fetch_data();
+			$('[data-toggle="tooltip"]').tooltip();
 			
 			function fetch_data() {
 				var dataTable = $('#account-table').DataTable({
@@ -256,7 +258,7 @@ if ($_SESSION['user_type'] != 'admin') {
 				html += '<td contenteditable="true" id="NormalSide"></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
 				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
-				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link">Insert</button></td>';
+				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-link">Insert</button></td>';
 				html += '</tr>';
 				$('#account-table tbody').prepend(html);
 			});

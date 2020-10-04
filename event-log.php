@@ -65,13 +65,13 @@ if ($_SESSION['user_type'] != 'admin') {
 					<br />
 					<thead>
 						<tr>
-							<th>Event ID</th>
-							<th>Account</th>
-							<th>Field Changed</th>
-							<th>From</th>
-							<th>To</th>
-							<th>Author</th>
-							<th>Date & Time</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by event id">Event ID</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account">Account</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by field changed">Field Changed</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by starting data">From</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by ending data">To</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by author">Author</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date & time">Date & Time</th>
 						</tr>
 					</thead>
 				</table>
@@ -84,7 +84,11 @@ if ($_SESSION['user_type'] != 'admin') {
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script><script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
 	<script type="text/javascript" language="javascript" >
 		$(document).ready(function(){
 

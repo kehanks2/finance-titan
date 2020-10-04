@@ -96,13 +96,13 @@
 			<h2>Create your account</h2>
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" required="required">
+			<input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first Name" required="required">
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" required="required">
+			<input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last Name" required="required">
 		</div>
 		<div class="form-group">
-			<input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required="required">
+			<input type="email" class="form-control" name="email" id="email" placeholder="Enter email address" required="required">
 		</div>
 		<div class="form-group">
 			<label for="dob" class="form-text">Enter Date of Birth:</label>
@@ -110,7 +110,7 @@
 		</div>
 		<div class="row">
 			<div class="form-group col-6">
-				<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Password" required="required">
+				<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Enter password" required="required">
 			</div>
 			<div class="col-1 help-icon">
 				<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
@@ -123,7 +123,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype Password" required="required">
+			<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype password" required="required">
 		</div>
 		<div class="form-group">
 			<select name="security-question" id="security-question" class="form-control" required="required">
@@ -136,10 +136,10 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Security Answer" required="required">
+			<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Enter security answer" required="required">
 		</div>
 		<div class="text-center">
-			<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" value="Create Account">
+			<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to create your account" value="Create Account">
 		</div>
 	</form>
 </section>

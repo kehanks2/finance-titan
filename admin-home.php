@@ -38,6 +38,8 @@ if ($_SESSION['user_type'] != 'admin') {
 		<div class="col-sm-4">
 			<h1>Welcome, <?php echo $login_session; ?></h1>
 			<h3>Administrator Account</h3>
+			<hr>
+			<h4>Select an option from the navigation menu.</h4>
 		</div>
 		<div class="col-sm-8" id="help-modal-container">
 			<?php include('include/help-modal.php'); ?>

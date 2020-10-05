@@ -35,7 +35,13 @@
 	$data = array();
 
 	while($row = mysqli_fetch_array($result)) {
- 				
+		// set number formats to x,xxx.xx
+		$debit_before = number_format($row["DebitBefore"], 2);
+		$debit_after = number_format($row["DebitAfter"], 2);
+		$credit_before = number_format($row["CreditBefore"], 2);
+		$credit_after = number_format($row["CreditAfter"], 2);
+ 		$bal_before = number_format($row["BalanceBefore"], 2);
+		$bal_after = number_format($row["BalanceAfter"], 2);
 		// child column data
 		$activebefore = '';
 		$activeafter = '';
@@ -53,9 +59,9 @@
 		$child_row = array();
 		$child_row[0] = '<div class="row child-row">Debit</div><div class="row child-row">Credit</div><div class="row child-row">Balance</div><div class="row child-row">Active?</div>';
 		
-		$child_row[1] = '<div class="row child-row">' .$row['DebitBefore']. '</div><div class="row child-row">' .$row['CreditBefore']. '</div><div class="row child-row">' .$row['BalanceBefore']. '</div><div class="row child-row">' .$activebefore. '</div>';
+		$child_row[1] = '<div class="row child-row">' .$debit_before. '</div><div class="row child-row">' .$credit_before. '</div><div class="row child-row">' .$bal_before. '</div><div class="row child-row">' .$activebefore. '</div>';
 		
-		$child_row[2] = '<div class="row child-row child-row-last">' .$row['DebitAfter']. '</div><div class="row child-row child-row-last">' .$row['CreditAfter']. '</div><div class="row child-row child-row-last">' .$row['BalanceAfter']. '</div><div class="row child-row child-row-last">' .$activeafter. '</div>';
+		$child_row[2] = '<div class="row child-row child-row-last">' .$debit_after. '</div><div class="row child-row child-row-last">' .$credit_after. '</div><div class="row child-row child-row-last">' .$bal_after. '</div><div class="row child-row child-row-last">' .$activeafter. '</div>';
 		
 		// column data
 		$sub_array = array();

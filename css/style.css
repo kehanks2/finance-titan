@@ -144,3 +144,11 @@ input[type=date] {
 .btn-divider-right{
     border-right: 1px solid #383D41;
 }
+.child-row {
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #898A96;
+}
+.child-row-last {
+	margin-right: 5px;
+}

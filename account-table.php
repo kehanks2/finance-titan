@@ -262,7 +262,7 @@ if (isset($_SESSION['inactive'])) {
 				html += '<td contenteditable="true" id="NormalSide"></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
 				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
-				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-link">Insert</button></td>';
+				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-secondary">Insert</button></td>';
 				html += '</tr>';
 				$('#account-table tbody').prepend(html);
 			});
@@ -273,9 +273,9 @@ if (isset($_SESSION['inactive'])) {
 				var desc = $('#Description').text();
 				var cat = $('#Category').text();
 				var subcat = $('#SubCategory').text();				
-				var initbal = parseFloat($('#InitialBalance').text().toFixed(2));
-				var debit = parseFloat($('#Debit').text().toFixed(2));				
-				var credit = parseFloat($('#Credit').text().toFixed(2));				
+				var initbal = parseFloat($('#InitialBalance').text()).toFixed(2);
+				var debit = parseFloat($('#Debit').text()).toFixed(2);				
+				var credit = parseFloat($('#Credit').text()).toFixed(2);				
 				var nside = $('#NormalSide').text();
 				var dateadded = $('#DateAdded').text();				
 				var creator = $('#CreatorID').text();

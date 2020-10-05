@@ -50,12 +50,13 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				System Management</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="user-table.php">Manage Users</a>
-					<a class="dropdown-item" href="password-table.php">Password Report</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="account-table.php">Manage Accounts</a>
+					<a class="dropdown-item" href="account-table.php">Chart of Accounts</a>
 					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="user-table.php">Manage Users</a>
+					<a class="dropdown-item" href="password-table.php">Password Report</a>
+					
 				</div>
 			</li>
 			<li class="nav-item">
@@ -104,7 +105,7 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				System Management</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-					<a class="dropdown-item" href="account-view.php">Manage Accounts</a>
+					<a class="dropdown-item" href="account-view.php">Chart of Accounts</a>
 					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
@@ -155,7 +156,7 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				System Management</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-					<a class="dropdown-item" href="account-view.php">Manage Accounts</a>
+					<a class="dropdown-item" href="account-view.php">Chart of Accounts</a>
 					<a class="dropdown-item" href="ledger.php">Ledger</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>

@@ -70,7 +70,8 @@ if (isset($_SESSION['inactive'])) {
 					<thead>
 						<tr>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by event id">Event ID</th>
-							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account">Account</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account name">Account Name</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by account id">AccountID</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by field changed">Field Changed</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by starting data">From</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by ending data">To</th>
@@ -103,7 +104,7 @@ if (isset($_SESSION['inactive'])) {
 					"processing" : true,
 					"serverSide" : true,
 					"dom": '<"top"f>t<"bottom"ip>',
-                	"order": [[0, "asc"]],
+                	"order": [[0, "desc"]],
 					"ajax" : {
 						url:"include/fetch-events.php",
 						type:"POST"

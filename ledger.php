@@ -71,10 +71,10 @@ while ($row = mysqli_fetch_array($result)) {
 		<div id="current-account" hidden><?php echo $accountName; ?></div>
 	</div>
 	<hr style="margin: 10px 0;">
-	<div class="row" style="margin-top: 0; padding-top: 10px;">		
-		<div class="form-group col-sm-2">
-			<select class="form-control" style="width:auto;" id="choose-account">
-				<option disabled>Select an account</option>
+	<div class="row form-inline" style="margin-top: 0; margin-left: 10px; padding: 10px 0;">		
+		<div class="form-group">
+			<select class="form-control" style="width:auto; margin-right: 10px;" id="choose-account">
+				<option selected disabled>Select an account</option>
 				<?php
 					for($i = 0; $i < count($arr); $i++) {
 						echo $arr[$i];
@@ -82,24 +82,25 @@ while ($row = mysqli_fetch_array($result)) {
 				?>
 			</select>
 		</div>
-		<div class="form-group col-sm-1">
-			<button type="button" id="go-to-acct" class="btn btn-primary" style="width:auto;" data-toggle="tooltip" title="Go to the ledger for the selected account">
+		<div class="form-group">
+			<button type="button" id="go-to-acct" class="btn btn-success" style="width:auto;" data-toggle="tooltip" title="Go to the ledger for the selected account">
 				Go
 			</button>
 		</div>
 	</div>
+	<hr>
 	<div class="row">
 		<div class="col-sm-4">
 			<h2 id="account-name"><?php echo $session ?></h2>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-2">
-			<h3>Account Details</h3>
+	<div class="row form-inline" style="margin: 0 10px;">
+		<div class="form-group">
+			<h3 style="margin-right: 10px;">Account Details</h3>
 		</div>
 		<?php if($_SESSION['user_type'] == 'admin') {
-				echo '<div class="col-sm-1">
-					<button type="button" id="edit-acct" class="btn btn-secondary" data-toggle="modal" data-target="#edit-modal" style="width:auto;">
+				echo '<div class="form-group">
+					<button type="button" id="edit-acct" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal" style="width:auto;">
 						<span data-toggle="tooltip" title="Edit this account">Edit</span>
 					</button>
 				</div>';
@@ -164,6 +165,11 @@ while ($row = mysqli_fetch_array($result)) {
 			</div>
 		</div>
 	<?php } ?>
+	<div class="row">
+		<div class="col-sm-auto">
+			<h4>Ledger will go here</h4>		
+		</div>
+	</div>
 </section>
 	
 <?php if ($_SESSION['user_type'] == 'admin') { ?>

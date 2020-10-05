@@ -1,9 +1,12 @@
  <?php
+/* back-end
 	/* will finish after work
+/* master
 	ini_set('display_startup_errors', true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
 
+/* back-end
    include("config.php");
    session_start();
    
@@ -26,6 +29,41 @@
       $resultUser = mysqli_query($db,$sqlUserInsert)
   }
 	*/   
+---
+	session_start();
+	include("include/config.php");
+
+   if(isset($_POST["submit"])) {
+      // values sent from form 
+      
+      $fname = mysqli_real_escape_string($db,$_POST['fname']);
+      $lname = mysqli_real_escape_string($db,$_POST['lname']);
+      $email = mysqli_real_escape_string($db,$_POST['email']);
+      $dob = mysqli_real_escape_string($db,$_POST['dob']);
+      $password = mysqli_real_escape_string($db,$_POST['password']); 
+      $squestion = mysqli_real_escape_string($db,$_POST['security-question']);	   
+      $sanswer = mysqli_real_escape_string($db,$_POST['security-answer']); 
+      $creationyear = date("Y");
+      //Hashing the password
+      //$password = password_hash($password,PASSWORD_DEFAULT);
+      //Creating a username  
+      $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];    
+	   
+      $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$password', '$squestion', '$sanswer')";
+	   
+      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate, PasswordID) VALUES ('$username', '$fname', '$lname', '$email', '$dob',
+      (SELECT PasswordID FROM Passwords WHERE '$password' = CurrentPassword and '$sanswer' = SecurityAnswer))";
+	   
+	   if(mysqli_query($db, $sqlPasswordInsert)) {
+		  if(mysqli_query($db, $sqlUserInsert)) {
+		   	header("Location: login.php");
+		  }
+	   } else {
+		   	echo alert("There was an error connecting to the server.");
+		   	header("Location: login.php");
+	   }
+   } 
+/* master
 ?>
 
 
@@ -43,98 +81,85 @@
 	<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css">
+	    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
 </head>
 	
 <body>
 <!-- NAVIGATION -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-	<img src="images/logo-no-bg.png" id="navbar-logo">
-	<a class="navbar-brand" href="index.php">Finance Titan</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link disabled" href="#">Messages</a>
-			</li>			
-		</ul>
-		<ul class="navbar-nav d-flex justify-content-end">	
-			<li>
-				<a class="nav-link" id="logout" href="login.php">Log In</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+<?php include('include/navbar.php'); ?>
 
 <!-- BANNER -->
-<section id="banner" class="text-center logo-background"> <img src="images/logo.jpeg" alt="Finance Titan Logo" max-width="225px" height="200px" class="logo"/>
-	<p class="lead">Seize Control of Your Finances</p>
-</section>
+<?php include('include/banner.php'); ?>
 
 <!-- PAGE CONTENT -->
-<section id="create-account-form" class="d-flex justify-content-center">
-	<form class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this)" action="index.php">
-		<div>
-			<h2>Create your account</h2>
+<section class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
 		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" id="fname" placeholder="First Name" required="required">
-		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" id="lname" placeholder="Last Name" required="required">
-		</div>
-		<div class="form-group">
-			<input type="email" class="form-control" id="email" placeholder="Enter Email" required="required">
-		</div>
-		<div class="form-group">
-			<label for="dob" class="form-text">Enter Date of Birth:</label>
-			<input type="date" class="form-control" id="dob" placeholder="mm/dd/yyyy" required="required">
-		</div>
-		<div class="row">
-			<div class="form-group col-6">
-				<input type="password" style="width:105%;"class="form-control" id="password" name="password" placeholder="Password" required="required">
+	</div>
+	<div class="d-flex justify-content-center">
+		<form id="create-account-form" class="col-md-6 sign-in-form" method="post" onSubmit="accountCreated(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<div>
+				<h2>Create your account</h2>
 			</div>
-			<div class="col-1 help-icon">
-				<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
-				   data-content="<ul>
-								 <li>use 8+ characters</li>
-								 <li>starts with a letter</li>
-								 <li>include at least one letter, one number, and one special character(such as ! . ? * or
-								 	&)</li></ul>">
-				</i>
+			<div class="form-group">
+				<input type="text" class="form-control" name="fname" id="fname" placeholder="Enter first Name" required="required">
 			</div>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype Password" required="required">
-		</div>
-		<div class="form-group">
-			<select name="security-question" class="form-control" required="required">
-				<option hidden disabled selected value>Select a security question</option>
-				<option value="mother-maiden">What is your mother's maiden name?</option>
-				<option value="father-middle">What is your father's middle name?</option>
-				<option value="first-pet">What is the name of your first pet?</option>
-				<option value="first-car">What was your first car?</option>
-				<option value="birth-city">What is the city you were born in?</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="security-answer" placeholder="Security Answer" required="required">
-		</div>
-		<div class="text-center">
-			<button type="submit" class="btn btn-lg">Create Account</button>
-		</div>
-	</form>
+			<div class="form-group">
+				<input type="text" class="form-control" name="lname" id="lname" placeholder="Enter last Name" required="required">
+			</div>
+			<div class="form-group">
+				<input type="email" class="form-control" name="email" id="email" placeholder="Enter email address" required="required">
+			</div>
+			<div class="form-group">
+				<label for="dob" class="form-text">Enter Date of Birth:</label>
+				<input type="date" class="form-control" name="dob" id="dob" placeholder="mm/dd/yyyy" required="required">
+			</div>
+			<div class="row">
+				<div class="form-group col-6">
+					<input type="password" style="width:105%;" class="form-control" id="password" name="password" placeholder="Enter password" required="required">
+				</div>
+				<div class="col-1 help-icon">
+					<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true"
+					   data-content="<ul>
+									 <li>use 8+ characters</li>
+									 <li>starts with a letter</li>
+									 <li>include at least one letter, one number, and one special character (such as ! . ? * or
+										&)</li></ul>">
+					</i>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" id="pasword-check" name="passwordcheck" placeholder="Retype password" required="required">
+			</div>
+			<div class="form-group">
+				<select name="security-question" id="security-question" class="form-control" required="required">
+					<option hidden disabled selected value>Select a security question</option>
+					<option value="mother-maiden">What is your mother's maiden name?</option>
+					<option value="father-middle">What is your father's middle name?</option>
+					<option value="first-pet">What is the name of your first pet?</option>
+					<option value="first-car">What was your first car?</option>
+					<option value="birth-city">What is the city you were born in?</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" name="security-answer" id="security-answer" placeholder="Enter security answer" required="required">
+			</div>
+			<div class="text-center">
+				<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to create your account" value="Create Account">
+			</div>
+		</form>
+	</div>
 </section>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="js/jquery-3.4.1.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap-4.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <script>
 	// enable tooltips and popovers
 	$('[data-toggle="tooltip"]').tooltip();
@@ -152,7 +177,7 @@
 
 		// If password doesn't match retype password 
 		if (password1 != password2) { 
-			alert ("\nPasswords did not match. Please try again.") 
+			alert ("\nPasswords did not match. Please try again."); 
 			return false; 
 		}
 		
@@ -173,6 +198,7 @@
 		if (checkPassword(form)) {
 			alert("\nSuccess!\nYour acount has been created.\nYou will receive an email when the administrator approves your account!");
 		}
+		
 	}
 </script>
 </body>

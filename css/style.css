@@ -5,39 +5,16 @@
 body {
 	padding-top: 50px;
 }
+a:hover {
+	cursor: pointer;
+}
 .row {
 	margin-top: 25px;
 }
 .btn {
-	background-color: #51D251;
   	border-radius: 5px;
 	width: 75%;
-	text-transform: uppercase;
-	color: #fff;
-	font-weight: 600;
-	font-size: 130%;	
-	box-shadow: 0 5px 4px #445262;
-}
-.btn:focus {
-	border: 0;
-	box-shadow: 0 5px 4px #445262;
-	color: #fff;
-  	background-color: #51D251;
-}
-.btn:hover {
-	background-color: #30b830;
-	color: #fff;
-	cursor: pointer;
-}
-.btn:active {
-	background-color: #30b830;
-	box-shadow: 0 2px 1px #343f4b;
-	transform: translateY(2px);
-}
-.search-btn {
-	width: auto;
-	font-weight: auto;
-	font-size: 95%;	
+	text-transform: uppercase;	
 }
 .logo-background {	
 	background-color: #000;
@@ -51,6 +28,19 @@ body {
 	max-width: 100%;
 	max-height: 100vh;
 	margin: auto;	
+}
+#help-modal-container {
+	margin-left: auto;
+	margin-right: 0;
+}
+#help-btn {
+	font-size: 24px;
+	width: auto;
+	float: right;
+	padding: 0 8px;
+}
+.btn-width {
+	width:auto;
 }
 
 /* NAV BAR */
@@ -98,6 +88,10 @@ body {
 .home-screen a:hover, a:focus {
 	color: #738A9F;
 	text-decoration: none;
+}
+[contenteditable="true"] {
+	border: 1px solid #333;
+	cursor: text;
 }
 
 /* SIGN IN & CREATE ACCOUNT FORMS */
@@ -147,4 +141,38 @@ input[type=password] {
 }
 input[type=date] {
 	width: 50%;
+}
+
+/* TABLES */
+.btn-divider-right{
+    border-right: 1px solid #383D41;
+}
+.child-row {
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #898A96;
+}
+.child-row-last {
+	margin-right: 5px;
+}
+.choose-account {
+	margin-top: 0;
+	margin-left: 10px;
+	padding: 10px 0;
+}
+.choose-account select {
+	width:auto;
+	margin-right: 10px;
+}
+.account-details {
+	margin: 0 10px;
+}
+.account-details h3 {
+	margin-right: 10px;
+}
+.acct-info {
+	width:auto;
+}
+.acct-info ul {
+	list-style-type:none;
 }

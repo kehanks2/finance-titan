@@ -262,7 +262,7 @@ if (isset($_SESSION['inactive'])) {
 				html += '<td contenteditable="true" id="NormalSide"></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
 				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
-				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-secondary">Insert</button></td>';
+				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-success">Insert</button></td>';
 				html += '</tr>';
 				$('#account-table tbody').prepend(html);
 			});

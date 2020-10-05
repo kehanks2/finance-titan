@@ -206,7 +206,7 @@ if (isset($_SESSION['inactive'])) {
 				html += '<td contenteditable="true" id="BirthDate"></td>';
 				html += '<td contenteditable="true" id="EmailAddress"></td>';
 				html += '<td id="UserType"><select id="user-type"><option>accountant</option><option>manager</option><option>admin</option></select></td>';
-				html += '<td><button type="button" name="insert" id="insert" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="Add new user account">Insert</button></td>';
+				html += '<td><button type="button" name="insert" id="insert" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Add new user account">Insert</button></td>';
 				html += '</tr>';
 				$('#user-table tbody').prepend(html);
 			});

@@ -39,14 +39,14 @@ if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat
          AccountAffectedID,
          DebitAfter,
          CreditAfter,
-         BalanceAfter,) 
+         BalanceAfter) 
          VALUES(
             '$username',
             (SELECT AccountName FROM Accounts WHERE '$accountID' = AccountNumber),
             (SELECT AccountNumber FROM Accounts WHERE '$accountID' = AccountNumber),
             (SELECT Debit FROM Accounts WHERE '$accountID' = AccountNumber),
             (SELECT Credit FROM Accounts WHERE '$accountID' = AccountNumber),
-            (SELECT CurrentBalance FROM Accounts WHERE '$accountID' = AccountNumber)";	
+            (SELECT CurrentBalance FROM Accounts WHERE '$accountID' = AccountNumber))";	
  			if(mysqli_query($db, $query)&& mysqli_query($db, $eventQuery)) {
   				$data = 0;
  			} else {

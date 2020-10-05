@@ -1,6 +1,6 @@
 <?php
-//fetch.php
 	include("../include/config.php");
+	// start column sort and search query
 	$columns = array('AccountNumber', 'AccountName', 'Description', 'Category', 'SubCategory', 'InitialBalance', 'Debit', 'Credit', 'CurrentBalance', 'NormalSide', 'DateAdded', 'CreatorID');
 	
 	$query = "SELECT * FROM Accounts ";
@@ -28,10 +28,12 @@
 	} else {
  		$query .= 'ORDER BY AccountNumber ASC ';
 	}
+	// end column sort and serach query
 
 	$query1 = '';
 
 	if($_POST["length"] != -1) {
+		// get table data
  		$query1 = 'LIMIT ' . $_POST['start'] . ', ' . $_POST['length'];
 	}
 
@@ -40,12 +42,15 @@
 	$result = mysqli_query($db, $query . $query1);
 
 	$data = array();
-
+	
+	// loop through each row in query result and display in the table
 	while($row = mysqli_fetch_array($result)) {
+		// format numbers as x,xxx.xx
 		$initbal = number_format($row["InitialBalance"], 2);
 		$debit = number_format($row["Debit"], 2);
 		$credit = number_format($row["Credit"], 2);
 		$currbal = number_format($row["CurrentBalance"], 2);
+		// changed active button based on account's active status
 		$isActive = "";
 		if ($row["IsActive"] == 1) {
 			$isActive = "Active";
@@ -84,6 +89,7 @@
  		$data[] = $sub_array;
 	}
 
+	// send data back to table
 	function get_all_data($db) {
  		$query = "SELECT * FROM Accounts";
  		$result = mysqli_query($db, $query);

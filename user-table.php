@@ -56,7 +56,7 @@ if (isset($_SESSION['inactive'])) {
 		<div class="col-sm-12">			
 			<div class="table-responsive">
 				<div class="row">
-					<div class="col-sm-2"><h2>View/Edit Users</h2></div>
+					<div class="col-sm-2 my-auto"><h2>View/Edit Users</h2></div>
 					<div class="col-sm-1">
 						<button name="add" id="add" type="button" class="btn btn-lg btn-primary btn-width" data-toggle="tooltip" data-placement="right" title="Click to add a new user">
 							Add
@@ -109,11 +109,10 @@ if (isset($_SESSION['inactive'])) {
 			}
 
 			function update_data(id, values) {
-				var lastname = values[0];
-				var firstname = values[1];
-				var dob = values[2]
-				var email = values[3];
-				var usertype = $('#user-type :selected').val();
+				var lastname = values[1];
+				var firstname = values[2];
+				var dob = values[3]
+				var email = values[4];
 				$.ajax({
 					url:"users/update.php",
 					method:"POST",
@@ -124,7 +123,6 @@ if (isset($_SESSION['inactive'])) {
 						firstname: firstname,
 						dob: dob,
 						email: email,
-						usertype: usertype
 					},
 					success:function(data) {
 						getAlert(data);
@@ -152,7 +150,6 @@ if (isset($_SESSION['inactive'])) {
 							$(this).find('.edt').prop('contenteditable', false);
 							values.push($(this).text());						
 						});
-						currentTD.find('#user-type').prop("disabled", true);
 						update_data(id, values);
 					}
 
@@ -165,7 +162,25 @@ if (isset($_SESSION['inactive'])) {
 					},5000);
 				}
 
-			});
+			});	
+			
+			function update_selected(selected, id) {
+				$.ajax({
+					url: 'users/update-selected.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						selected: selected,
+						id: id
+					}
+				});
+			}
+			
+			$('#user-table').on('change', '#user-type', function() {
+				var selected = $('option:selected', this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				update_selected(selected, id);
+			})
 			
 			function update_active(id, activeStatus) {
 				var userID = id;

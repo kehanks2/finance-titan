@@ -1,12 +1,16 @@
 <?php
 include("../include/session.php");
 if(isset($_POST['isActive'], $_POST['accountID'])) {
+	// if data received from table...
+	// generate variables for clean data
 	$accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
 	$isActive = mysqli_real_escape_string($db, $_POST["isActive"]);
 	$username = mysqli_real_escape_string($db, $_SESSION["login_user"]);
     	
+	// query to update active status for account
 	$query = "UPDATE Accounts SET isActive = '".$isActive."' WHERE AccountNumber = '".$accountID."'";
-        $eventQuery ="INSERT INTO AccountEvents(
+	// query to insert change to event log
+    $eventQuery ="INSERT INTO AccountEvents(
          Username,
          AccountAffected,
          AccountAffectedID,
@@ -30,6 +34,7 @@ if(isset($_POST['isActive'], $_POST['accountID'])) {
 		$data = 3;
 	}
 	
+	// send return message to table
 	echo $data;
 }
 ?>

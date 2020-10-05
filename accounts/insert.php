@@ -1,6 +1,8 @@
 <?php
 include("../include/session.php");
 if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat"], $_POST["subcat"], $_POST["initbal"], $_POST["debit"], $_POST["credit"], $_POST["currbal"], $_POST["nside"], $_POST["dateadded"], $_POST["creator"])) {
+	// if data received from table...
+	// generate variables for clean data
  	$username = mysqli_real_escape_string($db, $_SESSION["login_user"]);
     $accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
 	$accountname = mysqli_real_escape_string($db, $_POST["accountname"]);
@@ -15,6 +17,7 @@ if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat
 	$dateadded = mysqli_real_escape_string($db, $_POST["dateadded"]);
 	$creator = mysqli_real_escape_string($db, $_POST["creator"]);
 	
+	// query to select account number and name
 	$sql_check = "SELECT AccountNumber, AccountName FROM Accounts";
 	$result_check = mysqli_query($db, $sql_check);
 	
@@ -22,18 +25,21 @@ if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat
 	while($row = mysqli_fetch_array($result_check)) {
 		
 		if ($row["AccountNumber"] == $accountID) {
+			// send error message if account number has already been used
 			$data = 1;
 			break;
 		} else if ($row["AccountName"] == $accountname) {
+			// send error message if account name has already been used
 			$data = 2;
 			break;
 		}
 	}
 	
 	if ($data != 1 && $data != 2) {
-        
+        // query to insert new entry into accounts table
 		$query = "INSERT INTO Accounts(AccountNumber, AccountName, Description, Category, SubCategory, InitialBalance, Debit, Credit, CurrentBalance, NormalSide, DateAdded, CreatorID) VALUES('$accountID', '$accountname', '$desc', '$cat', '$subcat', '$initbal', '$debit', '$credit', '$currbal', '$nside', '$dateadded', '$creator')";
-        $eventQuery ="INSERT INTO AccountEvents(
+        // query to insert event into event log
+		$eventQuery ="INSERT INTO AccountEvents(
          Username,
          AccountAffected,
          AccountAffectedID,

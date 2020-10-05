@@ -54,6 +54,10 @@ if (isset($_SESSION['inactive'])) {
     <!-- Include all compiled plugins (below), or include individual files as needed --> 
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>	
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script><script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
   </body>
 </html>

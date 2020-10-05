@@ -48,7 +48,11 @@
 			$ut[0] = 'manager';
 			$ut[1] = 'accountant';
 			$ut[2] = 'admin';
-		};
+		} else {
+			$ut[0] = 'accountant';
+			$ut[1] = 'manager';
+			$ut[2] = 'admin';
+		}
 		
 		$isActive = "";
 		if ($row["IsActive"] == 1) {

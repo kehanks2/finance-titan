@@ -1,8 +1,8 @@
 <?php
 include("../include/session.php");
 if(isset($_POST['isActive'], $_POST['accountID'])) {
-	// if data received from table...
-	// generate variables for clean data
+	// if all data has successfully been retrieved from table...
+	// generate variables to hold clean data
 	$accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
 	$isActive = mysqli_real_escape_string($db, $_POST["isActive"]);
 	$username = mysqli_real_escape_string($db, $_SESSION["login_user"]);

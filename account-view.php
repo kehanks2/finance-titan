@@ -1,5 +1,6 @@
 <?php
 include('include/session.php');
+$ut = '';
 if (isset($_SESSION['inactive'])) {
 	header("Location: login.php");
 } else {
@@ -7,6 +8,10 @@ if (isset($_SESSION['inactive'])) {
 		header("Location: account-table.php");
 	} else if (!isset($_SESSION['user_type'])) {
 		header("Location: login.php");
+	} else if ($_SESSION['user_type'] == 'manager') {
+		$ut = 'Manager';
+	} else if ($_SESSION['user_type'] == 'accountant') {
+		$ut = 'Accountant';
 	}
 }
 ?>
@@ -39,7 +44,7 @@ if (isset($_SESSION['inactive'])) {
 	<div class="row">
 		<div class="col-sm-4">
 			<h1>Welcome, <?php echo $login_session; ?></h1>
-			<h3>Administrator Account</h3>
+			<h3><?php echo $ut ?> Account</h3>
 		</div>
 		<div class="col-sm-8" id="help-modal-container">
 			<?php include('include/help-modal.php'); ?>

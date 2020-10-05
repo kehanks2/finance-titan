@@ -112,10 +112,6 @@ if (isset($_SESSION['inactive'])) {
 					"processing": true,
 					"serverSide": true,
 					"dom": '<"top"f>t<"bottom"ip>',
-					"columnDefs": [
-    					{ "width": "20%", "targets": 1 },
-						{ "width": "10%", "targets": 12}
-  					],
 					"order": [],
 					"ajax": {
 						url: "accounts/fetch.php",

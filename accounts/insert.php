@@ -1,8 +1,8 @@
 <?php
 include("../include/session.php");
 if(isset($_POST["accountID"], $_POST["accountname"], $_POST["desc"], $_POST["cat"], $_POST["subcat"], $_POST["initbal"], $_POST["debit"], $_POST["credit"], $_POST["currbal"], $_POST["nside"], $_POST["dateadded"], $_POST["creator"])) {
-	// if data received from table...
-	// generate variables for clean data
+	// if all data has successfully been retrieved from table...
+	// generate variables to hold clean data
  	$username = mysqli_real_escape_string($db, $_SESSION["login_user"]);
     $accountID = mysqli_real_escape_string($db, $_POST["accountID"]);
 	$accountname = mysqli_real_escape_string($db, $_POST["accountname"]);

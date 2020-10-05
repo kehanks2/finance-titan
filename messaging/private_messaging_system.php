@@ -7,9 +7,9 @@ define('DB_SERVER', 'sql209.epizy.com');
 define('DB_USERNAME', 'epiz_26751404');
 define('DB_PASSWORD', '1Cm9XygUONbN4sz');
 define('DB_DATABASE', 'epiz_26751404_FinanceTitanDB');
-define("TBL_MESSAGES","users"); // your users database table
+define("TBL_MESSAGES","users"); //  users database table
 define("TBL_MESSAGES", "messages"); // messages database table
-define("", "you@example.com"); // website email address
+define("MY_WEBSITE_EMAIL", "you@example.com"); // website email address
 
 
 class Private_messaging_system{

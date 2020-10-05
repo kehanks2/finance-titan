@@ -72,105 +72,98 @@ while ($row = mysqli_fetch_array($result)) {
 	</div>
 	<hr style="margin: 10px 0;">
 	<div class="row" style="margin-top: 0; padding-top: 10px;">		
-		<div class="col-sm-12">			
-			<div class="table-responsive">
-				<div class="row" style="margin-top: 0;">
-					<div class="col-sm-12">
-						<div class="row">
-							<div class="form-group col-sm-2">
-								<select class="form-control" style="width:auto;" id="choose-account">
-									<option disabled>Select an account</option>
-									<?php
-										for($i = 0; $i < count($arr); $i++) {
-											echo $arr[$i];
-										}
-									?>
-								</select>
-							</div>
-							<div class="form-group col-sm-1">
-								<button type="button" id="go-to-acct" class="btn btn-primary" style="width:auto;" data-toggle="tooltip" title="Go to the ledger for the selected account">
-									Go
-								</button>
-							</div>
-						</div>
-						<br><br>
-						<h2 id="account-name"><?php echo $session ?></h2>
-						<div class="row">
-							<div class="col-sm-2">
-								<h3>Account Details</h3>
-							</div>
-							<?php if($_SESSION['user_type'] == 'admin') {
-									echo '<div class="col-sm-1">
-										<button type="button" id="edit-acct" class="btn btn-secondary" data-toggle="modal" data-target="#edit-modal" style="width:auto;">
-											<span data-toggle="tooltip" title="Edit this account">Edit</span>
-										</button>
-									</div>';
-								} ?>
-						</div>						
-						<hr>
-						<?php if (isset($_SESSION['accountName'])) { ?>
-							<div class="row">
-								<div class="col-sm-auto">
-									<ul style="list-style-type:none;"><strong>
-										<li>ID:</li>
-										<li>Name:</li>
-										<li>Description:</li>
-										<li>Category:</li>
-										<li>Subcategory:</li>
-									</strong></ul>
-								</div>
-								<div class="col-sm-auto">
-									<ul id="info" style="list-style-type:none;">
-										<li id="id"></li>
-										<li id="acct-name"></li>
-										<li id="desc"></li>
-										<li id="cat"></li>
-										<li id="subcat"></li>
-									</ul>
-								</div>
-								<div class="col-sm-auto">
-									<ul style="list-style-type:none;"><strong>
-										<li>Initial Bal:</li>
-										<li>Debit:</li>
-										<li>Credit:</li>
-										<li>Current Bal:</li>
-										<li>Normal Side:</li>
-									</strong></ul>
-								</div>
-								<div class="col-sm-auto">
-									<ul id="balance" style="list-style-type:none;">
-										<li id="init"></li>
-										<li id="debit"></li>
-										<li id="credit"></li>
-										<li id="curr"></li>
-										<li id="nside"></li>
-									</ul>
-								</div>
-								<div class="col-sm-auto">
-									<ul style="list-style-type:none;"><strong>
-										<li>Date Added:</li>
-										<li>Creator:</li>
-										<li>Account Stmt:</li>
-										<li>Order:</li>
-										<li>Active?:</li>
-									</strong></ul>
-								</div>
-								<div class="col-sm-auto">
-									<ul id="other" style="list-style-type:none;">
-										<li id="date-added"></li>
-										<li id="creator"></li>
-										<li id="acct-stmt"></li>
-										<li id="order"></li>
-										<li id="isactive"></li>
-									</ul>
-								</div>
-							</div>
-						<?php } ?>
-					</div>
-				</div>
-			</div>
+		<div class="form-group col-sm-2">
+			<select class="form-control" style="width:auto;" id="choose-account">
+				<option disabled>Select an account</option>
+				<?php
+					for($i = 0; $i < count($arr); $i++) {
+						echo $arr[$i];
+					}
+				?>
+			</select>
+		</div>
+		<div class="form-group col-sm-1">
+			<button type="button" id="go-to-acct" class="btn btn-primary" style="width:auto;" data-toggle="tooltip" title="Go to the ledger for the selected account">
+				Go
+			</button>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<h2 id="account-name"><?php echo $session ?></h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<h3>Account Details</h3>
+		</div>
+		<?php if($_SESSION['user_type'] == 'admin') {
+				echo '<div class="col-sm-1">
+					<button type="button" id="edit-acct" class="btn btn-secondary" data-toggle="modal" data-target="#edit-modal" style="width:auto;">
+						<span data-toggle="tooltip" title="Edit this account">Edit</span>
+					</button>
+				</div>';
+			} ?>
+		<hr>
+	</div>	
+	<?php if (isset($_SESSION['accountName'])) { ?>
+		<div class="row" style="width:auto;">
+			<div class="col-sm-auto">
+				<ul style="list-style-type:none;"><strong>
+					<li>ID:</li>
+					<li>Name:</li>
+					<li>Description:</li>
+					<li>Category:</li>
+					<li>Subcategory:</li>
+				</strong></ul>
+			</div>
+			<div class="col-sm-auto">
+				<ul id="info" style="list-style-type:none;">
+					<li id="id"></li>
+					<li id="acct-name"></li>
+					<li id="desc"></li>
+					<li id="cat"></li>
+					<li id="subcat"></li>
+				</ul>
+			</div>
+			<div class="col-sm-auto">
+				<ul style="list-style-type:none;"><strong>
+					<li>Initial Bal:</li>
+					<li>Debit:</li>
+					<li>Credit:</li>
+					<li>Current Bal:</li>
+					<li>Normal Side:</li>
+				</strong></ul>
+			</div>
+			<div class="col-sm-auto">
+				<ul id="balance" style="list-style-type:none;">
+					<li id="init"></li>
+					<li id="debit"></li>
+					<li id="credit"></li>
+					<li id="curr"></li>
+					<li id="nside"></li>
+				</ul>
+			</div>
+			<div class="col-sm-auto">
+				<ul style="list-style-type:none;"><strong>
+					<li>Date Added:</li>
+					<li>Creator:</li>
+					<li>Account Stmt:</li>
+					<li>Order:</li>
+					<li>Active?:</li>
+				</strong></ul>
+			</div>
+			<div class="col-sm-auto">
+				<ul id="other" style="list-style-type:none;">
+					<li id="date-added"></li>
+					<li id="creator"></li>
+					<li id="acct-stmt"></li>
+					<li id="order"></li>
+					<li id="isactive"></li>
+				</ul>
+			</div>
+		</div>
+	<?php } ?>
 </section>
 	
 <?php if ($_SESSION['user_type'] == 'admin') { ?>
@@ -222,6 +215,7 @@ while ($row = mysqli_fetch_array($result)) {
 		$(document).ready(function() {
 			
 			fetch_data();
+			$('[data-toggle="tooltip"]').tooltip();
 			
 			function fetch_data() {
 				var accountName = $('#current-account').text();

@@ -71,9 +71,9 @@ while ($row = mysqli_fetch_array($result)) {
 		<div id="current-account" hidden><?php echo $accountName; ?></div>
 	</div>
 	<hr style="margin: 10px 0;">
-	<div class="row form-inline" style="margin-top: 0; margin-left: 10px; padding: 10px 0;">		
+	<div class="row form-inline choose-account">		
 		<div class="form-group">
-			<select class="form-control" style="width:auto; margin-right: 10px;" id="choose-account">
+			<select class="form-control" id="choose-account">
 				<option selected disabled>Select an account</option>
 				<?php
 					for($i = 0; $i < count($arr); $i++) {
@@ -83,7 +83,7 @@ while ($row = mysqli_fetch_array($result)) {
 			</select>
 		</div>
 		<div class="form-group">
-			<button type="button" id="go-to-acct" class="btn btn-success" style="width:auto;" data-toggle="tooltip" title="Go to the ledger for the selected account">
+			<button type="button" id="go-to-acct" class="btn btn-success btn-width" data-toggle="tooltip" title="Go to the ledger for the selected account">
 				Go
 			</button>
 		</div>
@@ -94,13 +94,13 @@ while ($row = mysqli_fetch_array($result)) {
 			<h2 id="account-name"><?php echo $session ?></h2>
 		</div>
 	</div>
-	<div class="row form-inline" style="margin: 0 10px;">
+	<div class="row form-inline account-details">
 		<div class="form-group">
-			<h3 style="margin-right: 10px;">Account Details</h3>
+			<h3 class="my-auto">Account Details</h3>
 		</div>
 		<?php if($_SESSION['user_type'] == 'admin') {
 				echo '<div class="form-group">
-					<button type="button" id="edit-acct" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal" style="width:auto;">
+					<button type="button" id="edit-acct" class="btn btn-primary btn-width" data-toggle="modal" data-target="#edit-modal">
 						<span data-toggle="tooltip" title="Edit this account">Edit</span>
 					</button>
 				</div>';
@@ -108,9 +108,9 @@ while ($row = mysqli_fetch_array($result)) {
 		<hr>
 	</div>	
 	<?php if (isset($_SESSION['accountName'])) { ?>
-		<div class="row" style="width:auto;">
+		<div class="row acct-info">
 			<div class="col-sm-auto">
-				<ul style="list-style-type:none;"><strong>
+				<ul><strong>
 					<li>ID:</li>
 					<li>Name:</li>
 					<li>Description:</li>
@@ -119,7 +119,7 @@ while ($row = mysqli_fetch_array($result)) {
 				</strong></ul>
 			</div>
 			<div class="col-sm-auto">
-				<ul id="info" style="list-style-type:none;">
+				<ul id="info">
 					<li id="id"></li>
 					<li id="acct-name"></li>
 					<li id="desc"></li>
@@ -128,7 +128,7 @@ while ($row = mysqli_fetch_array($result)) {
 				</ul>
 			</div>
 			<div class="col-sm-auto">
-				<ul style="list-style-type:none;"><strong>
+				<ul><strong>
 					<li>Initial Bal:</li>
 					<li>Debit:</li>
 					<li>Credit:</li>
@@ -137,7 +137,7 @@ while ($row = mysqli_fetch_array($result)) {
 				</strong></ul>
 			</div>
 			<div class="col-sm-auto">
-				<ul id="balance" style="list-style-type:none;">
+				<ul id="balance">
 					<li id="init"></li>
 					<li id="debit"></li>
 					<li id="credit"></li>
@@ -146,7 +146,7 @@ while ($row = mysqli_fetch_array($result)) {
 				</ul>
 			</div>
 			<div class="col-sm-auto">
-				<ul style="list-style-type:none;"><strong>
+				<ul><strong>
 					<li>Date Added:</li>
 					<li>Creator:</li>
 					<li>Account Stmt:</li>
@@ -155,7 +155,7 @@ while ($row = mysqli_fetch_array($result)) {
 				</strong></ul>
 			</div>
 			<div class="col-sm-auto">
-				<ul id="other" style="list-style-type:none;">
+				<ul id="other">
 					<li id="date-added"></li>
 					<li id="creator"></li>
 					<li id="acct-stmt"></li>
@@ -205,8 +205,8 @@ while ($row = mysqli_fetch_array($result)) {
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="submit-edit" data-dismiss="modal" style="width:auto;">Save Changes</button>
-				<button type="button" class="btn btn-danger" id="cancel-edit" data-dismiss="modal" style="width:auto;">Cancel Edit</button>
+				<button type="button" class="btn btn-primary btn-width" id="submit-edit" data-dismiss="modal">Save Changes</button>
+				<button type="button" class="btn btn-danger btn-width" id="cancel-edit" data-dismiss="modal">Cancel Edit</button>
 			</div>
 		</div>
 	</div>

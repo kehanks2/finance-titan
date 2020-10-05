@@ -58,7 +58,7 @@ if (isset($_SESSION['inactive'])) {
 				<div class="row">
 					<div class="col-sm-2"><h2>View/Edit Users</h2></div>
 					<div class="col-sm-1">
-						<button name="add" id="add" type="button" class="btn btn-lg btn-primary" style="font-weight: 600; width:auto;" data-toggle="tooltip" data-placement="right" title="Click to add a new user">
+						<button name="add" id="add" type="button" class="btn btn-lg btn-primary btn-width" data-toggle="tooltip" data-placement="right" title="Click to add a new user">
 							Add
 						</button>
 					</div>

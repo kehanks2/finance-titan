@@ -4,9 +4,11 @@ include('include/config.php');
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
-        <title>New PM</title>
+       <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Finance Titan - New PM</title>
+        
     </head>
     <body>
         <div class="header">

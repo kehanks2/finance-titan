@@ -4,13 +4,13 @@ include("include/config.php");
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
-        <title>Personal Messages</title>
+        <title>Read Messages</title>
     </head>
     <body>
         <div class="header">
-                <a href="<?php echo $url_home; ?>"><img src="<?php echo $design; ?>/images/logo.png" alt="Members Area" /></a>
+                <a href="<?php echo $url_home; ?>"><img src="<?php echo $design; ?>/http://financetitan.great-site.net/></a>
             </div>
         <div class="content">
 <?php
@@ -23,7 +23,7 @@ $req1 = mysql_query('select m1.id, m1.title, m1.timestamp, count(m2.id) as reps,
 $req2 = mysql_query('select m1.id, m1.title, m1.timestamp, count(m2.id) as reps, users.id as userid, users.username from pm as m1, pm as m2,users where ((m1.user1="'.$_SESSION['userid'].'" and m1.user1read="yes" and users.id=m1.user2) or (m1.user2="'.$_SESSION['userid'].'" and m1.user2read="yes" and users.id=m1.user1)) and m1.id2="1" and m2.id=m1.id group by m1.id order by m1.id desc');
 ?>
 This is the list of your messages:<br />
-<a href="new_pm.php" class="link_new_pm">New PM</a><br />
+<a href="new_messages.php" class="link_new_messages">New Messages</a><br />
 <h3>Unread Messages(<?php echo intval(mysql_num_rows($req1)); ?>):</h3>
 <table>
         <tr>
@@ -38,7 +38,7 @@ while($dn1 = mysql_fetch_array($req1))
 {
 ?>
         <tr>
-        <td class="left"><a href="read_pm.php?id=<?php echo $dn1['id']; ?>"><?php echo htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
+        <td class="left"><a href="read_messages.php?id=<?php echo $dn1['id']; ?>"><?php echo htmlentities($dn1['title'], ENT_QUOTES, 'UTF-8'); ?></a></td>
         <td><?php echo $dn1['reps']-1; ?></td>
         <td><a href="profile.php?id=<?php echo $dn1['userid']; ?>"><?php echo htmlentities($dn1['username'], ENT_QUOTES, 'UTF-8'); ?></a></td>
         <td><?php echo date('Y/m/d H:i:s' ,$dn1['timestamp']); ?></td>

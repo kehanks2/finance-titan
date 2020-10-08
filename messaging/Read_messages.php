@@ -39,8 +39,8 @@ else
         mysql_query('update pm set user2read="yes" where id="'.$id.'" and id2="1"');
         $user_partic = 1;
 }
-//We get the list of the messages
-$req2 = mysql_query('select pm.timestamp, pm.message, users.id as userid, users.username, users.avatar from pm, users where pm.id="'.$id.'" and users.id=pm.user1 order by pm.id2');
+// get the list of the messages
+$req2 = mysql_query('select messages.timestamp, messages.message, users.id as userid, users.username, users.avatar from messages, users where pm.id="'.$id.'" and users.id=messages.user1 order by messages.id2');
 //check if the form has been sent
 if(isset($_POST['message']) and $_POST['message']!='')
 {
@@ -100,7 +100,7 @@ if($dn2['avatar']!='')
 </table><br />
 <h2>Reply</h2>
 <div class="center">
-    <form action="read_pm.php?id=<?php echo $id; ?>" method="post">
+    <form action="read_messages.php?id=<?php echo $id; ?>" method="post">
         <label for="message" class="center">Message</label><br />
         <textarea cols="40" rows="5" name="message" id="message"></textarea><br />
         <input type="submit" value="Send" />

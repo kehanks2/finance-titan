@@ -45,7 +45,7 @@ CREATE TABLE Messages
    	User2 int (20) NOT NULL
     	Tittle varchar(255),
     	Message text NOT NULL,
-    	Timestamp int(10) NOT NULL,
+    	TimeStamp int(10) NOT NULL,
 	User1read varchar(3) NOT NULL,
    	User2read varchar (3) NOT NULL
 	  	

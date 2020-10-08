@@ -37,3 +37,15 @@ CREATE TABLE Accounts (
 	AccountStatement varchar(255),
 	Comment varchar(2555)
 	);
+	
+CREATE TABLE Messages
+	UserID int PRIMARY KEY NOT NULL, 
+	UserID2 int PRIMARY KEY NOT NULL, 
+	User1 int (20) NOT NULL,
+   	User2 int (20) NOT NULL
+    	Tittle varchar(255),
+    	Message text NOT NULL,
+    	Timestamp int NOT NULL,
+	User1read varchar(3) NOT NULL,
+   	User2read varchar (3) NOT NULL
+	  	

@@ -1,16 +1,28 @@
--- Database: `messages`
+-- 
+-- Table structure for table `users`
+-- 
 
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `avatar` text NOT NULL,
+  `signup_date` int(10) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_to` int(11) NOT NULL,
-  `user_from` int(11) NOT NULL,
-  `subject` varchar(100) CHARACTER SET latin1 NOT NULL,
-  `message` text CHARACTER SET latin1 NOT NULL,
-  `respond` int(11) NOT NULL DEFAULT '0',
-  `sender_open` enum('y','n') CHARACTER SET latin1 NOT NULL DEFAULT 'y',
-  `receiver_open` enum('y','n') CHARACTER SET latin1 NOT NULL DEFAULT 'n',
-  `sender_delete` enum('y','n') CHARACTER SET latin1 NOT NULL DEFAULT 'n',
-  `receiver_delete` enum('y','n') CHARACTER SET latin1 NOT NULL DEFAULT 'n',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+-- 
+-- Table structure for table `pm`
+-- 
+
+CREATE TABLE `pm` (
+  `id` bigint(20) NOT NULL,
+  `id2` int(11) NOT NULL,
+  `title` varchar(256) NOT NULL,
+  `user1` bigint(20) NOT NULL,
+  `user2` bigint(20) NOT NULL,
+  `message` text NOT NULL,
+  `timestamp` int(10) NOT NULL,
+  `user1read` varchar(3) NOT NULL,
+  `user2read` varchar(3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

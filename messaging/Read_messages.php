@@ -16,9 +16,9 @@ include('include/config.php');
 if(isset($_SESSION['username']))
 {
 //check if the ID of the messages is defined
-if(isset($_GET['id']))
+if(isset($_GET['UserID']))
 {
-$id = intval($_GET['id']);
+$id = intval($_GET['UserID']);
 //get the title and the narators of the messages
 $req1 = mysql_query('select title, user1, user2 from pm where id="'.$id.'" and id2="1"');
 $dn1 = mysql_fetch_array($req1);

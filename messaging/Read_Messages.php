@@ -6,12 +6,11 @@ include('include/config.php');
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="<?php echo $design; ?>/style.css" rel="stylesheet" title="Style" />
-        <title>Read a PM</title>
+        <title>Read Messages</title>
     </head>
     <body>
-        <div class="header">
-                <a href="<?php echo $url_home; ?>"><img src="<?php echo $design; ?>/images/logo.png" alt="Members Area" /></a>
-            </div>
+  
+           
 <?php
 //check if the user is logged
 if(isset($_SESSION['username']))
@@ -51,21 +50,21 @@ if(isset($_POST['message']) and $_POST['message']!='')
         {
                 $message = stripslashes($message);
         }
-        //We protect the variables
+        //protect the variables
         $message = mysql_real_escape_string(nl2br(htmlentities($message, ENT_QUOTES, 'UTF-8')));
-        //We send the message and we change the status of the discussion to unread for the recipient
+        //send the message and we change the status of the discussion to unread for the recipient
         if(mysql_query('insert into pm (id, id2, title, user1, user2, message, timestamp, user1read, user2read)values("'.$id.'", "'.(intval(mysql_num_rows($req2))+1).'", "", "'.$_SESSION['userid'].'", "", "'.$message.'", "'.time().'", "", "")') and mysql_query('update pm set user'.$user_partic.'read="yes" where id="'.$id.'" and id2="1"'))
         {
 ?>
 <div class="message">Your message has successfully been sent.<br />
-<a href="read_pm.php?id=<?php echo $id; ?>">Go to the discussion</a></div>
+<a href="Read_Messages.php?id=<?php echo $id; ?>">Go to the discussion</a></div>
 <?php
         }
         else
         {
 ?>
 <div class="message">An error occurred while sending the message.<br />
-<a href="read_pm.php?id=<?php echo $id; ?>">Go to the discussion</a></div>
+<a href="Read_Messages.php?id=<?php echo $id; ?>">Go to the discussion</a></div>
 <?php
         }
 }
@@ -131,6 +130,6 @@ else
         echo '<div class="message">You must be logged to access this page.</div>';
 }
 ?>
-                <div class="foot"><a href="list_pm.php">Go to my Personal messages</a> - <a href="http://financetitan.great-site.net/">Finance titan</a></div>
+                <div class="foot"><a href="list_messages.php">Go to my Personal messages</a> - <a href="http://financetitan.great-site.net/">Finance titan</a></div>
         </body>
 </html>

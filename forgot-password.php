@@ -5,68 +5,6 @@
 
 	session_start();
 	include("include/config.php");
-
-	$sq = '';
-
-	if (isset($_POST["continue"])) {
-		if (isset($_POST["username"]) && $_POST["username"] != '' && isset($_POST["email"]) && $_POST["email"] != '') {
-		// values sent from form 
-			$email = mysqli_real_escape_string($db,$_POST['email']);
-			$username = mysqli_real_escape_string($db,$_POST['username']);
-
-			$sql_security = "SELECT SecurityQuestion FROM Passwords WHERE (SELECT PasswordID FROM Users WHERE UserName = '$username' and EmailAddress = '$email') = Passwords.PasswordID";
-			$sql_securitya = "SELECT SecurityAnswer FROM Passwords WHERE (SELECT PasswordID FROM Users WHERE UserName = '$username' and EmailAddress = '$email') = Passwords.PasswordID";
-
-			$get_security = mysqli_query($db, $sql_security);
-			$get_answer = mysqli_query($db, $sql_securitya);
-			if ($get_security && $get_answer) {
-				while ($row = mysqli_fetch_assoc($get_security)) {
-					$jsonArray[] = $row['SecurityQuestion'];
-					$sq = json_encode($jsonArray);
-				}
-				while ($row2 = mysqli_fetch_assoc($get_answer)) {
-					$_SESSION['sanswer'] = $row2['SecurityAnswer'];
-				}
-			} else {
-				echo "<div class='alert-message'>That username and email combination was not found.</div>";
-			}
-		}
-	} else {
-		echo "<div class='alert-message'>There was an error with continue.</div>";
-	}
-
-	if (isset($_POST['security'])) {
-		if (isset($_POST["security-answer"]) && $_POST['security-answer'] != '') {
-			if ($_POST["security-answer"] == $_SESSION['sanswer']) {
-				$_SESSION['resetpw'] = $_SESSION['security-answer'];
-			} else {
-				echo "<div class='alert-message'>The security answer you entered is incorrect.</div>";
-			}
-		}
-	} else {
-		echo "<div class='alert-message'>There was an error with security.</div>";
-	}
-
-	if (isset($_POST['submit'])) {
-		if (isset($_POST["newpassword"]) && isset($_POST["newpasswordcheck"]))
-		{
-			$email = mysqli_real_escape_string($db,$_POST['email']);
-			$username = mysqli_real_escape_string($db,$_POST['username']);
-			$newpassword = mysqli_real_escape_string($db, $_POST["newpassword"]);
-
-			$sql_password = "INSERT INTO Passwords VALUE CurrentPassword WHERE (SELECT PasswordID FROM Users WHERE UserName = '$username' and EmailAddress = '$email') = Passwords.PasswordID";
-			$set_password = mysqli_query($db, $sql_password);
-
-			if ($set_password) {
-				echo "<div class='alert-message'>Your password has been reset.</div>";
-				header("Location: login.php");
-			} else {
-				echo "<div class='alert-message'>There was an error resetting your password.</div>";
-			}
-		}
-	} else {
-		echo "<div class='alert-message'>There was an error with submit.</div>";
-	}
 ?>
 
 <!DOCTYPE html>
@@ -96,69 +34,31 @@
 <?php include("include/banner.php"); ?>
 
 <!-- PAGE CONTENT -->
-<section id="forgot-password-form" class="d-flex justify-content-center">
-	<div class="col-md-4 sign-in-form">
-		<form class="form-group" id="get-security" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<div class="text-center">
-				<h2>Reset Your Password</h2>
-				<p>Enter the information below to reset your password.</p>
+<div class="container">
+	<div class="row d-flex justify-content-center">
+		<div class="col-md-6 sign-in-form">
+			<div class="form-group" id="forgot-password-form">
+				<div class="text-center">
+					<h2>Reset Your Password</h2>
+					<p>Enter the information below to reset your password.</p>
+				</div>
+				<div id="alert-message"></div>
+				<div class="form-group" id="input1">
+					<input type="text" class="form-control" id="username" placeholder="Username">
+				</div>
+				<div class="form-group" id="input2">
+					<input type="email" class="form-control" id="email" placeholder="Email">
+				</div>
+				<div class="text-center" id="btn1">
+					<button type="button" id="continue" name="continue" class="btn btn-lg btn-primary ">Continue</button>
+				</div>
+				<div class="form-group" id="security-question"></div>
+				<div class="form-group" id="security-answer"></div>
+				<div class="text-center" id="submit-btn"></div>
 			</div>
-			<div class="form-group">
-				<input type="text" class="form-control" name="username" id="username" placeholder="Username">
-			</div>
-			<div class="form-group">
-				<input type="email" class="form-control" name="email" id="email" placeholder="Email">
-			</div>
-			<div class="text-center">
-				<button type="submit" id="continue" name="continue" class="btn btn-lg btn-primary">Submit</button>
-			</div>
-		</form>
-		<form class="form-group" id="security-check" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<?php
-				if($sq != '') {
-					echo '<div class="form-group row">
-							<input type="text" class="security-question" name="security-question" id="security-question" value="' . $sq . '" readonly>
-						</div>';			
-					echo '<div class="form-group row">
-							<input type="password" name="security-response" id="security-response" placeholder="Security Answer">
-						</div>';
-					echo '<div class="text-center">
-							<button type="submit" id="security" name="security" class="btn btn-lg btn-primary">Submit</button>
-						</div>';
-				} else {
-					echo '<div></div>';
-				}
-			?>
-		</form>
-		<form class="form-group" id="reset-password" method="POST" onSubmit="accountCreated(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<?php 
-				if (isset($_SESSION['resetpw']) && $_SESSION['resetpw'] == $_SESSION['security-answer']) {
-					echo '<div class="form-group row""> 
-					    	<input type="password" name="newpassword" id="newpassword" placeholder="Enter New Password>
-						</div>';
-					echo '<div class="col-1 help-icon">
-							<i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true" data-content="
-								<ul>
-									<li>use 8+ characters</li>
-									<li>starts with a letter</li>
-								 	<li>include at least one letter, one number, and one special character (such as ! . ? * or
-								 	&)</li>
-								</ul>">
-							</i>
-						</div>';
-					echo '<div class="form-group row"> 
-					    	<input type="password" name="newpasswordcheck" id="newpasswordcheck" placeholder="Retype Password">
-						</div>';			
-					echo '<div class="text-center"> 
-					    	<button type="submit" name="submit" id="submit" class="btn btn-lg btn primary">Submit</button>
-						</div>';
-				} else {				
-					echo '<div></div>';
-				}
-			?>
-		</form>
+		</div>
 	</div>
-</section>
+</div>
 	
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/popper.min.js"></script>
@@ -169,42 +69,161 @@
 	$('[data-toggle="tooltip"]').tooltip();
 	$('[data-toggle="popover"]').popover();
 	
-	// return true if first character is a letter
-	function isLetter(str) {
-		var first = str.charAt(0);
-  		return first.match(/[A-Z|a-z]/i);
-	}
-	// Function to check whether password is valid. 
-    function checkPassword(form) { 
-		password1 = form.newpassword.value; 
-		password2 = form.newpasswordcheck.value; 
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('#continue').click(function() {
+			var username = $('#username').val();
+			var email = $('#email').val();
+			$.ajax({
+				method: 'POST',
+				url: 'include/get-security.php',
+				dataType: 'JSON',
+				data: {
+					username: username,
+					email: email
+				},
+				success: function(data) {
+					displaySecurity(data);
+				}
+			});
+		})
+		
+		function displaySecurity(...data) {
+			if (data == 1) {
+				$('#alert-message').html('<div class="alert alert-danger">Error 1</div>');
+			} else if (data == -1) {
+				$('#alert-message').html('<div class="alert alert-danger">-1</div>');
+			} else {			
+				$('#username').prop('disabled', true);
+				$('#email').prop('disabled', true);
+				$('#continue').prop('hidden', true);
 
-		// If password doesn't match retype password 
-		if (password1 != password2) { 
-			alert ("\nPasswords did not match. Please try again."); 
-			return false; 
+				var question = '<h4 id="question">'+data[0]+'</h4>';
+				var answer = '<input type="password" class="form-control" id="security-response" placeholder="Security Answer">';
+				var sbtn = '<button type="button" id="security" class="btn btn-lg btn-primary">Submit</button>';
+				$('#security-question').html(question);
+				$('#security-answer').html(answer);
+				$('#submit-btn').html(sbtn);
+			}
 		}
 		
-		var str = password1;
-		// If password doesn't meet requirements
-		if (!str.match(/[a-z]/g) && 
-			!str.match(/[A-Z]/g) && 
-			!str.match(/[0-9]/g) && 
-			!str.match(/[^a-zA-Z\d]/g) &&
-			!isLetter(str) &&
-			!str.length >= 8) {			
-			alert ("\nPassword is not strong enough.\nPlease check the tooltip for all requirements!")
-			return false; 
+		$('#submit-btn').on('click', '#security', function(e) {
+			var username = $('#username').val();
+			var email = $('#email').val();
+			var answer = $('#security-response').val();
+			$.ajax({
+				method: 'POST',
+				url: 'include/get-security.php',
+				dataType: 'JSON',
+				data: {
+					username: username,
+					email: email,
+					answer: answer
+				},
+				success: function(data) {
+					displayReset(data);
+				}
+			});
+		})
+		
+		function displayReset(data) {			
+			if (data[0] == 2) {
+				$('#alert-message').html('<div class="alert alert-danger">Security answer incorrect.</div>');
+			} else if (data[0] == -1) {
+				$('#alert-message').html('<div class="alert alert-danger">-1</div>');
+			} else {	
+				$('#alert-message').html('<div class="alert alert-success">Success. Please enter your new password below.</div>');
+				
+				$('#question').prop('hidden', true);
+				$('#security-response').prop('hidden', true);
+				$('#security').prop('hidden', true);
+				
+				var username = data[0];
+				var email = data[1];
+				
+				$('#input1').html('<input type="password" id="newpassword" class="form-control" placeholder="Enter New Password"></div>');
+				$('#input2').html('<input type="password" id="newpasswordcheck" class="form-control" placeholder="Retype Password"></div>');
+				$('#btn1').html('<button type="button" id="changepw" class="btn btn-lg btn-primary">Submit</button>');
+				
+				var html = '<div id="username" hidden>'+username+'</div>';
+				html += '<div id="email" hidden>'+email+'</div>';
+				$('#forgot-password-form').append(html);
+			}	
 		}
-		return true;
-	} 
-	function accountCreated(form) {
-		if (checkPassword(form)) {
-			alert("Password has been successfully reset!");
-		} else {
-			return false;
-		}		
-	}
+		
+		$('#btn1').on('click', '#changepw', function(e) {
+			var username = $('#username').text();
+			var email = $('#email').text();
+			
+			var password = $('#newpassword').val();
+			var passwordcheck = $('#newpasswordcheck').val();
+			$.ajax({
+				method: 'POST',
+				url: 'include/get-security.php',
+				dataType: 'JSON',
+				data: {
+					username: username,
+					email: email,
+					password: password
+				},
+				success: function(data) {
+					isSuccess(data);
+					
+				}
+			})
+		})
+		
+		function isSuccess(data) {
+			if (data == 0) {
+				$('#alert-message').html('<div class="alert alert-success">Successfully changed pw</div>');
+			} else if (data == 1) {
+				$('#alert-message').html('<div class="alert alert-danger">Something went wrong.</div>');
+			} else if (data == 2) {
+				$('#alert-message').html('<div class="alert alert-danger">Password must not have been used previously.</div>');
+			} else {
+				$('#alert-message').html('<div class="alert alert-warning">Passwords must match. Check the requirements and try again.</div>');
+			}
+		}
+		
+		// return true if first character is a letter
+		function isLetter(str) {
+			var first = str.charAt(0);
+			return first.match(/[A-Z|a-z]/i);
+		}
+		// Function to check whether password is valid. 
+		function checkPassword(password1, password2) {
+
+			// If password doesn't match retype password 
+			if (password1 != password2) { 
+				alert ("\nPasswords did not match. Please try again."); 
+				return false; 
+			}
+
+			var str = password1;
+			// If password doesn't meet requirements
+			if (!str.match(/[a-z]/g) && 
+				!str.match(/[A-Z]/g) && 
+				!str.match(/[0-9]/g) && 
+				!str.match(/[^a-zA-Z\d]/g) &&
+				!isLetter(str) &&
+				!str.length >= 8) {			
+				alert ("\nPassword is not strong enough.\nPlease check the tooltip for all requirements!")
+				return false; 
+			}
+			return true;
+		} 
+		function accountCreated(form) {
+			if (checkPassword(form)) {
+				alert("Password has been successfully reset!");
+			} else {
+				return false;
+			}		
+		}
+		
+	})
+	
 </script>
 </body>
 </html>

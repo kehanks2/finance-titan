@@ -38,14 +38,16 @@ CREATE TABLE Accounts (
 	Comment varchar(2555)
 	);
 	
-CREATE TABLE Messages
-	UserID int PRIMARY KEY NOT NULL, 
-	UserID2 int PRIMARY KEY NOT NULL, 
+CREATE TABLE Messages(
+	MessageID int Primary Key NOT NULL,
+	UserID int NOT NULL, 
+	UserID2 int NOT NULL, 
 	User1 int (20) NOT NULL,
    	User2 int (20) NOT NULL
-    	Tittle varchar(255),
+    	Subject varchar(255),
     	Message text NOT NULL,
     	TimeStamp int(10) NOT NULL,
 	User1read varchar(3) NOT NULL,
-   	User2read varchar (3) NOT NULL
-	  	
+   	User2read varchar (3) NOT NULL,
+	FOREIGN KEY (UserID) REFERENCES Users(UserID)
+	  	);

@@ -43,12 +43,13 @@ CREATE TABLE Messages(
 	UserID int NOT NULL, 
 	UserID2 int NOT NULL, 
 	User1 int (20) NOT NULL,
-   	User2 int (20) NOT NULL
+   	User2 int (20) NOT NULL,
     	Subject varchar(255),
     	Message text NOT NULL,
     	TimeStamp datetime CURRENT_TIMESTAMP NOT NULL,
 	User1read varchar(3) NOT NULL,
    	User2read varchar (3) NOT NULL,
+	FOREIGN KEY (UserID) REFERENCES Users(UserID),
 	FOREIGN KEY (UserID) REFERENCES Users(UserID)
 	  	);
 		

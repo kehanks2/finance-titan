@@ -50,7 +50,7 @@ CREATE TABLE Messages(
 	User1read varchar(3) NOT NULL,
    	User2read varchar (3) NOT NULL,
 	FOREIGN KEY (UserID) REFERENCES Users(UserID),
-	FOREIGN KEY (UserID) REFERENCES Users(UserID)
+	FOREIGN KEY (UserID2) REFERENCES Users(UserID)
 	  	);
 		
 		

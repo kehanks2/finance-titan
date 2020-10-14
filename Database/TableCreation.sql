@@ -46,8 +46,23 @@ CREATE TABLE Messages(
    	User2 int (20) NOT NULL
     	Subject varchar(255),
     	Message text NOT NULL,
-    	TimeStamp int(10) NOT NULL,
+    	TimeStamp datetime CURRENT_TIMESTAMP NOT NULL,
 	User1read varchar(3) NOT NULL,
    	User2read varchar (3) NOT NULL,
 	FOREIGN KEY (UserID) REFERENCES Users(UserID)
 	  	);
+		
+		
+CREATE TABLE LedgerEntries (
+	LedgerEntryID int PRIMARY KEY NOT NULL,
+    	AccountNumber int NOT NULL,
+    	Description varchar(2555),
+	UpdateComments varchar(2555),
+	Debit double,
+	Credit double,
+	Balance double,
+	DateAdded DATE,
+   	CreatorID int,  
+	Status enum('Pending','Approved','Rejected'),
+	FOREIGN KEY (AccountNumber) REFERENCES Accounts(AccountNumber)
+	};

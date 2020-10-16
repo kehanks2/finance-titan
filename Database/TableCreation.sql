@@ -38,14 +38,32 @@ CREATE TABLE Accounts (
 	Comment varchar(2555)
 	);
 	
-CREATE TABLE Messages
-	UserID int PRIMARY KEY NOT NULL, 
-	UserID2 int PRIMARY KEY NOT NULL, 
-	User1 int (20) NOT NULL,
-   	User2 int (20) NOT NULL
-    	Tittle varchar(255),
+CREATE TABLE Messages(
+	MessageID int Primary Key NOT NULL,
+	SenderID int NOT NULL, 
+	RecipientID int NOT NULL, 
+	Sender varchar(255) NOT NULL,
+   	Recipient varchar(255) NOT NULL,
+    	Subject varchar(255),
     	Message text NOT NULL,
-    	TimeStamp int(10) NOT NULL,
-	User1read varchar(3) NOT NULL,
-   	User2read varchar (3) NOT NULL
-	  	
+    	TimeStamp datetime CURRENT_TIMESTAMP NOT NULL,
+	SenderRead varchar(3) NOT NULL,
+   	RecipientRead varchar (3) NOT NULL,
+	FOREIGN KEY (SenderID) REFERENCES Users(UserID),
+	FOREIGN KEY (RecipientID) REFERENCES Users(UserID)
+	  	);
+		
+		
+CREATE TABLE LedgerEntries (
+	LedgerEntryID int PRIMARY KEY NOT NULL,
+    	AccountNumber int NOT NULL,
+    	Description varchar(2555),
+	UpdateComments varchar(2555),
+	Debit double,
+	Credit double,
+	Balance double,
+	DateAdded DATE,
+   	CreatorID int,  
+	Status enum('Pending','Approved','Rejected'),
+	FOREIGN KEY (AccountNumber) REFERENCES Accounts(AccountNumber)
+	};

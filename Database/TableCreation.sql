@@ -40,17 +40,17 @@ CREATE TABLE Accounts (
 	
 CREATE TABLE Messages(
 	MessageID int Primary Key NOT NULL,
-	UserID int NOT NULL, 
-	UserID2 int NOT NULL, 
-	User1 int (20) NOT NULL,
-   	User2 int (20) NOT NULL,
+	SenderID int NOT NULL, 
+	RecipientID int NOT NULL, 
+	Sender varchar(255) NOT NULL,
+   	Recipient varchar(255) NOT NULL,
     	Subject varchar(255),
     	Message text NOT NULL,
     	TimeStamp datetime CURRENT_TIMESTAMP NOT NULL,
-	User1read varchar(3) NOT NULL,
-   	User2read varchar (3) NOT NULL,
-	FOREIGN KEY (UserID) REFERENCES Users(UserID),
-	FOREIGN KEY (UserID2) REFERENCES Users(UserID)
+	SenderRead varchar(3) NOT NULL,
+   	RecipientRead varchar (3) NOT NULL,
+	FOREIGN KEY (SenderID) REFERENCES Users(UserID),
+	FOREIGN KEY (RecipientID) REFERENCES Users(UserID)
 	  	);
 		
 		

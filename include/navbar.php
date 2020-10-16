@@ -107,6 +107,7 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown2">
 					<a class="dropdown-item" href="account-view.php">Chart of Accounts</a>
 					<a class="dropdown-item" href="ledger.php">Ledger</a>
+					<a class="dropdown-item" href="journalize-accountant.php">Journalize</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
 			</li>			
@@ -158,6 +159,7 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
 					<a class="dropdown-item" href="account-view.php">Chart of Accounts</a>
 					<a class="dropdown-item" href="ledger.php">Ledger</a>
+					<a class="dropdown-item" href="journalize-manager.php">Journalize</a>
 					<a class="dropdown-item" href="event-log.php">Event Log</a>
 				</div>
 			</li>			

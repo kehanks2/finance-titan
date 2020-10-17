@@ -67,9 +67,9 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 			while ($row = mysqli_fetch_array($res)) {
 				$nside = '';
 				if ($row['NormalSide'] == 'left') {
-					$nside = 0;
-				} else if ($row['NormalSide'] == 'right') {
 					$nside = 1;
+				} else if ($row['NormalSide'] == 'right') {
+					$nside = 0;
 				}
 				$bal = $credit_amts[$i];
 			}

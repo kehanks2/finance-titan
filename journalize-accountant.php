@@ -80,14 +80,14 @@ while ($row = mysqli_fetch_array($result)) {
 					</div>
 				</div>
 				<!-- for qjuery to place alert messages -->
-				<div id="alert_message"><br><br></div>
+				<div id="alert-message"><br><br></div>
 				<!-- JOURNAL TABLE START -->
-				<table id="account-table" class="table table-striped" style="width:100%;">
+				<table id="journalize-table" class="table table-striped" style="width:100%;">
 					<thead>
 						<tr>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date">Date</th>
-							<th data-toggle="tooltip" data-placement="bottom" title="Sort by type">Type</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by type">Type</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by accounts">Accounts</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by debit amount">Debit</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by credit amount">Credit</th>
@@ -154,15 +154,10 @@ while ($row = mysqli_fetch_array($result)) {
 								<!-- acct amount column -->
 								<label for="debit-amt0" class="col-form-label">$</label>
 								<input type="text" class="form-control debit-amt" id="debit-amt0" placeholder="0.00">
-								<!-- save/remove line button column -->
-								<div class="btn-group btn-group-sm" role="group">
-									<button type="button" class="btn btn-success btn-sm">
-										<i class="fa fa-check sm-icon"></i>
-									</button>
-									<button type="button" class="btn btn-danger btn-sm">
-										<i class="fa fa-close sm-icon"></i>
-									</button>
-								</div>
+								<!-- remove line button column -->
+								<button type="button" class="btn btn-danger btn-sm btn-width remove-btn">
+									<i class="fa fa-close sm-icon"></i>
+								</button>
 							</div>
 						</div>
 						<!-- add another debit acct button row -->
@@ -190,15 +185,10 @@ while ($row = mysqli_fetch_array($result)) {
 								<!-- acct amount column -->
 								<label for="credit-amt0" class="col-form-label">$</label>
 								<input type="text" class="form-control credit-amt" id="credit-amt0" placeholder="0.00">
-								<!-- save/remove line button column -->
-								<div class="btn-group btn-group-sm" role="group">
-									<button type="button" class="btn btn-success btn-sm">
-										<i class="fa fa-check sm-icon"></i>
-									</button>
-									<button type="button" class="btn btn-danger btn-sm">
-										<i class="fa fa-close sm-icon"></i>
-									</button>
-								</div>
+								<!-- remove line button column -->
+								<button type="button" class="btn btn-danger btn-sm btn-width remove-button">
+									<i class="fa fa-close sm-icon"></i>
+								</button>
 							</div>
 						</div>
 						<!-- add another debit acct button row -->
@@ -236,9 +226,24 @@ while ($row = mysqli_fetch_array($result)) {
 			// enable tooltips, enable modals
 			$('[data-toggle="tooltip"]').tooltip();
 			
-			// modal functions
+			//*** table functions ***//
+			// get data and generate table
+			function fetch_data() {
+				var dataTable = $('#journalize-table').DataTable({
+					"processing": true,
+					"serverSide": true,
+					"dom": '<"top"f>t<"bottom"ip>',
+					"order": [],
+					"ajax": {
+						url: "journalize/fetch.php",
+						type: "POST"
+					}
+				});
+			};
 			
-			//global vars for submit
+			
+			//*** modal functions ***//
+			// global vars for submit
 			var num_debit_accts = 1;
 			var num_credit_accts = 1;
 			
@@ -255,22 +260,26 @@ while ($row = mysqli_fetch_array($result)) {
 				var debit = [];
 				for (let i = 0; i < num_debit_accts; i++) {
 					let id = '#choose-debit'+i;
-					let acct = $(id).find(":selected").val();
-					id = '#debit-amt'+i;
-					let amt = $(id).val();
-					amt = parseFloat(amt).toFixed(2);
-					debit[i] = [acct, amt];
+					if (document.getElementById(id)) {
+						let acct = $(id).find(":selected").val();
+						id = '#debit-amt'+i;
+						let amt = $(id).val();
+						amt = parseFloat(amt).toFixed(2);
+						debit[i] = [acct, amt];
+					}						
 				}
 				
 				// put all credit data in an array
 				var credit = [];
 				for (let i = 0; i < num_credit_accts; i++) {
 					let id = '#choose-credit'+i;
-					let acct = $(id).find(":selected").val();
-					id = '#credit-amt'+i;
-					let amt = $(id).val();
-					amt = parseFloat(amt).toFixed(2);
-					credit[i] = [acct, amt];
+					if (document.getElementById(id)) {
+						let acct = $(id).find(":selected").val();
+						id = '#credit-amt'+i;
+						let amt = $(id).val();
+						amt = parseFloat(amt).toFixed(2);
+						credit[i] = [acct, amt];
+					}						
 				}
 				
 				var ed = JSON.stringify(debit);
@@ -293,6 +302,24 @@ while ($row = mysqli_fetch_array($result)) {
 						getAlert(data);
 					}
 				})			
+			})
+			
+			// remove credit or debit acct line
+			$('#new-entry-modal').on('click', '.remove-btn', function() {
+				// get current line
+				var div_current = $(this).parent('div').parent('div');
+				// check if div is a credit or debit line
+				var id = div_current.prop("id");
+				var credit = /credit/;
+				var debit = /debit/;
+				// deduct from the appropriate num accts count
+				if (credit.test(id)) {
+					num_credit_accts--;
+				} else if (debit.test(id)){
+					num_debit_accts--;
+				}
+				// remove div element + it's child elements
+				div_current.remove();				
 			})
 			
 			//add new debit line
@@ -334,6 +361,8 @@ while ($row = mysqli_fetch_array($result)) {
 			function getAlert(data) {
 				if (data == 0) {
 					$('#alert-message').html('<div class="alert alert-success">Your entry has been submitted for approval.</div>');
+					$('#journalize-table').DataTable().destroy();
+					fetch_data();
 				} else if (data == 1) {
 					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
 				} else if (data == 2) {

@@ -175,6 +175,7 @@ if (isset($_SESSION['inactive'])) {
 								// if field has class num, sav value in format xx.xx
 								if ($(this).hasClass('num')) {
 									var nextval = $(this).text();
+									nextval.replace(",", "");
 									nextval = parseFloat(nextval.toFixed(2));
 									values.push(nextval);
 								} else {
@@ -226,7 +227,7 @@ if (isset($_SESSION['inactive'])) {
 					// if button text = Active and balance is 0, change active status to inactive
 					if (bal == 0) {						
 						update_active(id, 0);					
-						$(this).html() = 'Inactive';
+						$(this).html('Inactive');
 					} else {
 						// is bal != 0, display error message
 						$('#alert_message').html('<div class="alert alert-warning">Accounts with a balance cannot be deactivated.</div>');
@@ -238,7 +239,7 @@ if (isset($_SESSION['inactive'])) {
 				} else if ($(this).html() == 'Inactive') {
 					// if button text = Inactive, change active status to active
 					update_active(id, 1);
-					$(this).html() = 'Active';
+					$(this).html('Active');
 				}
 			});
 			
@@ -284,7 +285,7 @@ if (isset($_SESSION['inactive'])) {
 				html += '<td contenteditable="true" id="Debit"></td>';
 				html += '<td contenteditable="true" id="Credit"></td>';
 				html += '<td contenteditable="false" id="CurrentBalance"></td>';
-				html += '<td contenteditable="true" id="NormalSide"></td>';
+				html += '<td contenteditable="true" id="NormalSide"><select id="n-side"><option>left</option><option>right</option></select></td>';
 				html += '<td contenteditable="false" id="DateAdded">' + today + '</td>';
 				html += '<td contenteditable="false" id="CreatorID">' + $('#currentuser').text() + '</td>';
 				html += '<td><button type="button" name="insert" id="insert" data-toggle="tooltip" data-placement="bottom" title="Save new account" class="btn btn-success">Insert</button></td>';
@@ -302,7 +303,7 @@ if (isset($_SESSION['inactive'])) {
 				var initbal = parseFloat($('#InitialBalance').text()).toFixed(2);
 				var debit = parseFloat($('#Debit').text()).toFixed(2);				
 				var credit = parseFloat($('#Credit').text()).toFixed(2);				
-				var nside = $('#NormalSide').text();
+				var nside = $('#n-side option:selected').text();
 				var dateadded = $('#DateAdded').text();				
 				var creator = $('#CreatorID').text();
 				

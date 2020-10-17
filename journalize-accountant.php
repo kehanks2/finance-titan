@@ -16,12 +16,12 @@ if (isset($_SESSION['inactive'])) {
 	}
 }
 
-$query = "SELECT AccountName FROM Accounts";
+$query = "SELECT * FROM Accounts";
 $result = mysqli_query($db, $query);
 
 $arr = array();
 while ($row = mysqli_fetch_array($result)) {
-	$arr[] = '<option value="' .$row["AccountName"]. '">' .$row["AccountName"]. '</option>';
+	$arr[] = '<option value="' .$row["AccountNumber"]. '">' .$row["AccountName"]. '</option>';
 }
 ?>
 
@@ -117,22 +117,22 @@ while ($row = mysqli_fetch_array($result)) {
 						<label for="entry-date" class="col-form-label my-auto">Date: </label>
 					</div>
 					<div class="col-sm-auto">
-						<input type="text" class="form-control-plaintext my-auto" id="entry-date" placeholder="<?php echo date("Y-m-d")?>" readonly>
+						<input type="text" class="form-control-plaintext my-auto" id="entry-date" placeholder="<?php echo date("Y-m-d")?>" value="<?php echo date("Y-m-d")?>" readonly>
 					</div>
 					<div class="col-sm-auto">
 						<label for="creator-username" class="col-form-label my-auto">Creator: </label>
 					</div>
 					<div class="col-sm-auto">
-						<input type="text" class="form-control-plaintext my-auto" id="creator-username" placeholder="<?php echo $login_session; ?>" readonly>
+						<input type="text" class="form-control-plaintext my-auto" id="creator-username" placeholder="<?php echo $login_session; ?>" value="<?php echo $login_session; ?>" readonly>
 					</div>						
 				</div>
 				<div class="form-group">
-					<label for="edit-cat">Type</label>
-					<input type="text" class="form-control" id="edit-cat" placeholder="">
+					<label for="entry-type">Type</label>
+					<input type="text" class="form-control" id="entry-type" placeholder="">
 				</div>
 				<div class="form-group">
-					<label for="edit-subcat">Description</label>
-					<input type="text" class="form-control" id="edit-subcat" placeholder="">
+					<label for="entry-desc">Description</label>
+					<input type="text" class="form-control" id="entry-desc" placeholder="">
 				</div>
 				<!-- debit and credit accounts row -->
 				<div class="row">
@@ -140,10 +140,10 @@ while ($row = mysqli_fetch_array($result)) {
 					<div class="col-sm-6" id="debit-accts">
 						<label class="form-label" for="debit-accts">Debits</label>
 						<!-- first/starting debit acct row -->
-						<div class="row acct-row">								
+						<div class="row acct-row" id="debit-row0">								
 							<div class="col-auto form-inline">
 								<!-- account dropdown -->
-								<select class="form-control my-auto" id="choose-debit">
+								<select class="form-control choose-debit" id="choose-debit0">
 									<option selected disabled>Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
@@ -152,8 +152,8 @@ while ($row = mysqli_fetch_array($result)) {
 										?>
 								</select>				
 								<!-- acct amount column -->
-								<label for="debit-amt" class="col-form-label my-auto">$</label>
-								<input type="text" class="form-control my-auto" id="debit-amt">
+								<label for="debit-amt0" class="col-form-label">$</label>
+								<input type="text" class="form-control debit-amt" id="debit-amt0" placeholder="0.00">
 								<!-- save/remove line button column -->
 								<div class="btn-group btn-group-sm" role="group">
 									<button type="button" class="btn btn-success btn-sm">
@@ -165,8 +165,6 @@ while ($row = mysqli_fetch_array($result)) {
 								</div>
 							</div>
 						</div>
-						<!-- additional accounts empty div / row -->
-						<div id="add-debit-acct"></div>
 						<!-- add another debit acct button row -->
 						<div class="row add-btn-row">
 							<button class="btn btn-primary btn-sm btn-width" type="button" id="add-debit">
@@ -178,10 +176,10 @@ while ($row = mysqli_fetch_array($result)) {
 					<div class="col-sm-6" id="credit-accts">
 						<label class="form-label" for="credit-accts">Credits</label>
 						<!-- first/starting credit acct row -->
-						<div class="row acct-row">
+						<div class="row acct-row" id="credit-row0">
 							<div class="col form-inline">
 								<!-- account dropdown column -->
-								<select class="form-control" id="choose-credit">
+								<select class="form-control choose-credit" id="choose-credit0">
 									<option selected disabled>Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
@@ -190,8 +188,8 @@ while ($row = mysqli_fetch_array($result)) {
 										?>
 								</select>
 								<!-- acct amount column -->
-								<label for="credit-amt" class="col-form-label">$</label>
-								<input type="text" class="form-control" id="credit-amt">
+								<label for="credit-amt0" class="col-form-label">$</label>
+								<input type="text" class="form-control credit-amt" id="credit-amt0" placeholder="0.00">
 								<!-- save/remove line button column -->
 								<div class="btn-group btn-group-sm" role="group">
 									<button type="button" class="btn btn-success btn-sm">
@@ -203,8 +201,6 @@ while ($row = mysqli_fetch_array($result)) {
 								</div>
 							</div>
 						</div>
-						<!-- additional accounts empty div / row -->
-						<div id="add-credit-acct"></div>
 						<!-- add another debit acct button row -->
 						<div class="row add-btn-row">
 							<button class="btn btn-primary btn-sm btn-width" type="button" id="add-credit">
@@ -229,14 +225,123 @@ while ($row = mysqli_fetch_array($result)) {
 </div>
 	
 	<!-- Include all compiled plugins (below), or include individual files as needed --> 
+  	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap-4.4.1.js"></script>	
+    <script src="js/bootstrap-4.4.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
-			fetch_data();
+			// enable tooltips, enable modals
 			$('[data-toggle="tooltip"]').tooltip();
+			
+			// modal functions
+			
+			//global vars for submit
+			var num_debit_accts = 1;
+			var num_credit_accts = 1;
+			
+			
+			// submit entry functions
+			$('#submit-entry').click(function() {
+				// get all entry info				
+				var date = $('#entry-date').val();
+				var creator = $('#creator-username').val();
+				var type = $('#entry-type').val();
+				var desc = $('#entry-desc').val();
+				
+				// put all debit data in an array
+				var debit = [];
+				for (let i = 0; i < num_debit_accts; i++) {
+					let id = '#choose-debit'+i;
+					let acct = $(id).find(":selected").val();
+					id = '#debit-amt'+i;
+					let amt = $(id).val();
+					amt = parseFloat(amt).toFixed(2);
+					debit[i] = [acct, amt];
+				}
+				
+				// put all credit data in an array
+				var credit = [];
+				for (let i = 0; i < num_credit_accts; i++) {
+					let id = '#choose-credit'+i;
+					let acct = $(id).find(":selected").val();
+					id = '#credit-amt'+i;
+					let amt = $(id).val();
+					amt = parseFloat(amt).toFixed(2);
+					credit[i] = [acct, amt];
+				}
+				
+				var ed = JSON.stringify(debit);
+				var ec = JSON.stringify(credit);
+				
+				$.ajax ({
+					url: 'journalize/insert.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						date: date,
+						creator: creator,
+						status: 'Pending',
+						type: type,
+						desc: desc,
+						debit: ed,
+						credit: ec						
+					},
+					success: function(data) {
+						getAlert(data);
+					}
+				})			
+			})
+			
+			//add new debit line
+			$('#add-debit').click(function() {
+				// get previous account line & child info and clone, changing id to id + 1
+				var div_prev = $('div[id^="debit-row"]:last');
+				var num = parseInt(div_prev.prop("id").match(/\d+/g), 10 ) +1;
+				var div_next = div_prev.clone().prop('id', 'debit-row'+num);
+				
+				// change specified child elements' attributes to id + 1
+				div_next.find('select').attr('id', 'choose-debit'+num);
+				div_next.find('label').attr('for', 'debit-amt'+num);
+				div_next.find('input').attr('id', 'debit-amt'+num);
+				
+				// insert new line after previous
+				$(div_next).insertAfter(div_prev);
+				
+				num_debit_accts++;
+			})
+			
+			//add new credit line
+			$('#add-credit').click(function() {
+				// get previous account line & child info and clone, changing id to id + 1
+				var div_prev = $('div[id^="credit-row"]:last');
+				var num = parseInt(div_prev.prop("id").match(/\d+/g), 10 ) +1;
+				var div_next = div_prev.clone().prop('id', 'credit-row'+num);
+				
+				// change specified child elements' attributes to id + 1
+				div_next.find('select').attr('id', 'choose-credit'+num);
+				div_next.find('label').attr('for', 'credit-amt'+num);
+				div_next.find('input').attr('id', 'credit-amt'+num);
+				
+				// insert new line after previous
+				$(div_next).insertAfter(div_prev);
+				
+				num_credit_accts++;
+			})
+			
+			function getAlert(data) {
+				if (data == 0) {
+					$('#alert-message').html('<div class="alert alert-success">Your entry has been submitted for approval.</div>');
+				} else if (data == 1) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
+				} else if (data == 2) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (2).</strong> Please try again.</div>');
+				} else if (data == 3) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (3).</strong> Please try again.</div>');
+				}
+			}
 			
 		});
 	</script>

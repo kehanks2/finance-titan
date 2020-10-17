@@ -65,11 +65,39 @@
 		// format numbers as x,xxx.xx
 		$var = number_format($row["column-to-format"], 2);
 		
+		$child_account_info = '';
+		$child_debits = '';
+		$child_credits = '';
+		for ($i = 0; $i < count(/*accounts with same LedgerEntryId*/); $i++) {
+			$child_account_info .= '<div class="row child-row">'.$row["AccountNumber"].' - '.$row['AccountName'].'</div>';
+			// put balance under debit or credit depending on normal side of account and entry data
+			if ((($row['NormalSide'] == 'left') && ($row['AccountSide'] == 0)) ||
+			    (($row['NormalSide'] == 'right') && ($row['AccountSide'] == 1))) {
+					$child_debits .= '<div class="row child-row">'.$row['Balance'].'</div>';
+					$child_credits .= '<div class="row child-row"> </div>';
+			} else {
+					$child_debits .= '<div class="row child-row"> </div>';
+					$child_credits .= '<div class="row child-row">'.$row['Balance'].'</div>';
+			}
+		}		
+		
  		$sub_array = array();
 		
 		// one line for each column, except the accounts/debit/credit columns,
-		// which will use child_row arrays, like in the fetch_events.php file
- 		$sub_array[] = '<div class="update" data-id="'.$row["DateAdded"].'" data-column="DateAdded">'. $row["DateAdded"].'</div>';
+		// which will use child_row data, from above
+ 		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="DateAdded">'.$row["DateAdded"]. '</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Creator">'.$row["Creator"]. '</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Type">'.$row["Type"].'</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Accounts">'.$child_account_info .'</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Debits">'.$child_debits. '</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Credits">'.$child_credits. '</div>';
+		
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Status">'.$row["Status"]. '</div>';
 		
  		$data[] = $sub_array;
 	}

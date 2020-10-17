@@ -60,48 +60,59 @@
 	</div>
 </div>
 	
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/popper.min.js"></script>
-	<script src="js/bootstrap-4.4.1.js"></script>	
+    <script src="js/bootstrap-4.4.1.js"></script>	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
-<script>
-	// enable tooltips and popovers
-	$('[data-toggle="tooltip"]').tooltip();
-	$('[data-toggle="popover"]').popover();
-	
-</script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var tries_remaining = 3;
 		
 		$('#continue').click(function() {
-			var username = $('#username').val();
-			var email = $('#email').val();
-			$.ajax({
-				method: 'POST',
-				url: 'include/get-security.php',
-				dataType: 'JSON',
-				data: {
-					username: username,
-					email: email
-				},
-				success: function(data) {
-					displaySecurity(data);
-				}
-			});
+			// after user clicks continue, send data to db and display results			
+			$('#alert-message').html('');
+			$('#continue').prop('disabled', true);
+			// if username or email is missing, throw error message
+			if ($('#username').val() == '' || $('#email').val() == '') {
+				$('#alert-message').html('<div class="alert alert-warning">You must enter your username & email to continue.</div>');
+				$('#continue').prop('disabled', false);
+			} else {
+				// otherwise, send data to server
+				var username = $('#username').val();
+				var email = $('#email').val();
+				$.ajax({
+					method: 'POST',
+					url: 'include/get-security.php',
+					dataType: 'JSON',
+					data: {
+						username: username,
+						email: email
+					},
+					success: function(data) {
+						displaySecurity(data);
+					}
+				});
+			}				
 		})
 		
 		function displaySecurity(...data) {
+			// function called after user clicks continue.
+			// errors:
 			if (data == 1) {
-				$('#alert-message').html('<div class="alert alert-danger">Error 1</div>');
+				$('#alert-message').html('<div class="alert alert-warning">Username & Email combination not found. Try again.</div>');
+				$('#continue').prop('disabled', false);
 			} else if (data == -1) {
-				$('#alert-message').html('<div class="alert alert-danger">-1</div>');
+				$('#alert-message').html('<div class="alert alert-danger">There was an error submitting your request.</div>');
+				$('#continue').prop('disabled', false);
+			// success:
 			} else {			
+				// disable previous fields and hidden continue button
 				$('#username').prop('disabled', true);
 				$('#email').prop('disabled', true);
 				$('#continue').prop('hidden', true);
 
-				var question = '<h4 id="question">'+data[0]+'</h4>';
-				var answer = '<input type="password" class="form-control" id="security-response" placeholder="Security Answer">';
+				// display security question, answer box, and submit button
+				var question = '<h5 id="question">'+data[0]+'</h5>';
+				var answer = '<input type="password" class="form-control" id="security-response" placeholder="Enter your answer">';
 				var sbtn = '<button type="button" id="security" class="btn btn-lg btn-primary">Submit</button>';
 				$('#security-question').html(question);
 				$('#security-answer').html(answer);
@@ -110,6 +121,9 @@
 		}
 		
 		$('#submit-btn').on('click', '#security', function(e) {
+			// after user clicks submit, send data to server and receive response
+			$('#alert-message').html('');
+			$('#security').prop('disabled', true);
 			var username = $('#username').val();
 			var email = $('#email').val();
 			var answer = $('#security-response').val();
@@ -128,14 +142,24 @@
 			});
 		})
 		
-		function displayReset(data) {			
-			if (data[0] == 2) {
-				$('#alert-message').html('<div class="alert alert-danger">Security answer incorrect.</div>');
-			} else if (data[0] == -1) {
-				$('#alert-message').html('<div class="alert alert-danger">-1</div>');
-			} else {	
-				$('#alert-message').html('<div class="alert alert-success">Success. Please enter your new password below.</div>');
-				
+		// enable tooltips and popovers
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();
+		
+		function displayReset(data) {	
+			// function called after user clicks submit
+			// errors:
+			if (data == 2) {
+				if (tries_remaining == 0) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>Your account has been locked.</strong> Contact a system administrator to unlock it.</div>');
+				} else {
+					tries_remaining--;
+					$('#alert-message').html('<div class="alert alert-warning">Security answer incorrect. Remaining tries: '+tries_remaining+'</div>');
+					$('#security').prop('disabled', false);	
+				}								
+			} else if (data == -1) {
+				$('#alert-message').html('<div class="alert alert-danger">There was an error submitting your request.</div>');
+			} else {				
 				$('#question').prop('hidden', true);
 				$('#security-response').prop('hidden', true);
 				$('#security').prop('hidden', true);
@@ -143,8 +167,8 @@
 				var username = data[0];
 				var email = data[1];
 				
-				$('#input1').html('<input type="password" id="newpassword" class="form-control" placeholder="Enter New Password"></div>');
-				$('#input2').html('<input type="password" id="newpasswordcheck" class="form-control" placeholder="Retype Password"></div>');
+				$('#input1').html('<label class="form-label" for="newpassword"><strong>Enter your new password:</strong></label></div><div class="row form-inline" style="margin-top:0px;"><div class="form-group"><input type="password" id="newpassword" class="my-auto form-control" placeholder="New Password"></div><div class="form-group"><i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true" data-content="<ul><li>use 8+ characters</li><li>starts with a letter</li><li>include at least one letter, one number, and one special character (such as ! . ? * or &)</li></ul>"></i></div></div>');
+				$('#input2').html('<label class="form label" for="newpasswordcheck"><strong>Retype your password:</strong></label></div><div class="row" style="margin-top:0px;"><div class="form-group"><input type="password" id="newpasswordcheck" class="form-control col-sm-4" placeholder="Retype Password"></div></div>');
 				$('#btn1').html('<button type="button" id="changepw" class="btn btn-lg btn-primary">Submit</button>');
 				
 				var html = '<div id="username" hidden>'+username+'</div>';
@@ -153,26 +177,30 @@
 			}	
 		}
 		
-		$('#btn1').on('click', '#changepw', function(e) {
+		$('#btn1').on('click', '#changepw', function(e) {			
+			$('#alert-message').html('');
+			$('#changepw').prop('disabled', true);
 			var username = $('#username').text();
-			var email = $('#email').text();
+			var email = $('#email').text();			
+			var pw1 = $('#newpassword').val();
+			var pw2 = $('#newpasswordcheck').val();
 			
-			var password = $('#newpassword').val();
-			var passwordcheck = $('#newpasswordcheck').val();
-			$.ajax({
-				method: 'POST',
-				url: 'include/get-security.php',
-				dataType: 'JSON',
-				data: {
-					username: username,
-					email: email,
-					password: password
-				},
-				success: function(data) {
-					isSuccess(data);
-					
-				}
-			})
+			if (checkPassword(pw1, pw2)) {
+				var password = pw1;
+				$.ajax({
+					method: 'POST',
+					url: 'include/get-security.php',
+					dataType: 'JSON',
+					data: {
+						username: username,
+						email: email,
+						password: password
+					},
+					success: function(data) {
+						isSuccess(data);					
+					}
+				})
+			}				
 		})
 		
 		function isSuccess(data) {
@@ -180,10 +208,13 @@
 				$('#alert-message').html('<div class="alert alert-success">Successfully changed pw</div>');
 			} else if (data == 1) {
 				$('#alert-message').html('<div class="alert alert-danger">Something went wrong.</div>');
+				$('#changepw').prop('disabled', false);
 			} else if (data == 2) {
-				$('#alert-message').html('<div class="alert alert-danger">Password must not have been used previously.</div>');
+				$('#alert-message').html('<div class="alert alert-warning">Password must not have been used previously.</div>');
+				$('#changepw').prop('disabled', false);
 			} else {
 				$('#alert-message').html('<div class="alert alert-warning">Passwords must match. Check the requirements and try again.</div>');
+				$('#changepw').prop('disabled', false);
 			}
 		}
 		
@@ -197,7 +228,7 @@
 
 			// If password doesn't match retype password 
 			if (password1 != password2) { 
-				alert ("\nPasswords did not match. Please try again."); 
+				$('#alert-message').html('<div class="alert alert-warning">Passwords must match. Check the requirements and try again.</div>'); 
 				return false; 
 			}
 
@@ -208,19 +239,12 @@
 				!str.match(/[0-9]/g) && 
 				!str.match(/[^a-zA-Z\d]/g) &&
 				!isLetter(str) &&
-				!str.length >= 8) {			
-				alert ("\nPassword is not strong enough.\nPlease check the tooltip for all requirements!")
+				!str.length >= 8) {	
+				$('#alert-message').html('<div class="alert alert-warning">Password is not strong enough.\nPlease check the tooltip for all requirements!</div>');
 				return false; 
 			}
 			return true;
 		} 
-		function accountCreated(form) {
-			if (checkPassword(form)) {
-				alert("Password has been successfully reset!");
-			} else {
-				return false;
-			}		
-		}
 		
 	})
 	

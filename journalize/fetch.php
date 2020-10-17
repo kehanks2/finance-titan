@@ -12,8 +12,8 @@
 	--------------------------------------------------------------------------------------------
 	
 	From LedgerEntries: 			DateAdded, Creator, Type, Description, Status
-	From LedgerAccountsAffected:	AccountNumber, AccountSide/Balance to determine if debit or credit, Balance
-	From Accounts:					AccountName
+	From LedgerAccountsAffected:	LedgerEntryID, AccountNumber, AccountSide, Balance
+	From Accounts:					AccountNumber, AccountName, NormalSide
 	
 	Need to determine the correct queries to make this work.
 	Seems like we need to use joins but I cant figure them out.

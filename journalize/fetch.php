@@ -68,6 +68,7 @@
 		$child_account_info = '';
 		$child_debits = '';
 		$child_credits = '';
+		// this may need to be done outside of this while loop and into another using a different query, but i'm not sure
 		for ($i = 0; $i < count(/*accounts with same LedgerEntryId*/); $i++) {
 			$child_account_info .= '<div class="row child-row">'.$row["AccountNumber"].' - '.$row['AccountName'].'</div>';
 			// put balance under debit or credit depending on normal side of account and entry data
@@ -79,7 +80,9 @@
 					$child_debits .= '<div class="row child-row"> </div>';
 					$child_credits .= '<div class="row child-row">'.$row['Balance'].'</div>';
 			}
-		}		
+		}
+		// add description to the end of child rows
+		$chils_account_info .= '<div class="row child-row">Description: '.$row['Description'].'</div>';
 		
  		$sub_array = array();
 		

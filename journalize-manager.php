@@ -15,6 +15,14 @@ if (isset($_SESSION['inactive'])) {
 		}
 	}
 }
+
+$query = "SELECT * FROM Accounts";
+$result = mysqli_query($db, $query);
+
+$arr = array();
+while ($row = mysqli_fetch_array($result)) {
+	$arr[] = '<option value="' .$row["AccountNumber"]. '">' .$row["AccountName"]. '</option>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,9 +110,9 @@ if (isset($_SESSION['inactive'])) {
 				<button type="button" class="close" data-dismiss="modal" aria-label="close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<div id="alert-message"><br><br></div>
 			</div>
 			<div class="modal-body">
+				<div id="alert-modal"><br><br></div>
 				<div class="form-group row" id="readonly-entry">		
 					<div class="col-sm-auto">
 						<label for="entry-date" class="col-form-label my-auto">Date: </label>
@@ -137,7 +145,7 @@ if (isset($_SESSION['inactive'])) {
 							<div class="col-auto form-inline">
 								<!-- account dropdown -->
 								<select class="form-control choose-debit" id="choose-debit0">
-									<option selected disabled>Select account</option>
+									<option selected disabled value="x">Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
 												echo $arr[$i];
@@ -168,7 +176,7 @@ if (isset($_SESSION['inactive'])) {
 							<div class="col form-inline">
 								<!-- account dropdown column -->
 								<select class="form-control choose-credit" id="choose-credit0">
-									<option selected disabled>Select account</option>
+									<option selected disabled value="x">Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
 												echo $arr[$i];
@@ -179,7 +187,7 @@ if (isset($_SESSION['inactive'])) {
 								<label for="credit-amt0" class="col-form-label">$</label>
 								<input type="text" class="form-control credit-amt" id="credit-amt0" placeholder="0.00">
 								<!-- remove line button column -->
-								<button type="button" class="btn btn-danger btn-sm btn-width remove-button">
+								<button type="button" class="btn btn-danger btn-sm btn-width remove-btn">
 									<i class="fa fa-close sm-icon"></i>
 								</button>
 							</div>
@@ -195,10 +203,42 @@ if (isset($_SESSION['inactive'])) {
 			</div>
 			<div class="modal-footer">
 				<div class="btn-group" role="group" aria-label="submit-or-cancel">
-					<button type="button" class="btn btn-success" id="submit-entry" data-dismiss="modal">
+					<button type="button" class="btn btn-success" id="submit-entry">
 						Submit
 					</button>
 					<button type="button" class="btn btn-danger" id="cancel-entry" data-dismiss="modal">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<!-- REJECTION COMMENT MODAL -->
+<div class="modal fade" id="reject-modal" tabindex="-1" role="dialog" aria-labelledby="reject-label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="reject-label">Rejection Comment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div hidden id="ledger-entry-id"></div>
+				<div id="alert-reject"><br><br></div>
+				<div class="form-group">
+					<label for="reject-comment">Enter the reason for rejecting this entry:</label>
+					<input type="text" class="form-control" id="reject-comment" placeholder="">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-group" role="group" aria-label="submit-or-cancel">
+					<button type="button" class="btn btn-success" id="submit-reject">
+						Submit
+					</button>
+					<button type="button" class="btn btn-danger" id="cancel-reject" data-dismiss="modal">
 						Cancel
 					</button>
 				</div>
@@ -223,6 +263,7 @@ if (isset($_SESSION['inactive'])) {
 			//*** table functions ***//
 			// get data and generate table
 			function fetch_data() {
+				var manager = true;
 				var dataTable = $('#journalize-table').DataTable({
 					"processing": true,
 					"serverSide": true,
@@ -230,19 +271,107 @@ if (isset($_SESSION['inactive'])) {
 					"order": [],
 					"ajax": {
 						url: "journalize/fetch.php",
-						type: "POST"
+						type: "POST",
+						data: {manager: manager}
 					}
 				});
-			};			
+			};
+			
+			function approveEntry(id) {
+				$.ajax ({
+					url: 'journalize/approve.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						id: id
+					},
+					success: function(data) {
+						getAlert(data);
+					}
+				})
+			}
+			
+			// approve btn function
+			$('#journalize-table').on('click', '.approve-btn', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				
+				approveEntry(id);
+				
+			})
+			
+			function rejectEntry(id, comment) {
+				$.ajax ({
+					url: 'journalize/reject.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						id: id,
+						comment: comment
+					},
+					success: function(data) {
+						getAlert(data);
+					}
+				})
+			}
+			
+			// approve btn function
+			$('#journalize-table').on('click', '.reject-btn', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				$('#ledger-entry-id').text(id);				
+			});
+			
+			var comment = '';
+			$('#reject-comment').on('blur', function() {
+				comment = $(this).val();
+			})
+			
+			$('#submit-reject').click(function() {
+				$('#submit-reject').attr('disabled', 'disabled');
+				
+				var id = $('#ledger-entry-id').text();
+				if (comment.length != 0) {
+					rejectEntry(id, comment);
+					$('#reject-modal').modal('hide');					
+				} else {
+					getAlert('no comment');
+					$('#submit-reject').removeAttr('disabled');
+				}
+			});
 			
 			//*** modal functions ***//
 			// global vars for submit
 			var num_debit_accts = 1;
-			var num_credit_accts = 1;			
+			var num_credit_accts = 1;	
+			
+			function submitEntry(date, creator, type, desc, ed, ec) {
+				$.ajax ({
+						url: 'journalize/insert.php',
+						method: 'POST',
+						dataType: 'JSON',
+						data: {
+							date: date,
+							creator: creator,
+							status: 'Approved',
+							type: type,
+							desc: desc,
+							debit: ed,
+							credit: ec,
+							manager: true
+						},
+						success: function(data) {
+							getAlert(data);
+							$('#submit-entry').removeAttr('disabled');
+						}
+					})
+			}
 			
 			// submit entry functions
-			$('#submit-entry').click(function() {
+			$('#submit-entry').click(function(e) {
+				e.preventDefault()
+				$('#submit-entry').attr('disabled', 'disabled');
+				
 				var error = false;
+				var error_message = '';
 				// get all entry info				
 				var date = $('#entry-date').val();
 				var creator = $('#creator-username').val();
@@ -256,6 +385,10 @@ if (isset($_SESSION['inactive'])) {
 					let id = '#choose-debit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
+						if (acct == 'x') {
+							error_message = 'no account';
+							error = true;
+						}
 						id = '#debit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
@@ -271,6 +404,10 @@ if (isset($_SESSION['inactive'])) {
 					let id = '#choose-credit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
+						if (acct == 'x') {
+							error_message = 'no account';
+							error = true;
+						}
 						id = '#credit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
@@ -284,42 +421,19 @@ if (isset($_SESSION['inactive'])) {
 				
 				// check for accounting errors:
 				if (total_debit != total_credit) {
-					getAlert('not equal');
+					error_message = 'not equal';
 					error = true;
 				} 
-				for (let i = 0; i < debit.length; i++) {
-					if (debit[i][0] == '') {
-						getAlert('no account');
-						error = true;
-					}
-				}
-
-				for (let i = 0; i < credit.length; i++) {
-					if (credit[i][0] == '') {
-						getAlert('no account')
-						error = true;
-					}
-				}
 				
 				if (!error) {
-					$.ajax ({
-						url: 'journalize/insert.php',
-						method: 'POST',
-						dataType: 'JSON',
-						data: {
-							date: date,
-							creator: creator,
-							status: 'Approved',
-							type: type,
-							desc: desc,
-							debit: ed,
-							credit: ec						
-						},
-						success: function(data) {
-							getAlert(data);
-						}
-					})		
-				}					
+					submitEntry(date, creator, type, desc, ed, ec);
+					$('#new-entry-modal').modal('hide');
+				} else {
+					error = false;
+					getAlert(error_message)
+					$('#submit-entry').removeAttr('disabled');
+					error_message = '';
+				}		
 			})
 			
 			// remove credit or debit acct line
@@ -379,9 +493,9 @@ if (isset($_SESSION['inactive'])) {
 			})
 			
 			function getAlert(data) {
-				// ajax success alerts
+				// ajax response alerts
 				if (data == 0) {
-					$('#alert-message').html('<div class="alert alert-success">Your entry has been submitted for approval.</div>');
+					$('#alert-message').html('<div class="alert alert-success">Your entry has been successfully posted.</div>');
 					$('#journalize-table').DataTable().destroy();
 					fetch_data();
 				} else if (data == 1) {
@@ -392,13 +506,41 @@ if (isset($_SESSION['inactive'])) {
 					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (3).</strong> Please try again.</div>');
 				}
 				
-				// accounting alerts
+				// accounting error alerts
 				if (data == 'not equal') {
 					$('#alert-modal').html('<div class="alert alert-warning"><strong>Debits and Credits must be equal.</strong> Please try again.</div>');
 				}
 				if (data == 'no account') {
 					$('#alert-modal').html('<div class="alert alert-warning"><strong>You must select an account.</strong> Please try again.</div>');
 				}
+				
+				// approve/reject alerts
+				if (data == 10) {
+					$('#alert-message').html('<div class="alert alert-success">The entry has been approve and the account has been updated.</div>');
+					$('#journalize-table').DataTable().destroy();
+					fetch_data();
+				} else if (data == 11) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
+				} else if (data == 12) {
+					$('#alert-message').html('<div class="alert alert-success">The entry has been rejected.</div>');
+					$('#journalize-table').DataTable().destroy();
+					fetch_data();
+				} else if (data == 13) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
+				} else if (data == 'no comment') {
+					$('#alert-reject').html('<div class="alert alert-warning">You must enter a comment to reject the entry.</div>');
+				}
+				
+				
+				
+				setTimeout( function() {
+					$('#alert-message').html('<br><br>');
+					$('#alert-modal').html('<br><br>');
+					$('#alert-reject').html('<br><br>');
+				}, 5000);
 			}
 			
 		});
+	</script>
+	</body>
+</html>

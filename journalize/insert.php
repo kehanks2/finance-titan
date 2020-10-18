@@ -53,7 +53,7 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('1', '$id', '$bal', '$entry_id'); ";
 		}
 				
-		if (mysqli_multi_query($db, $accountsquery)) {
+		if (isset($_POST['manager']) && ($_POST['manager'] == true) && mysqli_multi_query($db, $accountsquery)) {
 			//if successful update debit/credit and current balance for each affected account
 			mysqli_next_result($db);
 			mysqli_next_result($db);
@@ -113,7 +113,11 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 				$data = 1;
 			}
 		} else {
-			$data = 2;
+			if (isset($_POST['manager'])) {
+				$data = 2;				
+			} else {
+				$data = 0;
+			}
 		}
 			
 	} else {

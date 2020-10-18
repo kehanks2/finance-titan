@@ -79,7 +79,7 @@ while ($row = mysqli_fetch_array($result)) {
 						</button>
 					</div>
 				</div>
-				<!-- for qjuery to place alert messages -->
+				<!-- for jquery to place alert messages -->
 				<div id="alert-message"><br><br></div>
 				<!-- JOURNAL TABLE START -->
 				<table id="journalize-table" class="table table-striped" style="width:100%;">
@@ -110,9 +110,9 @@ while ($row = mysqli_fetch_array($result)) {
 				<button type="button" class="close" data-dismiss="modal" aria-label="close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<div id="alert-message"><br><br></div>
 			</div>
 			<div class="modal-body">
+				<div id="alert-modal"><br><br></div>
 				<div class="form-group row" id="readonly-entry">		
 					<div class="col-sm-auto">
 						<label for="entry-date" class="col-form-label my-auto">Date: </label>
@@ -145,7 +145,7 @@ while ($row = mysqli_fetch_array($result)) {
 							<div class="col-auto form-inline">
 								<!-- account dropdown -->
 								<select class="form-control choose-debit" id="choose-debit0">
-									<option selected disabled>Select account</option>
+									<option selected disabled value="x">Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
 												echo $arr[$i];
@@ -176,7 +176,7 @@ while ($row = mysqli_fetch_array($result)) {
 							<div class="col form-inline">
 								<!-- account dropdown column -->
 								<select class="form-control choose-credit" id="choose-credit0">
-									<option selected disabled>Select account</option>
+									<option selected disabled value="x">Select account</option>
 										<?php
 											for($i = 0; $i < count($arr); $i++) {
 												echo $arr[$i];
@@ -187,7 +187,7 @@ while ($row = mysqli_fetch_array($result)) {
 								<label for="credit-amt0" class="col-form-label">$</label>
 								<input type="text" class="form-control credit-amt" id="credit-amt0" placeholder="0.00">
 								<!-- remove line button column -->
-								<button type="button" class="btn btn-danger btn-sm btn-width remove-button">
+								<button type="button" class="btn btn-danger btn-sm btn-width remove-btn">
 									<i class="fa fa-close sm-icon"></i>
 								</button>
 							</div>
@@ -203,7 +203,7 @@ while ($row = mysqli_fetch_array($result)) {
 			</div>
 			<div class="modal-footer">
 				<div class="btn-group" role="group" aria-label="submit-or-cancel">
-					<button type="button" class="btn btn-success" id="submit-entry" data-dismiss="modal">
+					<button type="button" class="btn btn-success" id="submit-entry">
 						Submit
 					</button>
 					<button type="button" class="btn btn-danger" id="cancel-entry" data-dismiss="modal">
@@ -248,9 +248,35 @@ while ($row = mysqli_fetch_array($result)) {
 			var num_debit_accts = 1;
 			var num_credit_accts = 1;			
 			
+			function submitEntry(date, creator, type, desc, ed, ec) {
+				$.ajax ({
+						url: 'journalize/insert.php',
+						method: 'POST',
+						dataType: 'JSON',
+						data: {
+							date: date,
+							creator: creator,
+							status: 'Pending',
+							type: type,
+							desc: desc,
+							debit: ed,
+							credit: ec						
+						},
+						success: function(data) {
+							getAlert(data);
+							$('#submit-entry').removeAttr('disabled');
+						}
+					})
+			}
+			
 			// submit entry functions
-			$('#submit-entry').click(function() {
+			$('#submit-entry').click(function(e) {
+				e.preventDefault()
+				$('#submit-entry').attr('disabled', 'disabled');
+				
+				
 				var error = false;
+				var error_message = '';
 				// get all entry info				
 				var date = $('#entry-date').val();
 				var creator = $('#creator-username').val();
@@ -264,6 +290,10 @@ while ($row = mysqli_fetch_array($result)) {
 					let id = '#choose-debit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
+						if (acct == 'x') {
+							error_message = 'no account';
+							error = true;
+						}
 						id = '#debit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
@@ -279,6 +309,10 @@ while ($row = mysqli_fetch_array($result)) {
 					let id = '#choose-credit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
+						if (acct == 'x') {
+							error_message = 'no account';
+							error = true;
+						}
 						id = '#credit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
@@ -292,42 +326,19 @@ while ($row = mysqli_fetch_array($result)) {
 				
 				// check for accounting errors:
 				if (total_debit != total_credit) {
-					getAlert('not equal');
+					error_message = 'not equal';
 					error = true;
 				} 
-				for (let i = 0; i < debit.length; i++) {
-					if (debit[i][0] == '') {
-						getAlert('no account');
-						error = true;
-					}
-				}
-
-				for (let i = 0; i < credit.length; i++) {
-					if (credit[i][0] == '') {
-						getAlert('no account')
-						error = true;
-					}
-				}
 				
 				if (!error) {
-					$.ajax ({
-						url: 'journalize/insert.php',
-						method: 'POST',
-						dataType: 'JSON',
-						data: {
-							date: date,
-							creator: creator,
-							status: 'Pending',
-							type: type,
-							desc: desc,
-							debit: ed,
-							credit: ec						
-						},
-						success: function(data) {
-							getAlert(data);
-						}
-					})		
-				}					
+					submitEntry(date, creator, type, desc, ed, ec);
+					$('#new-entry-modal').modal('hide');
+				} else {
+					error = false;
+					getAlert(error_message)
+					$('#submit-entry').removeAttr('disabled');
+					error_message = '';
+				}		
 			})
 			
 			// remove credit or debit acct line
@@ -407,6 +418,11 @@ while ($row = mysqli_fetch_array($result)) {
 				if (data == 'no account') {
 					$('#alert-modal').html('<div class="alert alert-warning"><strong>You must select an account.</strong> Please try again.</div>');
 				}
+				
+				setTimeout( function() {
+					$('#alert-message').html('<br><br>');
+					$('#alert-modal').html('<br><br>');
+				}, 5000);
 			}
 			
 		});

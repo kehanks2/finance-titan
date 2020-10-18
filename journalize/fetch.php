@@ -60,6 +60,18 @@
 	// loop through each row in query result and display in the table
 	while($row = mysqli_fetch_array($result)) {
 		
+		// check if manager [gives access to approve/reject buttons]
+		$status_btns = '';
+		if (isset($_POST['manager'])) {
+			if ($row['Status'] == 'Pending') {
+				$status_btns = '
+				<div class="btn-group" role="group">
+					<button type="button" id="approve" data-toggle="tooltip" data-placement="bottom" title="Approve this entry" class="btn btn-success btn-sm approve-btn">Approve</button>
+					<button type="button" data-toggle="modal" data-target="#reject-modal" data-id="'.$row['LedgerEntryID'].'"class="btn btn-danger btn-sm reject-btn" id="reject">Reject</button>
+				</div>';
+			}
+		}
+		
 		//*** start child query ***//
 		
 		$entry_id = $row["LedgerEntryID"];
@@ -106,7 +118,8 @@
 		
 		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Credits">'.$child_credits[0] . $child_credits[1] .'</div>';
 		
-		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Status">'.$row["Status"]. '</div>';
+		$sub_array[] = '<div class="update" style="margin-bottom: 5px;" data-id="'.$row["LedgerEntryID"].'" data-column="Status">'.$row["Status"].
+			'</div>'.$status_btns.'<div class="font-italic small" id="reject-comment">'.$row['UpdateComments'].'</div></td>';
 		
  		$data[] = $sub_array;
 	}

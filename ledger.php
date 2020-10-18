@@ -165,13 +165,32 @@ while ($row = mysqli_fetch_array($result)) {
 			</div>
 		</div>
 	<?php } ?>
-	<div class="row">
-		<div class="col-sm-auto">
-			<h4>Ledger will go here</h4>		
+	<div class="row">		
+		<div class="col-sm-12">			
+			<div class="table-responsive">				
+				<!-- for jquery to place alert messages -->
+				<div id="alert-message"><br><br></div>
+				<!-- JOURNAL TABLE START -->
+				<table id="ledger-table" class="table table-striped" style="width:100%;">
+					<thead>
+						<tr>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date">Date</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by type">Type</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by debit amount">Debit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by credit amount">Credit</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Sort by status">Status</th>
+							<th data-toggle="tooltip" data-placement="bottom" title="Click to see the relevant journal entry">Entry</th>
+						</tr>
+					</thead>
+				</table>
+				<!-- JOURNAL TABLE END -->
+			</div>
 		</div>
 	</div>
 </section>
-	
+
+<!-- EDIT MODAL -->
 <?php if ($_SESSION['user_type'] == 'admin') { ?>
 <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -213,17 +232,130 @@ while ($row = mysqli_fetch_array($result)) {
 </div>
 <?php } ?>
     
-    <!-- Include all compiled plugins (below), or include individual files as needed --> 
+<!-- VIEW ENTRY MODAL -->
+<div class="modal fade" id="view-entry-modal" tabindex="-1" role="dialog" aria-labelledby="view-entry-label" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="view-entry-label">Journal Entry</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				
+				<div class="form-group row">
+					<div class="col-sm-auto">
+						<label for="view-date"><strong>Date:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="view-date"></div>
+					<div class="col-sm-auto">
+						<label for="view-creator"><strong>Creator:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="view-creator"></div>
+					<div class="col-sm-auto">
+						<label for="view-status"><strong>Status</strong></label>
+					</div>
+					<div class="col-sm-auto" id="view-status"></div>
+				</div>
+				
+				<div class="form-group row">
+					<div class="col-sm-auto">
+						<label for="view-type"><strong>Type:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="view-type"></div>
+					<div class="col-sm-auto">
+						<label for="view-desc"><strong>Description:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="view-desc"></div>
+				</div>
+					
+				<div class="form-group row">
+					<div class="col-sm-5">
+						<label for="view-accounts"><strong>Accounts</strong></label>
+					</div>
+					<div class="col-sm-3">
+						<label for="view-debits"><strong>Debits</strong></label>
+					</div>
+					<div class="col-sm-3">
+						<label for="view-credits"><strong>Credits</strong></label>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-5" style="margin-left:15px;"id="view-accounts"></div>
+					<div class="col-sm-3" id="view-debits"></div>					
+					<div class="col-sm-3" id="view-credits"></div<
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed --> 
+  	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap-4.4.1.js"></script>	
+    <script src="js/bootstrap-4.4.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
+			fetch_info();
 			fetch_data();
 			$('[data-toggle="tooltip"]').tooltip();
 			
+			// ledger table functions
 			function fetch_data() {
+				var accountName = $('#current-account').text();
+				var dataTable = $('#ledger-table').DataTable({
+					"processing": true,
+					"serverSide": true,
+					"dom": '<"top"f>t<"bottom"ip>',
+					"order": [],
+					"ajax": {
+						url: "include/fetch-entries.php",
+						type: "POST",
+						data: {accountName: accountName}
+					}
+				});
+			}
+			
+			function fetch_entry(entry_id, accountName) {
+				$.ajax ({
+					url: 'include/view-entry.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						entry_id: entry_id,
+						accountName: accountName
+					},
+					success: function(data) {
+						updateView(...data);
+					}
+				})
+			}
+			
+			$('#ledger-table').on('click', '#view-entry-btn', function() {
+				var entry_id = $(this).parents('tr').find('td').find('div').data("id");
+				var accountName = $('#current-account').text();
+				
+				fetch_entry(entry_id, accountName);
+			})
+			
+			function updateView(...data) {
+				$('#view-date').html(data[0]);
+				$('#view-creator').html(data[1]);
+				$('#view-status').html(data[2]);
+				$('#view-type').html(data[3]);				
+				$('#view-desc').html(data[4]);
+				
+				$('#view-accounts').html(data[5]);
+				$('#view-debits').html(data[6]);
+				$('#view-credits').html(data[7]);
+			}
+			 
+			// ledger info functions
+			function fetch_info() {
 				var accountName = $('#current-account').text();
 				if (accountName == "Select an account to view the ledger") {
 					return;

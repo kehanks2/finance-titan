@@ -14,7 +14,7 @@
 			<div class="modal-body">
 				<div id="help-accordion" role="tablist">
 					<?php
-						if(!isset($_SESSION['user_type']) || isset($_SESSION['inactive']) || ($_SESSION['user_type'] != 'admin' && $_SESSION['user_type'] != 'manager' && $_SESSION['user_type'] != 'manager')) { ?>
+						if(!isset($_SESSION['user_type']) || isset($_SESSION['inactive']) || ($_SESSION['user_type'] != 'admin' && $_SESSION['user_type'] != 'manager' && $_SESSION['user_type'] != 'accountant')) { ?>
 							<!-- CARD 1 -->
 							<div class="card">
 								<div class="card-header" id="heading1" role="tab">
@@ -102,6 +102,20 @@
 								<div class="collapse" id="collapse6" aria-labelledby="heading6" role="tabpanel" data-parent="#help-accordion">
 									<div class="card-body">
 										Passwords will automatically expire over time. Passwords will need to be changed and account may need to be reset after a password expires. Information regarding when user account passwords expire can be accessed by admin users on the Password Report page under the System Management tab
+									</div>
+								</div>
+							</div>
+					<!-- CARD 7 -->
+							<div class="card">
+								<div class="card-header" id="heading7" role="tab">
+									<h2 class="mb-0">
+										<a class="btn btn-link" role="button" data-toggle="collapse" href="#collapse7" aria-expanded="true" aria-controls="collapse7">
+											Journalize</a>
+									</h2>
+								</div>
+								<div class="collapse" id="collapse7" aria-labelledby="heading7" role="tabpanel" data-parent="#help-accordion">
+									<div class="card-body">
+										On the Journalize page, found under the System Management tab, users can make changes to existing accounts. Changes made by Accountants must be approved by Managers.
 									</div>
 								</div>
 							</div>

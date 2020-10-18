@@ -152,8 +152,21 @@ input[type=date] {
 	padding-top: 5px;
 	border-top: 1px solid #898A96;
 }
+.child-row-2 {
+	margin-top: 5px;
+}
+.child-row-empty {
+	padding-top: 15px;
+	padding-bottom: 14px;
+}
 .child-row-last {
 	margin-right: 5px;
+}
+.child-row-credit {
+	padding-left: 75px;
+}
+.right-align {
+	padding-left: 25px;
 }
 .choose-account {
 	margin-top: 0;

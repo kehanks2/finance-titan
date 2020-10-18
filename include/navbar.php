@@ -44,7 +44,7 @@ if (!isset($_SESSION['login_user']) || isset($_SESSION['inactive'])) {
 				<a class="nav-link" href="admin-home.php">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Messages</a>
+				<a class="nav-link" href="messages/list_messages.php">Messages</a>
 			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

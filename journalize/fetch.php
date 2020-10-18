@@ -24,21 +24,18 @@
 	before I can build the table with the data.
 	*/
 
-
-
 	// start column sort and search query
-	$account_info = array('AccountNumber', 'AccountName');
-	$columns = array('DateAdded', 'Creator', 'Type', $account_info, 'Status');
+	$columns = array('Date', 'Creator', 'Type', 'AccountName', 'Debit', 'Credit', 'Status');
 	
-	$query = "SELECT * FROM Table";
+	$query = "SELECT * FROM LedgerEntries ";
 	
 	if(isset($_POST["search"]["value"])) {
 		
  		$query .= '
- 			WHERE item1 LIKE "%'.$_POST["search"]["value"].'%"
-			OR item2 LIKE "%'.$_POST["search"]["value"].'%"
- 			OR item3 LIKE "%'.$_POST["search"]["value"].'%" 
- 			OR item...n LIKE "%'.$_POST["search"]["value"].'%"
+ 			WHERE DateAdded LIKE "%'.$_POST["search"]["value"].'%"
+			OR Creator LIKE "%'.$_POST["search"]["value"].'%"
+ 			OR Type LIKE "%'.$_POST["search"]["value"].'%" 
+ 			OR Status LIKE "%'.$_POST["search"]["value"].'%"
  			';		
 	}
 
@@ -46,7 +43,7 @@
  		$query .= 'ORDER BY '.$columns[$_POST['order']['0']['column']].' '.$_POST['order']['0']['dir'].' 
  		';
 	} else {
- 		$query .= 'ORDER BY DateAdded ASC ';
+ 		$query .= 'ORDER BY LedgerEntryID DESC ';
 	}
 	// end column sort and serach query
 
@@ -62,48 +59,59 @@
 	
 	// loop through each row in query result and display in the table
 	while($row = mysqli_fetch_array($result)) {
-		// format numbers as x,xxx.xx
-		$var = number_format($row["column-to-format"], 2);
 		
-		$child_account_info = '';
-		$child_debits = '';
-		$child_credits = '';
-		// this may need to be done outside of this while loop and into another using a different query, but i'm not sure
-		for ($i = 0; $i < count(/*accounts with same LedgerEntryId*/); $i++) {
-			$child_account_info .= '<div class="row child-row">'.$row["AccountNumber"].' - '.$row['AccountName'].'</div>';
-			// put balance under debit or credit depending on normal side of account and entry data
-			if ((($row['NormalSide'] == 'left') && ($row['AccountSide'] == 0)) ||
-			    (($row['NormalSide'] == 'right') && ($row['AccountSide'] == 1))) {
-					$child_debits .= '<div class="row child-row">'.$row['Balance'].'</div>';
-					$child_credits .= '<div class="row child-row"> </div>';
-			} else {
-					$child_debits .= '<div class="row child-row"> </div>';
-					$child_credits .= '<div class="row child-row">'.$row['Balance'].'</div>';
+		//*** start child query ***//
+		
+		$entry_id = $row["LedgerEntryID"];
+		
+		$child_query = "SELECT Accounts.AccountNumber, Accounts.AccountName, LedgerAccountsAffected.AccountSide, LedgerAccountsAffected.Balance FROM Accounts, LedgerAccountsAffected WHERE LedgerAccountsAffected.LedgerEntryID = '$entry_id' and LedgerAccountsAffected.AccountNumber = Accounts.AccountNumber";
+		
+		$child_result = mysqli_query($db, $child_query);
+		
+		$child_account_info = array('', '', '');
+		$child_debits = array('', '');
+		$child_credits = array('', '');
+		
+		while ($child_row = mysqli_fetch_array($child_result)) {
+			// put balance under debit or credit depending on AccountSide
+			if ($child_row['AccountSide'] == 0) {			
+				$child_account_info[0] .= '<div class="row child-row-2">'.$child_row["AccountNumber"].' - '.$child_row['AccountName'].'</div>';
+
+				$child_debits[0] .= '<div class="row child-row-2 right-align">'.number_format($child_row['Balance'], 2).'</div>';
+				$child_credits[0] .= '<div class="row child-row-2 child-row-empty child-row-last"><br><br></div>';
+			} else {							
+				$child_account_info[1] .= '<div class="row child-row-2 child-row-credit">'.$child_row["AccountNumber"].' - '.$child_row['AccountName'].'</div>';
+				
+				$child_debits[1] .= '<div class="row child-row-2 child-row-empty"><br><br></div>';
+				$child_credits[1] .= '<div class="row child-row-2 right-align  child-row-last">'. number_format($child_row['Balance'], 2).'</div>';
 			}
-		}
 		// add description to the end of child rows
-		$chils_account_info .= '<div class="row child-row">Description: '.$row['Description'].'</div>';
+		}
+		$child_account_info[2] = '<div class="row child-row-2"><strong>Description: &nbsp;</strong>'.$row['Description']. '</div>';
+		
+		//*** end child query ***//
 		
  		$sub_array = array();
 		
-		// one line for each column, except the accounts/debit/credit columns,
-		// which will use child_row data, from above
+		// one line for each column, except the accounts/debit/credit columns which uses child query data from above
  		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="DateAdded">'.$row["DateAdded"]. '</div>';
 		
 		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Creator">'.$row["Creator"]. '</div>';
 		
 		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Type">'.$row["Type"].'</div>';
 		
-		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Accounts">'.$child_account_info .'</div>';
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Accounts">'.$child_account_info[0] . $child_account_info[1] . $child_account_info[2] .'</div>';
 		
-		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Debits">'.$child_debits. '</div>';
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Debits">'.$child_debits[0] . $child_debits[1] .'</div>';
 		
-		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Credits">'.$child_credits. '</div>';
+		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Credits">'.$child_credits[0] . $child_credits[1] .'</div>';
 		
 		$sub_array[] = '<div class="update" data-id="'.$row["LedgerEntryID"].'" data-column="Status">'.$row["Status"]. '</div>';
 		
  		$data[] = $sub_array;
 	}
+
+	mysqli_free_result($result);
 
 	// send table data back to table
 	function get_all_data($db) {

@@ -110,6 +110,7 @@ while ($row = mysqli_fetch_array($result)) {
 				<button type="button" class="close" data-dismiss="modal" aria-label="close">
 					<span aria-hidden="true">&times;</span>
 				</button>
+				<div id="alert-message"><br><br></div>
 			</div>
 			<div class="modal-body">
 				<div class="form-group row" id="readonly-entry">		
@@ -223,6 +224,7 @@ while ($row = mysqli_fetch_array($result)) {
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
+			fetch_data();
 			// enable tooltips, enable modals
 			$('[data-toggle="tooltip"]').tooltip();
 			
@@ -239,17 +241,16 @@ while ($row = mysqli_fetch_array($result)) {
 						type: "POST"
 					}
 				});
-			};
-			
+			};			
 			
 			//*** modal functions ***//
 			// global vars for submit
 			var num_debit_accts = 1;
-			var num_credit_accts = 1;
-			
+			var num_credit_accts = 1;			
 			
 			// submit entry functions
 			$('#submit-entry').click(function() {
+				var error = false;
 				// get all entry info				
 				var date = $('#entry-date').val();
 				var creator = $('#creator-username').val();
@@ -258,50 +259,75 @@ while ($row = mysqli_fetch_array($result)) {
 				
 				// put all debit data in an array
 				var debit = [];
+				var total_debit = 0;
 				for (let i = 0; i < num_debit_accts; i++) {
 					let id = '#choose-debit'+i;
-					if (document.getElementById(id)) {
+					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
 						id = '#debit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
 						debit[i] = [acct, amt];
-					}						
+						total_debit += amt;
+					}
 				}
 				
 				// put all credit data in an array
 				var credit = [];
+				var total_credit = 0;
 				for (let i = 0; i < num_credit_accts; i++) {
 					let id = '#choose-credit'+i;
-					if (document.getElementById(id)) {
+					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
 						id = '#credit-amt'+i;
 						let amt = $(id).val();
 						amt = parseFloat(amt).toFixed(2);
 						credit[i] = [acct, amt];
+						total_credit += amt;
 					}						
 				}
 				
 				var ed = JSON.stringify(debit);
 				var ec = JSON.stringify(credit);
 				
-				$.ajax ({
-					url: 'journalize/insert.php',
-					method: 'POST',
-					dataType: 'JSON',
-					data: {
-						date: date,
-						creator: creator,
-						status: 'Pending',
-						type: type,
-						desc: desc,
-						debit: ed,
-						credit: ec						
-					},
-					success: function(data) {
-						getAlert(data);
+				// check for accounting errors:
+				if (total_debit != total_credit) {
+					getAlert('not equal');
+					error = true;
+				} 
+				for (let i = 0; i < debit.length; i++) {
+					if (debit[i][0] == '') {
+						getAlert('no account');
+						error = true;
 					}
-				})			
+				}
+
+				for (let i = 0; i < credit.length; i++) {
+					if (credit[i][0] == '') {
+						getAlert('no account')
+						error = true;
+					}
+				}
+				
+				if (!error) {
+					$.ajax ({
+						url: 'journalize/insert.php',
+						method: 'POST',
+						dataType: 'JSON',
+						data: {
+							date: date,
+							creator: creator,
+							status: 'Pending',
+							type: type,
+							desc: desc,
+							debit: ed,
+							credit: ec						
+						},
+						success: function(data) {
+							getAlert(data);
+						}
+					})		
+				}					
 			})
 			
 			// remove credit or debit acct line
@@ -333,6 +359,7 @@ while ($row = mysqli_fetch_array($result)) {
 				div_next.find('select').attr('id', 'choose-debit'+num);
 				div_next.find('label').attr('for', 'debit-amt'+num);
 				div_next.find('input').attr('id', 'debit-amt'+num);
+				div_next.find('input').text('');
 				
 				// insert new line after previous
 				$(div_next).insertAfter(div_prev);
@@ -351,6 +378,7 @@ while ($row = mysqli_fetch_array($result)) {
 				div_next.find('select').attr('id', 'choose-credit'+num);
 				div_next.find('label').attr('for', 'credit-amt'+num);
 				div_next.find('input').attr('id', 'credit-amt'+num);
+				div_next.find('input').text('');
 				
 				// insert new line after previous
 				$(div_next).insertAfter(div_prev);
@@ -359,6 +387,7 @@ while ($row = mysqli_fetch_array($result)) {
 			})
 			
 			function getAlert(data) {
+				// ajax success alerts
 				if (data == 0) {
 					$('#alert-message').html('<div class="alert alert-success">Your entry has been submitted for approval.</div>');
 					$('#journalize-table').DataTable().destroy();
@@ -369,6 +398,14 @@ while ($row = mysqli_fetch_array($result)) {
 					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (2).</strong> Please try again.</div>');
 				} else if (data == 3) {
 					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (3).</strong> Please try again.</div>');
+				}
+				
+				// accounting alerts
+				if (data == 'not equal') {
+					$('#alert-modal').html('<div class="alert alert-warning"><strong>Debits and Credits must be equal.</strong> Please try again.</div>');
+				}
+				if (data == 'no account') {
+					$('#alert-modal').html('<div class="alert alert-warning"><strong>You must select an account.</strong> Please try again.</div>');
 				}
 			}
 			

@@ -39,50 +39,23 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 
 		for ($i = 0; $i < count($debit_ids); $i++) {
 			$id = $debit_ids[$i];
-			// for each debit id, get normal side from table
-			$acctquery = "SELECT NormalSide FROM Accounts WHERE AccountNumber = '$id';";
-			$res = mysqli_query($db, $acctquery);
-			while ($row = mysqli_fetch_array($res)) {
-				$nside = '';
-				if ($row['NormalSide'] == 'left') {
-					$nside = 0;
-				} else if ($row['NormalSide'] == 'right') {
-					$nside = 1;
-				}
-				$bal = $debit_amts[$i];
-			}
-			
+			$bal = $debit_amts[$i];
+						
 			// for each debit id, insert into accounts affected table
-			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('$nside', '$id', '$bal', '$entry_id'); ";
-			
-			mysqli_free_result($res);
-			mysqli_next_result($db);
+			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('0', '$id', '$bal', '$entry_id'); ";
 		}
 		
 		for ($i = 0; $i < count($credit_ids); $i++) {
 			$id = $credit_ids[$i];
-			// for each credit id, get normal side from table
-			$acctquery = "SELECT NormalSide FROM Accounts WHERE AccountNumber = '$id';";
-			$res = mysqli_query($db, $acctquery);
-			while ($row = mysqli_fetch_array($res)) {
-				$nside = '';
-				if ($row['NormalSide'] == 'left') {
-					$nside = 1;
-				} else if ($row['NormalSide'] == 'right') {
-					$nside = 0;
-				}
-				$bal = $credit_amts[$i];
-			}
+			$bal = $credit_amts[$i];
 			
 			// for each credit id, insert into accounts affected table
-			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('$nside', '$id', '$bal', '$entry_id'); ";
-			
-			mysqli_free_result($res);
-			mysqli_next_result($db);
+			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('1', '$id', '$bal', '$entry_id'); ";
 		}
-		
+				
 		if (mysqli_multi_query($db, $accountsquery)) {
 			//if successful update debit/credit and current balance for each affected account
+			mysqli_next_result($db);
 			mysqli_next_result($db);
 			
 			$updatequery = "";			
@@ -133,22 +106,19 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 				mysqli_free_result($res);
 				mysqli_next_result($db);
 			}
-				
-			var_dump($updatequery);
-			printf(mysqli_error($db));
 
 			if (mysqli_multi_query($db, $updatequery)) {
-				echo 0;
+				$data = 0;
 			} else {
-				echo 1;
+				$data = 1;
 			}
 		} else {
-			echo 2;
+			$data = 2;
 		}
 			
 	} else {
-		echo 3;
+		$data = 3;
 	}
 }
-	echo 4;
+	echo $data;
 ?>

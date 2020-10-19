@@ -260,7 +260,7 @@ while ($row = mysqli_fetch_array($result)) {
 							type: type,
 							desc: desc,
 							debit: ed,
-							credit: ec						
+							credit: ec,
 						},
 						success: function(data) {
 							getAlert(data);
@@ -274,7 +274,6 @@ while ($row = mysqli_fetch_array($result)) {
 				e.preventDefault()
 				$('#submit-entry').attr('disabled', 'disabled');
 				
-				
 				var error = false;
 				var error_message = '';
 				// get all entry info				
@@ -285,8 +284,8 @@ while ($row = mysqli_fetch_array($result)) {
 				
 				// put all debit data in an array
 				var debit = [];
-				var total_debit = 0;
-				for (let i = 0; i < num_debit_accts; i++) {
+				var total_debit = parseFloat(0);
+				for (var i = 0; i < num_debit_accts; i++) {
 					let id = '#choose-debit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
@@ -296,16 +295,16 @@ while ($row = mysqli_fetch_array($result)) {
 						}
 						id = '#debit-amt'+i;
 						let amt = $(id).val();
-						amt = parseFloat(amt).toFixed(2);
-						debit[i] = [acct, amt];
+						amt = Math.floor(amt * 100) / 100;
 						total_debit += amt;
+						debit[i] = [acct, amt];
 					}
 				}
 				
 				// put all credit data in an array
 				var credit = [];
-				var total_credit = 0;
-				for (let i = 0; i < num_credit_accts; i++) {
+				var total_credit = parseFloat(0);
+				for (var i = 0; i < num_credit_accts; i++) {
 					let id = '#choose-credit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
@@ -315,10 +314,10 @@ while ($row = mysqli_fetch_array($result)) {
 						}
 						id = '#credit-amt'+i;
 						let amt = $(id).val();
-						amt = parseFloat(amt).toFixed(2);
-						credit[i] = [acct, amt];
+						amt = Math.floor(amt * 100) / 100;;
 						total_credit += amt;
-					}						
+						credit[i] = [acct, amt];
+					}	
 				}
 				
 				var ed = JSON.stringify(debit);
@@ -398,9 +397,9 @@ while ($row = mysqli_fetch_array($result)) {
 			})
 			
 			function getAlert(data) {
-				// ajax success alerts
+				// ajax response alerts
 				if (data == 0) {
-					$('#alert-message').html('<div class="alert alert-success">Your entry has been submitted for approval.</div>');
+					$('#alert-message').html('<div class="alert alert-success"><strong>Your entry has been submitted for approval.</strong> A manager has been notified.</div>');
 					$('#journalize-table').DataTable().destroy();
 					fetch_data();
 				} else if (data == 1) {
@@ -411,7 +410,7 @@ while ($row = mysqli_fetch_array($result)) {
 					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (3).</strong> Please try again.</div>');
 				}
 				
-				// accounting alerts
+				// accounting error alerts
 				if (data == 'not equal') {
 					$('#alert-modal').html('<div class="alert alert-warning"><strong>Debits and Credits must be equal.</strong> Please try again.</div>');
 				}
@@ -422,6 +421,7 @@ while ($row = mysqli_fetch_array($result)) {
 				setTimeout( function() {
 					$('#alert-message').html('<br><br>');
 					$('#alert-modal').html('<br><br>');
+					$('#alert-reject').html('<br><br>');
 				}, 5000);
 			}
 			

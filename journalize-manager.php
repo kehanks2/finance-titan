@@ -366,8 +366,7 @@ while ($row = mysqli_fetch_array($result)) {
 			}
 			
 			// submit entry functions
-			$('#submit-entry').click(function(e) {
-				e.preventDefault()
+			$('#submit-entry').click(function() {
 				$('#submit-entry').attr('disabled', 'disabled');
 				
 				var error = false;
@@ -380,8 +379,8 @@ while ($row = mysqli_fetch_array($result)) {
 				
 				// put all debit data in an array
 				var debit = [];
-				var total_debit = 0;
-				for (let i = 0; i < num_debit_accts; i++) {
+				var total_debit = parseFloat(0);
+				for (var i = 0; i < num_debit_accts; i++) {
 					let id = '#choose-debit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
@@ -391,16 +390,16 @@ while ($row = mysqli_fetch_array($result)) {
 						}
 						id = '#debit-amt'+i;
 						let amt = $(id).val();
-						amt = parseFloat(amt).toFixed(2);
-						debit[i] = [acct, amt];
+						amt = Math.floor(amt * 100) / 100;
 						total_debit += amt;
+						debit[i] = [acct, amt];
 					}
 				}
 				
 				// put all credit data in an array
 				var credit = [];
-				var total_credit = 0;
-				for (let i = 0; i < num_credit_accts; i++) {
+				var total_credit = parseFloat(0);
+				for (var i = 0; i < num_credit_accts; i++) {
 					let id = '#choose-credit'+i;
 					if ($(id).length) {
 						let acct = $(id).find(":selected").val();
@@ -410,10 +409,10 @@ while ($row = mysqli_fetch_array($result)) {
 						}
 						id = '#credit-amt'+i;
 						let amt = $(id).val();
-						amt = parseFloat(amt).toFixed(2);
-						credit[i] = [acct, amt];
+						amt = Math.floor(amt * 100) / 100;;
 						total_credit += amt;
-					}						
+						credit[i] = [acct, amt];
+					}	
 				}
 				
 				var ed = JSON.stringify(debit);

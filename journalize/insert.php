@@ -53,71 +53,74 @@ if(isset($_POST["date"], $_POST["creator"], $_POST["status"], $_POST["debit"], $
 			$accountsquery .= "INSERT INTO LedgerAccountsAffected (AccountSide, AccountNumber, Balance, LedgerEntryID) VALUES ('1', '$id', '$bal', '$entry_id'); ";
 		}
 				
-		if (isset($_POST['manager']) && ($_POST['manager'] == true) && mysqli_multi_query($db, $accountsquery)) {
-			//if successful update debit/credit and current balance for each affected account
-			mysqli_next_result($db);
-			mysqli_next_result($db);
+		if (mysqli_multi_query($db, $accountsquery)) {
 			
-			$updatequery = "";			
-										
-			for ($j = 0; $j < count($debit_ids); $j++) {				
-				$id = $debit_ids[$j];
-				// for each id, update values to be inserted, based on normal side
-				$acctquery = "SELECT * FROM Accounts WHERE AccountNumber = '$id';";
-				$res = mysqli_query($db, $acctquery);
-				
-				$d = 0;
-				$curr = 0;
-				while ($row = mysqli_fetch_array($res)) {					
-					$d = (double)($row['Debit'] + $debit_amts[$j]);
-					
-					if ($row['NormalSide'] == 'left') {
-						$curr = (double)($row['CurrentBalance'] + $debit_amts[$j]);
-					} else if ($row['NormalSide'] == 'right') {
-						$curr = (double)($row['CurrentBalance'] - $debit_amts[$j]);
+			if (isset($_POST['manager']) && ($_POST['manager'] == true)) {
+				//if successful update debit/credit and current balance for each affected account
+				mysqli_next_result($db);
+				mysqli_next_result($db);
+
+				$updatequery = "";			
+
+				for ($j = 0; $j < count($debit_ids); $j++) {				
+					$id = $debit_ids[$j];
+					// for each id, update values to be inserted, based on normal side
+					$acctquery = "SELECT * FROM Accounts WHERE AccountNumber = '$id';";
+					$res = mysqli_query($db, $acctquery);
+
+					$d = 0;
+					$curr = 0;
+					while ($row = mysqli_fetch_array($res)) {					
+						$d = (double)($row['Debit'] + $debit_amts[$j]);
+
+						if ($row['NormalSide'] == 'left') {
+							$curr = (double)($row['CurrentBalance'] + $debit_amts[$j]);
+						} else if ($row['NormalSide'] == 'right') {
+							$curr = (double)($row['CurrentBalance'] - $debit_amts[$j]);
+						}
 					}
+
+					$updatequery .= "UPDATE Accounts SET Debit = '$d', CurrentBalance = '$curr' WHERE AccountNumber = '$id'; ";
+
+					mysqli_free_result($res);
+					mysqli_next_result($db);
+				}
+
+				for ($j = 0; $j < count($credit_ids); $j++) {
+					$id = $credit_ids[$j];
+					// for each id, update values to be inserted, based on normal side
+					$acctquery = "SELECT * FROM Accounts WHERE AccountNumber = '$id';";
+					$res = mysqli_query($db, $acctquery);
+					$c = 0;
+					$curr = 0;
+					while ($row = mysqli_fetch_array($res)) {					
+						$c = (double)($row['Credit'] + $credit_amts[$j]);	
+
+						if ($row['NormalSide'] == 'left') {
+							$curr = (double)($row['CurrentBalance'] - $credit_amts[$j]);
+						} else if ($row['NormalSide'] == 'right') {
+							$curr = (double)($row['CurrentBalance'] + $credit_amts[$j]);
+						}
+					}		
+
+					$updatequery .= "UPDATE Accounts SET Credit = '$c', CurrentBalance = '$curr' WHERE AccountNumber = '$id'; ";
+
+					mysqli_free_result($res);
+					mysqli_next_result($db);
 				}
 				
-				$updatequery .= "UPDATE Accounts SET Debit = '$d', CurrentBalance = '$curr' WHERE AccountNumber = '$id'; ";
+				if (mysqli_multi_query($db, $updatequery)) {
+					$data = 0;
+				} else {
+					$data = 1;
+				}
 				
-				mysqli_free_result($res);
-				mysqli_next_result($db);
+			} else {
+				$data = 0;
 			}
 			
-			for ($j = 0; $j < count($credit_ids); $j++) {
-				$id = $credit_ids[$j];
-				// for each id, update values to be inserted, based on normal side
-				$acctquery = "SELECT * FROM Accounts WHERE AccountNumber = '$id';";
-				$res = mysqli_query($db, $acctquery);
-				$c = 0;
-				$curr = 0;
-				while ($row = mysqli_fetch_array($res)) {					
-					$c = (double)($row['Credit'] + $credit_amts[$j]);	
-					
-					if ($row['NormalSide'] == 'left') {
-						$curr = (double)($row['CurrentBalance'] - $credit_amts[$j]);
-					} else if ($row['NormalSide'] == 'right') {
-						$curr = (double)($row['CurrentBalance'] + $credit_amts[$j]);
-					}
-				}		
-								
-				$updatequery .= "UPDATE Accounts SET Credit = '$c', CurrentBalance = '$curr' WHERE AccountNumber = '$id'; ";
-				
-				mysqli_free_result($res);
-				mysqli_next_result($db);
-			}
-
-			if (mysqli_multi_query($db, $updatequery)) {
-				$data = 0;
-			} else {
-				$data = 1;
-			}
 		} else {
-			if (isset($_POST['manager'])) {
-				$data = 2;				
-			} else {
-				$data = 0;
-			}
+			$data = 2;
 		}
 			
 	} else {

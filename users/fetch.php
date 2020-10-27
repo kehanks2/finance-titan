@@ -58,9 +58,11 @@
 		if ($row["IsActive"] == 1) {
 			$isActive = "Active";
 			$edit = "";
+			$modal = 'data-toggle="modal" data-target="#active-modal"';
 		} else if ($row["IsActive"] == 0) {
 			$isActive = "Inactive";
 			$edit = "disabled";
+			$modal = '';
 		}
 		
  		$sub_array = array();
@@ -76,7 +78,7 @@
 		
  		$sub_array[] = '<div class="update" data-id="'.$row["UserID"].'" data-column="UserType"><select id="user-type" disabled><option id="'.$ut[0].'">'.$ut[0].'</option><option id="'.$ut[1].'">'.$ut[1].'</option><option id="'.$ut[2].'">'.$ut[2].'</option></select></div>';
 		
-		$sub_array[] = '<div class="btn-group" role="group"><button type="button" name="edit" id="edit" data-toggle="tooltip" data-placement="bottom" title="Make changes to this account" class="btn btn-success btn-divider-right edit-btn '. $edit .'">Edit</button><button type="button" data-toggle="tooltip" data-placement="bottom" title="Change active status of this account" class="btn btn-danger active-btn" name="active" id="active">'. $isActive .'</button></div></td>';
+		$sub_array[] = '<div class="btn-group" role="group"><button type="button" name="edit" id="edit" data-toggle="tooltip" data-placement="bottom" title="Make changes to this account" class="btn btn-success btn-divider-right edit-btn '. $edit .'">Edit</button><button type="button" '. $modal .' class="btn btn-danger active-btn" name="active" id="active" data-id="'.$row["UserID"].'">'. $isActive .'</button></div></td>';
 		
  		$data[] = $sub_array;
 	}

@@ -82,6 +82,46 @@ if (isset($_SESSION['inactive'])) {
 		</div>
 	</div>
 </section>
+	
+	<!-- Active Modal -->
+<div class="modal fade" id="active-modal" tabindex="-1" role="dialog" aria-labelledby="active-modal-label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="active-modal-label">Set User as Inactive</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="alert_active_modal"><br><br></div>
+				<div hidden id="active-acct-id"></div>
+				<div class="form-row">
+					<div class="col-sm-auto">
+						<input type="checkbox" class="form-check-inline" id="date-check">
+						<label for="date-check" class="form-check-label">Set inactive indefinitely</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-auto form-inline">
+						<label for="start-date" class="col-form-label">Start: </label>
+						<input type="date" id="start-date" class="form-control">
+					</div>
+					<div class="col-auto form-inline">
+						<label for="start-date" class="col-form-label">End: </label>
+						<input type="date" id="end-date" class="form-control">
+					</div>						
+				</div>				
+			</div>
+			<div class="modal-footer">
+				<div class="btn-group">
+					<button type="button" class="btn btn-success btn-width" id="active-save">Save</button>
+					<button type="button" class="btn btn-danger btn-width" id="active-cancel" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
     <!-- Include all compiled plugins (below), or include individual files as needed --> 
   	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
@@ -182,16 +222,24 @@ if (isset($_SESSION['inactive'])) {
 				update_selected(selected, id);
 			})
 			
-			function update_active(id, activeStatus) {
+			function update_active(id, activeStatus, dates) {
 				var userID = id;
 				var isActive = activeStatus;
+				var startDate = 0;
+				var endDate = 0;
+				if (dates != false) {
+					startDate = dates[0];
+					endDate = dates[1];
+				}
 				$.ajax({
 					url: "users/update-active.php",
 					method: "POST",
 					dataType: "JSON",
 					data: {
 						userID: userID,
-						isActive: isActive
+						isActive: isActive,
+						startDate: startDate,
+						endDate: endDate
 					},
 					success:function(data) {
 						getAlert(data);
@@ -202,16 +250,72 @@ if (isset($_SESSION['inactive'])) {
 				}, 5000);
 			};
 			
+			var active_id = "";
 			$('#user-table').on('click', '#active', function() {
-				var id = $(this).parents('tr').find('td').find('div').data("id");
-				if ($(this).html() == 'Active') {
-					update_active(id, 0);					
-					$(this).html() = 'Inactive';
-				} else if ($(this).html() == 'Inactive') {
-					update_active(id, 1);
-					$(this).html() = 'Active';
+				var active_id = $(this).parents('tr').find('td').find('div').data("id");
+				if ($(this).html() == 'Inactive') {
+					var dates = Array();
+					dates[0] = 0;
+					dates[1] = 0;
+					update_active(active_id, 1, dates);
+					$(this).html('Active');
+				} else {
+					$('#active-acct-id').text(active_id);
 				}
 			});
+			
+			var isChecked = false;
+			$('#date-check').change(function() {
+				if(this.checked) {
+					$(this).closest('.modal-body').find('#start-date').prop('disabled', 'disabled');
+					$(this).closest('.modal-body').find('#end-date').prop('disabled', 'disabled');
+					isChecked = true;
+				} else {
+					$(this).closest('.modal-body').find('#start-date').removeAttr('disabled');
+					$(this).closest('.modal-body').find('#end-date').removeAttr('disabled');
+					isChecked = false;
+				}
+			})
+			
+			$('#active-modal').on('click', '#active-save', function() {
+				var dates = Array();
+				active_id = $('#active-acct-id').text();
+				if (isChecked) {
+					dates[0] = 0;
+					dates[1] = 0;
+					update_active(active_id, 0, dates);
+					$('#user-table').find('button[data-id="'+active_id+'"]').html('Inactive');					
+					$('#active-modal').modal('hide');
+				} else {
+					var startDate = $(this).parent().parent().parent().find('#start-date').val();
+					var endDate = $(this).parent().parent().parent().find('#end-date').val();
+
+					if (startDate != '' && endDate != '') {
+						if (startDate < endDate) {
+							var d = new Date();
+							var month = d.getMonth()+1;
+							var day = d.getDate();
+							var today = d.getFullYear() + '-' +
+								((''+month).length<2 ? '0' : '') + month + '-' +
+								((''+day).length<2 ? '0' : '') + day;
+							if (endDate > today) {
+								dates[0] = startDate;
+								dates[1] = endDate;
+								update_active(active_id, 0, dates);
+								$('#user-table').find('button[data-id="'+active_id+'"]').html('Inactive');					
+								$('#active-modal').modal('hide');
+							} else {
+								$('#alert_active_modal').html('<div class="alert alert-warning">End date must be after current date. S: '+startDate+', E: '+endDate+'</div>');
+							}
+						} else {
+							$('#alert_active_modal').html('<div class="alert alert-warning">Start date must come before end date. S: '+startDate+', E: '+endDate+'</div>');
+						}
+					} else {
+						$('#alert_active_modal').html('<div class="alert alert-warning">You must selected either <strong>indefinitely inactive</strong> or choose a start and end date.</div>');
+					}
+				}				
+					
+			})
 			
 			$('#add').click(function(){
 				var html = '<tr>';

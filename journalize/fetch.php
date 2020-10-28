@@ -1,5 +1,6 @@
 <?php
 	include("../include/config.php");
+	session_start();
 	/*
 	For the journalize table we need something like this for each entry:
 	
@@ -32,11 +33,105 @@
 	if(isset($_POST["search"]["value"])) {
 		
  		$query .= '
- 			WHERE DateAdded LIKE "%'.$_POST["search"]["value"].'%"
+ 			WHERE (DateAdded LIKE "%'.$_POST["search"]["value"].'%"
 			OR Creator LIKE "%'.$_POST["search"]["value"].'%"
  			OR Type LIKE "%'.$_POST["search"]["value"].'%" 
- 			OR Status LIKE "%'.$_POST["search"]["value"].'%"
+ 			OR Status LIKE "%'.$_POST["search"]["value"].'%")
  			';		
+	}
+
+	if (isset($_SESSION['filters'])) {
+		//date range
+		$startDate = mysqli_real_escape_string($db, $_SESSION['startDate']);
+		$endDate = mysqli_real_escape_string($db, $_SESSION['endDate']);
+		
+		$query .= "AND (DateAdded >= '$startDate' AND DateAdded <= '$endDate') ";
+		
+		//amount range
+		$min = mysqli_real_escape_string($db, $_SESSION['minAmount']);
+		$max = mysqli_real_escape_string($db, $_SESSION['maxAmount']);
+		
+		$query .= "AND (Debit >= '$min' AND Debit <= '$max') ";
+		
+		//type filters
+		if ($_SESSION['type'] == true) {
+			$count = $_SESSION['typecount'];
+			$count2 = $count;
+			$query .= "AND ( ";
+			if (isset($_SESSION['regular'])) {
+				$query .= "Type = 'Regular' ";
+				$count2--;
+			}
+			if ($count2 != $count && $count2 != 0) {
+				$query .= " OR ";
+				$count = $count2;
+			}
+			if (isset($_SESSION['adjusting'])) {
+				$query .= "Type = 'Adjusting' ";
+				$count2--;
+			}
+			if ($count2 != $count && $count2 != 0) {
+				$query .= " OR ";
+				$count = $count2;
+			}
+			if (isset($_SESSION['reversing'])) {
+				$query .= "Type = 'Reversing' ";
+				$count2--;
+			}
+			if ($count2 != $count && $count2 != 0) {
+				$query .= " OR ";
+				$count = $count2;
+			} 
+			if (isset($_SESSION['closing'])) {
+				$query .= "Type = 'Closing' ";
+			}
+			$query .= ")";
+		}
+		
+		//status filters
+		if ($_SESSION['status'] == true) {
+			$count = $_SESSION['statuscount'];
+			$count2 = $count;
+			$query .= "AND ( ";
+			if (isset($_SESSION['approved'])) {
+				$query .= "Status = 'Approved' ";
+				$count2--;
+			}
+			if ($count2 != $count && $count2 != 0) {
+				$query .= " OR ";
+				$count = $count2;
+			}
+			if (isset($_SESSION['pending'])) {
+				$query .= "Status = 'Pending' ";
+				$count2--;
+			}
+			if ($count2 != $count && $count2 != 0) {
+				$query .= " OR ";
+				$count = $count2;
+			}
+			if (isset($_SESSION['rejected'])) {
+				$query .= "Status = 'Rejected' ";
+			} 
+			$query .= ") ";
+		}
+		
+		//destroy session filter variables
+		unset($_SESSION['filters']);
+		unset($_SESSION['startDate']);
+		unset($_SESSION['endDate']);
+		unset($_SESSION['minAmount']);
+		unset($_SESSION['maxAmount']);
+		unset($_SESSION['type']);
+		unset($_SESSION['regular']);
+		unset($_SESSION['adjusting']);
+		unset($_SESSION['reversing']);
+		unset($_SESSION['closing']);
+		unset($_SESSION['status']);
+		unset($_SESSION['pending']);
+		unset($_SESSION['approved']);
+		unset($_SESSION['rejected']);
+		unset($_SESSION['statuscount']);
+		unset($_SESSION['typecount']);
 	}
 
 	if(isset($_POST["order"])) {

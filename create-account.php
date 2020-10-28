@@ -19,12 +19,15 @@
       $creationyear = date("Y");
       //Hashing the password
       //$password = password_hash($password,PASSWORD_DEFAULT);
-      //Creating a username  
-      $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];    
+      //Creating a username 
+      $username = $fname[0] . $lname . date("m") . $creationyear[2] . $creationyear[3];
+	  
+	   //Email activation code 
+	  $emailcode = md5(uniqid(mt_rand(), true )); 
 	   
       $sqlPasswordInsert = "INSERT INTO Passwords (CurrentPassword, SecurityQuestion, SecurityAnswer) VALUES ('$password', '$squestion', '$sanswer')";
 	   
-      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate, PasswordID) VALUES ('$username', '$fname', '$lname', '$email', '$dob',
+      $sqlUserInsert = "INSERT INTO Users (UserName,  FirstName, LastName, EmailAddress, BirthDate, PasswordID, EmailCode) VALUES ('$username', '$fname', '$lname', '$email', '$dob', '$emailcode',
       (SELECT PasswordID FROM Passwords WHERE '$password' = CurrentPassword and '$sanswer' = SecurityAnswer))";
 	   
 	   if(mysqli_query($db, $sqlPasswordInsert)) {

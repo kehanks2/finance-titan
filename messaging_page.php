@@ -6,7 +6,8 @@
 	session_start();
 	include("include/config.php");
 
-   if(isset($_POST["submit"])) {
+/*   
+if(isset($_POST["submit"])) {
       
       $sid = $login_session;
       $rid = mysqli_real_escape_string($db,$_POST['rid']);
@@ -31,7 +32,8 @@
             (SELECT UserName FROM Users WHERE '$rid' = UserID), 
             '$subject', 
             '$message')";
-   } 
+   }
+   */
 ?>
 
 
@@ -67,22 +69,30 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-center">
-			<div>
-				<h2>Send Message</h2>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<h2>Messaging System</h2>
+				</div>
+				<div class="col-sm-9">
+					<h2>New Message</h2>
+				</div>
 			</div>
-			<div class="form-group">
-				<input type="text" class="form-control" name="rid" id="rid" placeholder="Enter Recipient ID" required="required">
+			<div class="row">
+				<div class="col-sm-3" style="padding-right:5px; border-right: 1px solid #ccc;">
+					<h5>New Message</h5>
+					<h5>Inbox</h5>
+					<h5>Sent</h5>
+				</div>
+				<div class="col-sm-9">
+					Date:  <?php echo date("Y/m/d")?>
+					<input type="text" class="form-control" name="rid" id="rid" placeholder="Enter Recipient ID" required="required">
+					<input type="text" class="form-control" name="subject" id="subject" placeholder="Enter Subject" required="required">
+					<textarea class="form-control" id="message" rows="3"></textarea>
+					<input type="submit" id="submit" class="btn btn-sm btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to send message" value="Send Message">
+				</div>
 			</div>
-			<div class="form-group">
-				<input type="text" class="form-control" name="subject" id="subject" placeholder="Enter Subject" required="required">
-			</div>
-			<div class="form-group">
-				<input type="text" class="form-control" name="message" id="message" placeholder="Type Message" required="required">
-			</div>
-			<div class="text-center">
-				<input type="submit" id="submit" class="btn btn-lg btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to send message" value="Send Message">
-			</div>
-		</form>
+		</div>
 	</div>
 </section>
 

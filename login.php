@@ -111,7 +111,10 @@
 									<div class="alert alert-warning">The username and password combination you enter is incorrect.</div>
 									<?php $error_login = false;
 								} elseif ($error_inactive) { ?>
-									<div class="alert alert-danger"><strong>Your account is inactive.</strong> Contact the system administrator to reactivate your account.</div>
+									<div class="alert alert-danger"><strong>Your account is inactive.</strong> Contact the system administrator to reactivate your account.			
+							</div>
+								
+											<p><a href="mailto:admin@financetitan.great-site.net">email system admin</a></p>
 									<?php $error_inactive = false;
 								}
 							?>

@@ -142,6 +142,9 @@ input[type=password] {
 input[type=date] {
 	width: 50%;
 }
+input[type=number] {
+	width: 130px !important;
+}
 
 /* TABLES */
 .btn-divider-right{
@@ -219,4 +222,7 @@ input[type=date] {
 	padding: auto 0;
 	width: 14px;
 	height: 14px;
+}
+.col-form-label {
+	margin-right: 5px;
 }

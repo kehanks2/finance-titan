@@ -82,6 +82,79 @@ while ($row = mysqli_fetch_array($result)) {
 				<!-- for jquery to place alert messages -->
 				<div id="alert-message"><br><br></div>
 				<!-- JOURNAL TABLE START -->
+				<!-- SET FILTERS -->
+				<div id="filters" role="tablist">
+					<div class="card">
+						<div class="card-header" role="tab" id="filters-head">
+							<h5 style="margin-bottom:0;"><a href="#filters-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="filters-collapse">
+								Filters
+							</a></h5>
+						</div>
+						<div id="filters-collapse" class="collapse" role="tabpanel" aria-labelledby="filters-head" data-parent="#filters">
+			      			<div class="card-body">
+								<div class="row">
+									<!-- date range filter -->
+									<div class="col-auto form-inline">
+										<label for="date-range" class="col-form-label"><strong>Date Range:</strong></label>
+										<div class="date-range">
+											<input type="date" class="form-control" id="startDate">
+											<input type="date" class="form-control" id="endDate">
+										</div>
+									</div>
+									<!-- amount range filter -->
+									<div class="col-auto form-inline">
+										<label for="amount-range" class="col-form-label"><strong>Amount Range:</strong></label>
+										<div class="amount-range">
+											<input type="number" class="form-control col-auto" id="minAmount" min="1" max="1000000">
+											<input type="number" class="form-control" id="maxAmount" min="1" max="1000000">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2">
+									<!-- type filter -->
+										<div class="form-group" id="choose-type">
+											<label for="choose-type"><strong>Type</strong></label>
+											<div class="form-inline">
+												<input type="checkbox" value="regular" id="regular" name="choose-type" class="form-check"><label for="regular">Regular</label>
+											</div>
+											<div class="form-inline">
+												<input type="checkbox" value="adjusting" id="adjusting" name="choose-type" class="form-check"><label for="adjusting">Adjusting</label>
+											</div>
+											<div class="form-inline">
+												<input type="checkbox" value="reversing" id="reversing" name="choose-type" class="form-check"><label for="reversing">Reversing</label>
+											</div>
+											<div class="form-inline">
+												<input type="checkbox" value="closing" id="closing" name="choose-type" class="form-check"><label for="closing">Closing</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-2">
+									<!-- status filter -->
+										<div class="form-group" id="choose-status">
+											<label for="choose-status"><strong>Status</strong></label>
+											<div class="form-inline">
+												<input type="checkbox" value="pending" id="pending" name="choose-status" class="form-check"><label for="pending">Pending</label>
+											</div>
+											<div class="form-inline">
+												<input type="checkbox" value="approved" id="approved" name="choose-status" class="form-check"><label for="approved">Approved</label>
+											</div>
+											<div class="form-inline">
+												<input type="checkbox" value="rejected" id="rejected" name="choose-status" class="form-check"><label for="rejected">Rejected</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-primary btn-width" id="apply-filters">
+										Apply
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<table id="journalize-table" class="table table-striped" style="width:100%;">
 					<thead>
 						<tr>
@@ -242,6 +315,94 @@ while ($row = mysqli_fetch_array($result)) {
 					}
 				});
 			};			
+			
+			$('#apply-filters').click(function () {
+				var d = new Date();
+				var month = d.getMonth()+1;
+				var day = d.getDate();
+				var today = d.getFullYear() + '-' +
+					((''+month).length<2 ? '0' : '') + month + '-' +
+					((''+day).length<2 ? '0' : '') + day;
+				
+				var filters = Array();
+				//date range
+				if ($('#startDate').val()) {
+					filters.push($('#startDate').val());
+					if ($('#endDate').val()) {
+						filters.push($('#endDate').val());
+					} else {
+						filters.push(today);
+					}
+				} else {
+					filters.push('1969-12-31');
+					if ($('#endDate').val()) {
+						filters.push($('#endDate').val());
+					} else {
+						filters.push(today);
+					}
+				}
+				//amount range
+				if ($('#minAmount').val()) {
+					filters.push($('#minAmount').val());
+					if ($('#maxAmount').val()) {
+						filters.push($('#maxAmount').val());
+					} else {
+						filters.push(1000000);
+					}
+				} else {
+					filters.push(1);
+					if ($('#maxAmount').val()) {
+						filters.push($('#maxAmount').val());
+					} else {
+						filters.push(1000000);
+					}
+				}
+				
+				//type filters
+				$.each($('input[name="choose-type"'), function() {
+					if ($(this).is(':checked')) {
+						filters.push(1);
+					} else {
+						filters.push(0);
+					}
+				});
+				
+				//status filters
+				$.each($('input[name="choose-status"'), function() {
+					if ($(this).is(':checked')) {
+						filters.push(1);
+					} else {
+						filters.push(0);
+					}
+				});
+				
+				setFilters(filters)
+			})
+						
+			function setFilters(filters) {
+				$.ajax ({
+					method: 'POST',
+					url: 'journalize/set-filters.php',
+					dataType: 'text',
+					data: {
+						startDate: filters[0],
+						endDate: filters[1],
+						minAmount: filters[2],
+						maxAmount: filters[3],
+						type1: filters[4],
+						type2: filters[5],
+						type3: filters[6],
+						type4: filters[7],
+						status1: filters[8],
+						status2: filters[9],
+						status3: filters[10],
+					}, 
+					success: function(data) {	
+						$('#journalize-table').DataTable().destroy();					
+						fetch_data();
+					}
+				});
+			}
 			
 			//*** modal functions ***//
 			// global vars for submit

@@ -202,7 +202,13 @@ while ($row = mysqli_fetch_array($result)) {
 				</div>
 				<div class="form-group">
 					<label for="entry-type">Type</label>
-					<input type="text" class="form-control" id="entry-type" placeholder="">
+					<select class="form-control" id="entry-type">
+						<option disabled selected>Select a type</option>
+						<option value="Regular">Regular</option>
+						<option value="Adjusting">Adjusting</option>
+						<option value="Reversing">Reversing</option>
+						<option value="Closing">Closing</option>
+					</select>
 				</div>
 				<div class="form-group">
 					<label for="entry-desc">Description</label>
@@ -224,7 +230,7 @@ while ($row = mysqli_fetch_array($result)) {
 												echo $arr[$i];
 											}
 										?>
-								</select>				
+								</select>			
 								<!-- acct amount column -->
 								<label for="debit-amt0" class="col-form-label">$</label>
 								<input type="text" class="form-control debit-amt" id="debit-amt0" placeholder="0.00">
@@ -404,6 +410,28 @@ while ($row = mysqli_fetch_array($result)) {
 				});
 			}
 			
+			// redirect user specified account's ledger page
+			function to_ledger(id, accountName) {
+				$.ajax({
+					url: "journalize/to-ledger.php",
+					method: "POST",
+					data: {
+						accountID: id,
+						accountName: accountName
+					},
+					success: function(data) {
+						window.location.assign(data);
+					}
+				})
+			}
+			
+			// on click function for account page to ledger
+			$('#journalize-table').on('click', '#ledger', function() {
+				var accountName = $(this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				to_ledger(id, accountName);
+			});
+			
 			//*** modal functions ***//
 			// global vars for submit
 			var num_debit_accts = 1;
@@ -440,7 +468,7 @@ while ($row = mysqli_fetch_array($result)) {
 				// get all entry info				
 				var date = $('#entry-date').val();
 				var creator = $('#creator-username').val();
-				var type = $('#entry-type').val();
+				var type = $('#entry-type option:selected').val();
 				var desc = $('#entry-desc').val();
 				
 				// put all debit data in an array
@@ -485,6 +513,14 @@ while ($row = mysqli_fetch_array($result)) {
 				var ec = JSON.stringify(credit);
 				
 				// check for accounting errors:
+				if (type != 'Regular' || type != 'Adjusting' || type != 'Reversing' || type != 'Closing') {
+					error_message = 'bad type';
+					error = true;
+				}
+				if (total_debit == 0 || total_credit == 0) {
+					error_message = 'zero';
+					error = true;
+				}
 				if (total_debit != total_credit) {
 					error_message = 'not equal';
 					error = true;
@@ -572,11 +608,17 @@ while ($row = mysqli_fetch_array($result)) {
 				}
 				
 				// accounting error alerts
+				if (data == 'bad type') {
+					$('#alert-modal').html('<div class="alert alert-danger"><strong>You must select a type.</strong> Please choose one of the dropdown options.</div>');
+				}
+				if (data == 'zero') {
+					$('#alert-modal').html('<div class="alert alert-danger"><strong>Amount cannot be zero.</strong> Please try again.</div>');
+				}
 				if (data == 'not equal') {
-					$('#alert-modal').html('<div class="alert alert-warning"><strong>Debits and Credits must be equal.</strong> Please try again.</div>');
+					$('#alert-modal').html('<div class="alert alert-danger"><strong>Debits and Credits must be equal.</strong> Please try again.</div>');
 				}
 				if (data == 'no account') {
-					$('#alert-modal').html('<div class="alert alert-warning"><strong>You must select an account.</strong> Please try again.</div>');
+					$('#alert-modal').html('<div class="alert alert-danger"><strong>You must select an account.</strong> Please try again.</div>');
 				}
 				
 				setTimeout( function() {

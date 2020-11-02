@@ -182,12 +182,12 @@
 		while ($child_row = mysqli_fetch_array($child_result)) {
 			// put balance under debit or credit depending on AccountSide
 			if ($child_row['AccountSide'] == 0) {			
-				$child_account_info[0] .= '<div class="row child-row-2">'.$child_row["AccountNumber"].' - '.$child_row['AccountName'].'</div>';
+				$child_account_info[0] .= '<div class="row child-row-2">'.$child_row["AccountNumber"].' - <a href="#" id="ledger" class="ledger">'.$child_row['AccountName'].'</a></div>';
 
 				$child_debits[0] .= '<div class="row child-row-2 right-align">'.number_format($child_row['Balance'], 2).'</div>';
 				$child_credits[0] .= '<div class="row child-row-2 child-row-empty child-row-last"><br><br></div>';
 			} else {							
-				$child_account_info[1] .= '<div class="row child-row-2 child-row-credit">'.$child_row["AccountNumber"].' - '.$child_row['AccountName'].'</div>';
+				$child_account_info[1] .= '<div class="row child-row-2 child-row-credit">'.$child_row["AccountNumber"].' - <a href="#" id="ledger" class="ledger">'.$child_row['AccountName'].'</a></div>';
 				
 				$child_debits[1] .= '<div class="row child-row-2 child-row-empty"><br><br></div>';
 				$child_credits[1] .= '<div class="row child-row-2 right-align  child-row-last">'. number_format($child_row['Balance'], 2).'</div>';

@@ -54,8 +54,9 @@ if (isset($_SESSION['inactive'])) {
 		<div id="currentuser" hidden><?php echo $login_session; ?></div>
 	</div>
 	
+	
 	<!-- MAIN CONTENT -->
-	<div class="row">		
+		<div class="row">		
 		<div class="col-sm-12">			
 			<div class="table-responsive">
 				<div class="row">
@@ -64,6 +65,7 @@ if (isset($_SESSION['inactive'])) {
 					<div class="col-sm-1">
 						<button name="add" id="add" type="button" class="btn btn-lg btn-primary btn-width" data-toggle="tooltip" data-placement="right" title="Click to add a new account">
 							Add
+			
 						</button>
 					</div>
 				</div>
@@ -86,6 +88,9 @@ if (isset($_SESSION['inactive'])) {
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date added">Date Added</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>
 							<th>Edit</th>
+							<th> <a href= "upload/fileUpload.php">source doc</th>
+							
+							
 						</tr>
 					</thead>
 				</table>

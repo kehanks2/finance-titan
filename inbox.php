@@ -5,39 +5,7 @@
 
 	//session_start();
 	include("include/session.php");
-   
-if(isset($_POST["submit"])) {
-      
-      $sid = $login_session;
-      $rid = mysqli_real_escape_string($db,$_POST['rid']);
-      $subject = mysqli_real_escape_string($db,$_POST['subject']);
-      $message = sprintf(mysqli_real_escape_string($db,$_POST['message']));
-	   
-	  //$time = time();
-	   //Insert Data into Messages Table
-	  $sqlMessagesInsert = "INSERT INTO Messages 
-        (SenderID,
-        RecipientID, 
-        Sender, 
-        Recipient, 
-        Subject, 
-        Message)
-        VALUES (
-            (SELECT UserID FROM Users WHERE '$sid' = UserName), 
-            (SELECT UserID FROM Users WHERE '$rid' = UserName),
-            '$sid',
-            '$rid', 
-            '$subject', 
-            '$message')";
-
-        if(mysqli_query($db, $sqlMessagesInsert)) {
-  				$data = 1;
- 		} else {
-				$data = 2;
-		}
-	    echo $data;  
-   }
-?>
+    ?>
 
 
 
@@ -78,22 +46,42 @@ if(isset($_POST["submit"])) {
 					<h2>Messaging System</h2>
 				</div>
 				<div class="col-sm-9">
-					<h2>New Message</h2>
+					<h2>Inbox</h2>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-3" style="padding-right:5px; border-right: 1px solid #ccc;">
-					<h5>New Message</h5>
-					<a class="nav-link" href="inbox.php"><h5>Inbox</h5></a>
+					<a class="nav-link" href="messaging_page.php"><h5>New Message</h5></a>
+					<h5>Inbox</h5>
 					<h5>Sent</h5>
 				</div>
 				<div class="col-sm-9">
-					<form id="send-message-form" method="post" onSubmit="messsageSent(this);" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-					Date:  <?php echo date("Y/m/d")?>
-					<input type="text" class="form-control" name="rid" id="rid" placeholder="Enter Recipient ID" required="required">
-					<input type="text" class="form-control" name="subject" id="subject" placeholder="Enter Subject" required="required">
-					<textarea type="text" class="form-control" name="message" id="message" rows="3"></textarea>
-					<input type="submit" id="submit" class="btn btn-sm btn-primary" name="submit" data-toggle="tooltip" data-placement="bottom" title="Click to send message" value="Send Message">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th data-toggle="tooltip" data-placement="bottom" title="Sort by sender">Sender</th>
+									<th data-toggle="tooltip" data-placement="bottom" title="Sort by subject">Subject</th>
+									<th data-toggle="tooltip" data-placement="bottom" title="Sort by time">Time</th>
+									<th data-toggle="tooltip" data-placement="bottom" title="Sort by message">Message</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+								$query = "SELECT * FROM Messages WHERE Recipient = '".$login_session."'";
+
+								$result = mysqli_query($db, $query);
+
+								while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+									echo "<tr><td>" . $row["Sender"] . "</td>";
+									echo "<td>" . $row["Subject"] . "</td>";
+									echo "<td>" . $row["Timesent"] . "</td>";
+									echo "<td>" . $row["Message"] . "</td>";
+									echo "</tr>";
+								} ?>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

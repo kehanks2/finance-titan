@@ -60,6 +60,27 @@
 			$edit = "disabled";
 		}
 		
+		$opt = array('Asset', 'Liability', 'Equity', 'Expense', 'Revenue');
+		if ($row['Category'] == 'Liability') {
+			$opt[0] = 'Liability';
+			$opt[1] = 'Asset';
+		} else if ($row['Category'] == 'Equity') {
+			$opt[0] = 'Equity';
+			$opt[2] = 'Asset';
+		} else if ($row['Category'] == 'Expense') {
+			$opt[0] = 'Expense';
+			$opt[3] = 'Asset';
+		} else if ($row['Category'] == 'Revenue') {
+			$opt[0] = 'Revenue';
+			$opt[4] = 'Asset';
+		}
+		
+		$ns = array('left', 'right');
+		if ($row['NormalSide'] == 'right') {
+			$ns[0] = 'right';
+			$ns[1] = 'left';
+		}
+		
  		$sub_array = array();
  		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
 		
@@ -67,7 +88,7 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Description">'. $row["Description"].'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="Category">'. $row["Category"].'</div>';
+		$sub_array[] = '<div class="update" data-id="'.$row["AccountNumber"].'" data-column="Category"><select id="category" disabled><option id="'.$opt[0].'">'.$opt[0].'</option><option id="'.$opt[1].'">'.$opt[1].'</option><option id="'.$opt[2].'">'.$opt[2].'</option><option id="'.$opt[3].'">'.$opt[3].'</option><option id="'.$opt[4].'">'.$opt[4].'</option></select></div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="SubCategory">'. $row["SubCategory"].'</div>';
 		
@@ -79,7 +100,7 @@
 		
 		$sub_array[] = '<div contenteditable="false" class="update num" data-id="'.$row["AccountNumber"].'" data-column="CurrentBalance" id="CurrentBalance">'. $currbal .'</div>';
 		
-		$sub_array[] = '<div contenteditable="false" class="update edt" data-id="'.$row["AccountNumber"].'" data-column="NormalSide">'. $row["NormalSide"].'</div>';
+		$sub_array[] = '<div class="update" data-id="'.$row["AccountNumber"].'" data-column="NormalSide"><select id="nside" disabled><option id="'.$ns[0].'">'.$ns[0].'</option><option id="'.$ns[1].'">'.$ns[1].'</option></select></div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="DateAdded">'. $row["DateAdded"].'</div>';
 		

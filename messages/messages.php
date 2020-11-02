@@ -1,119 +1,197 @@
-<?php
-include('include/config.php');
-?>
-<!DOCTYPE html>
-<html>
-    <head>
-       <meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Finance Titan - Messages</title>
-        
-    </head>
-    <body>
-        <div class="header">
-                </div>
-<?php
-//check if the user is logged
-if(isset($_SESSION['username']))
-{
-$form = true;
-$otitle = '';
-$orecip = '';
-$omessage = '';
-//check if the form has been sent
-if(isset($_POST['title'], $_POST['recip'], $_POST['message']))
-{
-        $otitle = $_POST['title'];
-        $orecip = $_POST['recip'];
-        $omessage = $_POST['message'];
-        
-        if(get_magic_quotes_gpc())
-        {
-                $otitle = stripslashes($otitle);
-                $orecip = stripslashes($orecip);
-                $omessage = stripslashes($omessage);
-        }
-        // check if all the fields are filled
-        if($_POST['title']!='' and $_POST['recip']!='' and $_POST['message']!='')
-        {
-                //protect the variables
-                $title = mysql_real_escape_string($otitle);
-                $recip = mysql_real_escape_string($orecip);
-                $message = mysql_real_escape_string(nl2br(htmlentities($omessage, ENT_QUOTES, 'UTF-8')));
-                //We check if the recipient exists
-                $dn1 = mysql_fetch_array(mysql_query('select count(id) as recip, id as recipid, (select count(*) from pm) as npm from users where username="'.$recip.'"'));
-                if($dn1['recip']==1)
-                {
-                        // check if the recipient is not the actual user
-                        if($dn1['recipid']!=$_SESSION['userid'])
-                        {
-                                $id = $dn1['npm']+1;
-                                //send the message
-                                if(mysql_query('insert into pm (id, id2, title, user1, user2, message, timestamp, user1read, user2read)values("'.$id.'", "1", "'.$title.'", "'.$_SESSION['userid'].'", "'.$dn1['recipid'].'", "'.$message.'", "'.time().'", "yes", "no")'))
-                                {
-?>
-<div class="message">The message has successfully been sent.<br />
-<a href="list_pm.php">List of my Personal messages</a></div>
-<?php
-                                        $form = false;
-                                }
-                                else
-                                {
-                                        //Otherwise, say that an error occured
-                                        $error = 'An error occurred while sending the message';
-                                }
-                        }
-                        else
-                        {
-                                //Otherwise, say the user cannot send a message to himself
-                                $error = 'You cannot send a message to yourself.';
-                        }
-                }
-                else
-                {
-                        //Otherwise,say the recipient does not exists
-                        $error = 'The recipient does not exists.';
-                }
-        }
-        else
-        {
-                //Otherwise, say a field is empty
-                $error = 'A field is empty. Please fill of the fields.';
-        }
-}
-elseif(isset($_GET['recip']))
-{
-        //get the username for the recipient if available
-        $orecip = $_GET['recip'];
-}
-if($form)
-{
-//display a message if necessary
-if(isset($error))
-{
-        echo '<div class="message">'.$error.'</div>';
-}
-//display the form
-?>
-<div class="content">
-        <h1>New Personal Message</h1>
-    <form action="new_pm.php" method="post">
-                Please fill the following form to send a Personal message.<br />
-        <label for="title">Title</label><input type="text" value="<?php echo htmlentities($otitle, ENT_QUOTES, 'UTF-8'); ?>" id="title" name="title" /><br />
-        <label for="recip">Recipient<span class="small">(Username)</span></label><input type="text" value="<?php echo htmlentities($orecip, ENT_QUOTES, 'UTF-8'); ?>" id="recip" name="recip" /><br />
-        <label for="message">Message</label><textarea cols="40" rows="5" id="message" name="message"><?php echo htmlentities($omessage, ENT_QUOTES, 'UTF-8'); ?></textarea><br />
-        <input type="submit" value="Send" />
-    </form>
-</div>
-<?php
-}
-}
-else
-{
-        echo '<div class="message">You must be logged to access this page.</div>';
-}
-?>
-                <div class="foot"><a href="list_pm.php">Go to my Personal messages</a> - <a href="http://financetitan.great-site.net/"> Finance Titan</a></div>
-        </body>
+ <?php
+	ini_set('display_startup_errors', true);
+	error_reporting(E_ALL);
+	ini_set('display_errors', true);
+
+	session_start();
+	include("include/config.php");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- HEADER -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Send Message</title>
+
+	<!-- Stylesheets -->
+	<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css">
+	    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+</head>
+	
+<body>
+<!-- NAVIGATION -->
+<?php include('include/navbar.php'); ?>
+	
+	
+<?php
+ 
+class Private_messaging_system{
+	
+	public function __construct()
+	{
+		mysql_connect(server,user,password) or die ("Mysql was unable to connect to a database using provided information!");
+		mysql_select_db(database) or die ("Mysql was unable to select " . database . " database!");
+	}
+
+	/**
+	*	$TO = USER_ID for which the message is meant
+	* 	$MESSAGE = message that is sent to a user
+	*	$SUBJECT = subject of a message
+	*	$RESPOND = ID of conversation to which this message is a part of
+	**/
+	public function send_message($to, $message, $subject, $respond = 0){
+		$from = $_SESSION['user_id']; // ID of a user sending a message
+
+		$message = $this->_validate_message($message); // validate message to see if it safe, to be passed to the database
+
+		if($respond == 0){
+			$query = "INSERT INTO " . TBL_MESSAGES . " (user_to, user_from, subject, message) VALUES(" . $to . ", " . $from . ", '" . $subject . "', '" . $message . "')";
+		}else{
+			$query = "INSERT INTO " . TBL_MESSAGES . " (user_to, useer_from, subject, message, respond) VALUES(" . $to . ", " . $from . ", '" . $subject . "', '" . $message . "'," . $respond . ")";
+		}
+		if($this->validate_message($message)){
+			mysql_query($query);
+			// uncomment this function out if you want to email a user of a new message
+			//$this->_email_user_of_new_message($to,$from,$subject);
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	} // END send_message
+	
+	public function get_number_of_unread_messages(){
+		$id = $_SESSION['user_id'];
+		$query = "SELECT COUNT(opened) AS unread FROM " . TBL_MESSAGES . " WHERE user_to = '" . $id . "' AND respond = '0'";
+		return mysql_query($query);
+	} // END get_number_of_unread_messages
+
+	public function get_all_messages(){
+		$role = "sender_delete";
+		$id = $_SESSION['user_id'];
+		$query = mysql_query("SELECT user_to FROM " . TBL_MESSAGES . " WHERE id = '" . $message_id . "'");
+		while($data = mysql_fetch_object($query)){
+			if($data->user_to != $id){
+				$role = "receiver_delete";
+			}			
+		}
+		$query = "SELECT * FROM " . TBL_MESSAGES . " WHERE user_to = '" . $id . "' OR user_from = '" . $id . "' AND respond = 0 AND " . $role . " != 'n'";
+		return mysql_query($query);
+	} // END get_all_messages
+
+	public function get_message($message_id){
+		$role = "sender_delete";
+		$id = $_SESSION['user_id'];
+		$query = mysql_query("SELECT user_to FROM " . TBL_MESSAGES . " WHERE id = '" . $message_id . "'");
+		while($data = mysql_fetch_object($query)){
+			if($data->user_to != $id){
+				$role = "receiver_delete";
+			}			
+		}
+		$query = mysql_query("SELECT * FROM " . TBL_MESSAGES . " WHERE id = '" . $message_id . "' AND (user_to = '" . $id . "' OR user_from = '" . $id . "') OR respond = '" . $message_id . "' AND " . $role . " != 'n'");
+		return $query;
+	} // END get_message
+
+	public function delete_message($message_id){
+		$role = "sender_delete";
+		$id = $_SESSION['user_id'];
+		$query = mysql_query("SELECT user_to FROM " . TBL_MESSAGES . " WHERE id = '" . $message_id . "' OR respond = '" . $message_id . "'");
+		while($data = mysql_fetch_object($query)){
+			if($data->user_to != $id){
+				$role = "receiver_delete";
+			}			
+		}
+
+		$query1 = mysql_query("UPDATE " . TBL_MESSAGES . " SET " . $role . " = 'y' WHERE id = '" . $message_id . "'");
+		$this->_check_for_deleted_messages();
+	} // END delete_message
+
+	public function delete_conversation($conversation_id){
+		$role = "sender_delete";
+		$id = $_SESSION['user_id'];
+		$query = mysql_query("SELECT user_to FROM " . TBL_MESSAGES . " WHERE id = '" . $message_id . "'");
+		while($data = mysql_fetch_object($query)){
+			if($data->user_to != $id){
+				$role = "receiver_delete";
+			}			
+		}
+		mysql_query("UPDATE " . TBL_MESSAGES . " SET " . $role . " = 'y' WHERE id = '" . $conversation_id . "'");
+	}
+
+	private function _check_for_deleted_messages(){
+		mysql_query("DELETE FROM " . TBL_MESSAGES . " WHERE sender_delete = 'y' AND receiver_delete 'y'"); // removes messages from DB if both sender and receiver have deleted it.
+	} // END _check_for_deleted_messages
+
+	/**
+	*	$to = ID of a user who will receive message
+	*	$from = ID of a user who is sending message
+	*	$subject = subject of a message
+	**/
+	private function _email_user_of_new_message($to,$from,$subject){
+		$r = mysql_fetch_object(mysql_query("SELECT first_name,last_name,email FROM " . TBL_USERS . " WHERE id = '" . $to . "'"));
+		$u = mysql_fetch_object(mysql_query("SELECT first_name,last_name FROM " . TBL_USERS . " WHERE id = '" . $from . "'"));
+		$name = $r->first_name . " " . $r->last_name;
+		$uname = $u->first_name . " " . $u->last_name;
+		$to_email = $r->email;
+		//This message is optional, you can put what ever you want
+		$body = "Dear " . $name . ",\n";
+		$body .= "you have received a new message on our system.\n\n";
+		$body .= "<table border='1'><tr>";
+		$body .= "<th>From: </th>";
+		$body .= "<th>Subject:</th>";
+		$body .= "</tr><tr>";
+		$body .= "<td>&nbsp;" . $uname . "&nbsp;</td>";
+		$body .= "<td>&nbsp;" . $subject . "&nbsp;</td>";
+		$body .= "</tr></table>\n";
+		$body .= "Best regards,\n";
+		$body .= "MyWebSite.com team";		
+		
+		mail($to_email,MY_WEBSITE_EMAIL,"New message: " . $subject,$body);
+	} // END _email_user_of_new_message
+
+	/**
+	*	$message = message that will be validate for security purposes
+	**/
+	private function _validate_message($message){
+		$return = trim($message); // trims all the white space at the beginning and the end of string
+		$return = filter_var($message, FILTER_SANITIZE_STRING); // strips tags
+		$return = filter_var($message, FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Equivalent to calling htmlspecialchars()
+		return $return;
+	} // END _validate_message
+
+} // END class
+
+?>	
+
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<script>
+	// enable tooltips and popovers
+	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="popover"]').popover();
+	
+	// return true if first character is a letter
+	function isLetter(str) {
+		var first = str.charAt(0);
+  		return first.match(/[A-Z|a-z]/i);
+	}
+</script>
+</body>
+	
+	<footer>
+	
+	</footer>
 </html>
+
+        

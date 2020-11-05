@@ -10,13 +10,11 @@ if (isset($_SESSION['inactive'])) {
 			} else {
 				header("Location: login.php");				
 			}
-		} else {
-			header("Location: journalize-manager.php");
 		}
 	}
 }
 
-$query = "SELECT * FROM Accounts";
+$query = "SELECT * FROM Accounts ORDER BY AccountNumber";
 $result = mysqli_query($db, $query);
 
 $arr = array();
@@ -61,6 +59,7 @@ while ($row = mysqli_fetch_array($result)) {
 				}
 			?>
 		</div>
+		<div hidden id="isManager"><?php if ($_SESSION['user_type'] == 'manager') {echo "manager";} else {echo "accountant";}?></div>
 		<div class="col-sm-8" id="help-modal-container">
 			<?php include('include/help-modal.php'); ?>
 		</div>
@@ -294,6 +293,38 @@ while ($row = mysqli_fetch_array($result)) {
 	</div>
 </div>
 	
+<!-- REJECTION COMMENT MODAL -->
+<div class="modal fade" id="reject-modal" tabindex="-1" role="dialog" aria-labelledby="reject-label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="reject-label">Rejection Comment</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div hidden id="ledger-entry-id"></div>
+				<div id="alert-reject"><br><br></div>
+				<div class="form-group">
+					<label for="reject-comment">Enter the reason for rejecting this entry:</label>
+					<input type="text" class="form-control" id="reject-comment" placeholder="">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-group" role="group" aria-label="submit-or-cancel">
+					<button type="button" class="btn btn-success" id="submit-reject">
+						Submit
+					</button>
+					<button type="button" class="btn btn-danger" id="cancel-reject" data-dismiss="modal">
+						Cancel
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
 	<!-- Include all compiled plugins (below), or include individual files as needed --> 
   	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -310,6 +341,11 @@ while ($row = mysqli_fetch_array($result)) {
 			//*** table functions ***//
 			// get data and generate table
 			function fetch_data() {
+				var manager = "accountant";
+				if ($('#isManager').html() == 'manager') {
+					manager = "manager";
+				} else {
+				}
 				var dataTable = $('#journalize-table').DataTable({
 					"processing": true,
 					"serverSide": true,
@@ -317,7 +353,8 @@ while ($row = mysqli_fetch_array($result)) {
 					"order": [],
 					"ajax": {
 						url: "journalize/fetch.php",
-						type: "POST"
+						type: "POST",
+						data: {manager: manager}
 					}
 				});
 			};			
@@ -432,6 +469,53 @@ while ($row = mysqli_fetch_array($result)) {
 				to_ledger(id, accountName);
 			});
 			
+			// approve btn function
+			$('#journalize-table').on('click', '.approve-btn', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				
+				approveEntry(id);
+				
+			})
+			
+			function rejectEntry(id, comment) {
+				$.ajax ({
+					url: 'journalize/reject.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						id: id,
+						comment: comment
+					},
+					success: function(data) {
+						getAlert(data);
+					}
+				})
+			}
+			
+			// approve btn function
+			$('#journalize-table').on('click', '.reject-btn', function() {
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				$('#ledger-entry-id').text(id);				
+			});
+			
+			var comment = '';
+			$('#reject-comment').on('blur', function() {
+				comment = $(this).val();
+			})
+			
+			$('#submit-reject').click(function() {
+				$('#submit-reject').attr('disabled', 'disabled');
+				
+				var id = $('#ledger-entry-id').text();
+				if (comment.length != 0) {
+					rejectEntry(id, comment);
+					$('#reject-modal').modal('hide');					
+				} else {
+					getAlert('no comment');
+					$('#submit-reject').removeAttr('disabled');
+				}
+			});
+			
 			//*** modal functions ***//
 			// global vars for submit
 			var num_debit_accts = 1;
@@ -513,7 +597,7 @@ while ($row = mysqli_fetch_array($result)) {
 				var ec = JSON.stringify(credit);
 				
 				// check for accounting errors:
-				if (type != 'Regular' || type != 'Adjusting' || type != 'Reversing' || type != 'Closing') {
+				if (type != 'Regular' && type != 'Adjusting' && type != 'Reversing' && type != 'Closing') {
 					error_message = 'bad type';
 					error = true;
 				}
@@ -619,6 +703,23 @@ while ($row = mysqli_fetch_array($result)) {
 				}
 				if (data == 'no account') {
 					$('#alert-modal').html('<div class="alert alert-danger"><strong>You must select an account.</strong> Please try again.</div>');
+				}				
+				
+				// approve/reject alerts
+				if (data == 10) {
+					$('#alert-message').html('<div class="alert alert-success">The entry has been approve and the account has been updated.</div>');
+					$('#journalize-table').DataTable().destroy();
+					fetch_data();
+				} else if (data == 11) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
+				} else if (data == 12) {
+					$('#alert-message').html('<div class="alert alert-success">The entry has been rejected.</div>');
+					$('#journalize-table').DataTable().destroy();
+					fetch_data();
+				} else if (data == 13) {
+					$('#alert-message').html('<div class="alert alert-danger"><strong>An error occurred (1).</strong> Please try again.</div>');
+				} else if (data == 'no comment') {
+					$('#alert-reject').html('<div class="alert alert-warning">You must enter a comment to reject the entry.</div>');
 				}
 				
 				setTimeout( function() {

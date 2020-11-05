@@ -113,18 +113,18 @@ while ($row = mysqli_fetch_array($result)) {
 				<ul><strong>
 					<li>ID:</li>
 					<li>Name:</li>
-					<li>Description:</li>
 					<li>Category:</li>
 					<li>Subcategory:</li>
+					<li>Description:</li>
 				</strong></ul>
 			</div>
 			<div class="col-sm-auto">
 				<ul id="info">
 					<li id="id"></li>
 					<li id="acct-name"></li>
-					<li id="desc"></li>
 					<li id="cat"></li>
 					<li id="subcat"></li>
+					<li id="desc"></li>
 				</ul>
 			</div>
 			<div class="col-sm-auto">
@@ -538,9 +538,9 @@ while ($row = mysqli_fetch_array($result)) {
 			function insert_data(...data) {
 				$('#id').html(data[0]);
 				$('#acct-name').html(data[1]);
-				$('#desc').html(data[2]);
-				$('#cat').html(data[3]);
-				$('#subcat').html(data[4]);
+				$('#cat').html(data[2]);
+				$('#subcat').html(data[3]);
+				$('#desc').html(data[4]);
 
 				$('#init').html(data[5]);
 				$('#debit').html(data[6]);

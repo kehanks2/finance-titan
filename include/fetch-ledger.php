@@ -10,9 +10,9 @@ if(isset($_POST['accountName'])) {
 	while ($row = mysqli_fetch_array($result)) {
 		$data[0] = $row['AccountNumber'];
 		$data[1] = $row['AccountName'];
-		$data[2] = $row['Description'];
-		$data[3] = $row['Category'];
-		$data[4] = $row['SubCategory'];
+		$data[2] = $row['Category'];
+		$data[3] = $row['SubCategory'];
+		$data[4] = $row['Description'];
 		
 		$data[5] = $row['InitialBalance'];
 		$data[6] = $row['Debit'];

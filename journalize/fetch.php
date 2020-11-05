@@ -157,7 +157,7 @@
 		
 		// check if manager [gives access to approve/reject buttons]
 		$status_btns = '';
-		if (isset($_POST['manager'])) {
+		if ($_POST['manager'] == 'manager') {
 			if ($row['Status'] == 'Pending') {
 				$status_btns = '
 				<div class="btn-group" role="group">

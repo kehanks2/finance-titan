@@ -82,7 +82,7 @@
 		}
 		
  		$sub_array = array();
- 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber">'. $row["AccountNumber"].'</div>';
+ 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountNumber" data-name="'.$row["AccountName"].'"><a href="#" id="ledger-id" class="ledger">'. $row["AccountNumber"].'</a></div>';
 		
 		$sub_array[] = '<div contenteditable="false" class="update" data-id="'.$row["AccountNumber"].'" data-column="AccountName"><a href="#" id="ledger" class="ledger">'. $row["AccountName"].'</a></div>';
 		

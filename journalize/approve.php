@@ -34,10 +34,34 @@ if (isset($_POST['id'])) {
 
 		$updatequery .= "UPDATE Accounts SET Debit = '$d', Credit = '$c', CurrentBalance = '$curr' WHERE AccountNumber = '$acct_id'; ";
 	}	
-	
+	// query to insert change into event log
+	$eventQuery = "INSERT INTO AccountEvents(
+    Username,
+    AccountAffected,
+    AccountAffectedID,
+    DebitBefore,
+    DebitAfter,
+    CreditBefore,
+    CreditAfter,
+    BalanceBefore,
+    BalanceAfter,
+    ActivityAfter,
+    ActivityBefore) VALUES(
+        'Journal Approved',
+        (SELECT AccountName FROM Accounts WHERE '$acct_id' = AccountNumber),
+        (SELECT AccountNumber FROM Accounts WHERE '$acct_id' = AccountNumber),
+        (SELECT Debit FROM Accounts WHERE '$acct_id' = AccountNumber),
+        $d,
+        (SELECT Credit FROM Accounts WHERE '$acct_id' = AccountNumber),
+        $c,
+        (SELECT CurrentBalance FROM Accounts WHERE '$acct_id' = AccountNumber),
+        $curr,
+        (SELECT IsActive FROM Accounts WHERE '$acct_id' = AccountNumber),
+        (SELECT IsActive FROM Accounts WHERE '$acct_id' = AccountNumber))";	
+    
 	$updatequery .= "UPDATE LedgerEntries SET Status = 'Approved' WHERE LedgerEntryID = '$id'; ";
 
-	if (mysqli_multi_query($db, $updatequery)) {
+	if (mysqli_multi_query($db, $eventQuery)&&mysqli_multi_query($db, $updatequery)) {
 		$data = 10;
 	} else {
 		$data = 11;

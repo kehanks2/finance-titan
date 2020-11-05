@@ -128,6 +128,12 @@ if (isset($_SESSION['inactive'])) {
 				var id = $(this).parents('tr').find('td').find('div').data("id");
 				to_ledger(id, accountName);
 			});
+			
+			$('#account-table').on('click', '#ledger-id', function() {
+				var accountName = $(this).parents('tr').find('td').find('div').data("name");
+				var id = $(this).text();
+				to_ledger(id, accountName);
+			});
 		})
 	</script>
 </body>

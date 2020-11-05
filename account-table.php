@@ -88,9 +88,6 @@ if (isset($_SESSION['inactive'])) {
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by date added">Date Added</th>
 							<th data-toggle="tooltip" data-placement="bottom" title="Sort by creator">Creator</th>
 							<th>Edit</th>
-							<th> <a href= "upload/fileUpload.php">source doc</th>
-							
-							
 						</tr>
 					</thead>
 				</table>
@@ -267,6 +264,12 @@ if (isset($_SESSION['inactive'])) {
 			$('#account-table').on('click', '#ledger', function() {
 				var accountName = $(this).text();
 				var id = $(this).parents('tr').find('td').find('div').data("id");
+				to_ledger(id, accountName);
+			});
+			
+			$('#account-table').on('click', '#ledger-id', function() {
+				var accountName = $(this).parents('tr').find('td').find('div').data("name");
+				var id = $(this).text();
 				to_ledger(id, accountName);
 			});
 			

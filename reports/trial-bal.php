@@ -27,20 +27,23 @@
 		if ($debit) {			
 			$sub_array = array();
 
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".$row['CurrentBalance']."</div><div class='col-sm-3'></div></div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div><div class='col-sm-3'></div></div>";
 			
 			$totald += (double) $curr;
 			
 		} else if ($credit) {			
 			$sub_array = array();
 
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".$row['CurrentBalance']."</div></div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div></div>";
 			
 			$totalc += (double) $curr;
 		}
 		
  		$data[] = $sub_array;
 	}
+
+	$totalc = number_format($totalc, 2);
+	$totald = number_format($totald, 2);
 
 	$data[] = "<div class='row report' style='margin-bottom:10px;'><div class='col-sm-5' style='margin-left:15px;'><strong>Total</strong></div><div class='col-sm-3' style='text-align: right;'><strong>".$totald."</strong></div><div class='col-sm-3' style='text-align: right;'><strong>".$totalc."</strong></div></div>";
 

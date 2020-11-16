@@ -24,11 +24,11 @@
 		}
 
 		if ($category == 'Revenue') {		
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".$row['CurrentBalance']."</div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div>";
 			
 			$totalrev += (double) $curr;
 		} else {
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".$row['CurrentBalance']."</div><div class='col-sm-3'></div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div><div class='col-sm-3'></div>";
 			
 			$totalexp += (double) $curr;
 		}
@@ -36,9 +36,12 @@
  		$data[] = $sub_array;
 	}
 
-	$data[] = "<div class='row report'><div class='col-sm-5' style='text-align: right;'><strong>Total Expenses</strong></div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".$totalexp."</div>";
+	$totalexpa = number_format($totalexp, 2);
 
-	$total = (double) ($totalrev - $totalexp);
+	$data[] = "<div class='row report'><div class='col-sm-5'></div><div class='col-sm-3' style='text-align: right;'><strong>Total Expenses</strong></div><div class='col-sm-3' style='text-align: right;'>".$totalexpa."</div>";
+
+	$total = $totalrev - $totalexp;
+	$total = number_format($total, 2);
 
 	$data[] = "<div class='row report' style='margin-bottom:10px;'><div class='col-sm-5'><strong>Net Income</strong></div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".$total."</div>";
 

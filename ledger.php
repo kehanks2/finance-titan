@@ -147,7 +147,7 @@ while ($row = mysqli_fetch_array($result)) {
 			</div>
 			<div class="col-sm-auto">
 				<ul><strong>
-					<li>Date Added:</li>
+					<li><a class="creation-event" data-target="#view-creation-modal" data-toggle="modal" type="button">Date Added:</a></li>
 					<li>Creator:</li>
 					<li>Account Stmt:</li>
 					<li>Order:</li>
@@ -156,7 +156,9 @@ while ($row = mysqli_fetch_array($result)) {
 			</div>
 			<div class="col-sm-auto">
 				<ul id="other">
-					<li id="date-added"></li>
+					<a class="creation-event" data-target="#view-creation-modal" data-toggle="modal" type="button">
+						<li id="date-added"></li>
+					</a>
 					<li id="creator"></li>
 					<li id="acct-stmt"></li>
 					<li id="order"></li>
@@ -357,12 +359,58 @@ while ($row = mysqli_fetch_array($result)) {
 				<div class="form-group row">
 					<div class="col-sm-5" style="margin-left:15px;"id="view-accounts"></div>
 					<div class="col-sm-3" id="view-debits"></div>					
-					<div class="col-sm-3" id="view-credits"></div<
+					<div class="col-sm-3" id="view-credits"></div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+	
+<!-- VIEW CREATION EVENT MODAL -->
+<div class="modal fade" id="view-creation-modal" tabindex="-1" role="dialog" aria-labelledby="view-creation-label" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="view-creation-label">Creation Event</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				
+				<div class="form-group row">
+					<div class="col-sm-auto">
+						<label for="c-date"><strong>Date:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-date"></div>
+					<div class="col-sm-auto">
+						<label for="c-creator"><strong>Creator:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-creator"></div>
+					<div class="col-sm-auto">
+						<label for="c-id"><strong>Event Log Id:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-id"></div>
+				</div>
+				
+				<div class="form-group row">
+					<div class="col-sm-auto">
+						<label for="c-initial"><strong>Initial:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-initial"></div>
+					<div class="col-sm-auto">
+						<label for="c-cat"><strong>Category:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-cat"></div>
+					<div class="col-sm-auto">
+						<label for="c-subcat"><strong>Subcategory:</strong></label>
+					</div>
+					<div class="col-sm-auto" id="c-subcat"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
 	
 	<!-- Include all compiled plugins (below), or include individual files as needed --> 
   	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
@@ -481,6 +529,7 @@ while ($row = mysqli_fetch_array($result)) {
 				});
 			}
 			
+			// get entry details (modal)
 			function fetch_entry(entry_id, accountName) {
 				$.ajax ({
 					url: 'include/view-entry.php',
@@ -513,6 +562,31 @@ while ($row = mysqli_fetch_array($result)) {
 				$('#view-accounts').html(data[5]);
 				$('#view-debits').html(data[6]);
 				$('#view-credits').html(data[7]);
+			}
+			
+			// get creation event details (modal)
+			$('.creation-event').click(function() {				
+				var accountName = $('#current-account').text();
+				$.ajax ({
+					url: 'include/view-creation.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						accountName: accountName
+					},
+					success: function(data) {
+						updateC(...data);
+					}
+				})
+			})
+			
+			function updateC(...data) {
+				$('#c-date').html(data[0]);
+				$('#c-creator').html(data[1]);
+				$('#c-id').html(data[2]);
+				$('#c-initial').html(data[3]);				
+				$('#c-cat').html(data[4]);
+				$('#c-subcat').html(data[5]);
 			}
 			 
 			// ledger info functions

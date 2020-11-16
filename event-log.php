@@ -5,7 +5,7 @@ if (isset($_SESSION['inactive'])) {
 } else {
 	if ($_SESSION['user_type'] != 'admin') {
 		if ($_SESSION['user_type'] != 'accountant') {
-			if ($_SESSION['user_type'] == 'manager') {
+			if ($_SESSION['user_type'] != 'manager') {
 				header("Location: login.php");
 			}
 		}

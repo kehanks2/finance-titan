@@ -125,12 +125,10 @@ if (isset($_SESSION['inactive'])) {
 			// update table with values specified by user
 			function update_data(id, values) {
 				var desc = values[0];
-				var cat = values[1];
-				var subcat = values[2];				
-				var initbal = values[3];
-				var debit = values[4];				
-				var credit = values[5];				
-				var nside = values[6];
+				var subcat = values[1];				
+				var initbal = values[2];
+				var debit = values[3];				
+				var credit = values[4];	
 				var accountID = id;
 				$.ajax({
 					url:"accounts/update.php",
@@ -138,12 +136,10 @@ if (isset($_SESSION['inactive'])) {
 					dataType: "JSON",
 					data:{
 						desc: desc,
-						cat: cat,
 						subcat: subcat,				
 						initbal: initbal,
 						debit: debit,
 						credit: credit,
-						nside: nside,
 						accountID: accountID
 					},
 					success:function(data) {
@@ -166,6 +162,8 @@ if (isset($_SESSION['inactive'])) {
 						$.each(currentTD, function () {
 							$(this).find('.edt').prop('contenteditable', true);
 						});
+						currentTD.find('#category').prop('disabled', false);
+						currentTD.find('#nside').prop('disabled', false);
 					
 					} else {
 						// if button text != Edit, make fields with class edt no longer editable
@@ -200,6 +198,34 @@ if (isset($_SESSION['inactive'])) {
 
 			});
 			
+			//update dropdown options
+			function update_selected(name, selected, id) {
+				$.ajax({
+					url: 'accounts/update-selected.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						name: name,
+						selected: selected,
+						id: id
+					}
+				});
+			}
+			
+			$('#account-table').on('change', '#category', function() {
+				var name = "Category";
+				var selected = $('option:selected', this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				update_selected(name, selected, id);
+			})
+			
+			$('#account-table').on('change', '#nside', function() {
+				var name = "NormalSide";
+				var selected = $('option:selected', this).text();
+				var id = $(this).parents('tr').find('td').find('div').data("id");
+				update_selected(name, selected, id);
+			})
+						
 			// update active status of specified account
 			function update_active(id, activeStatus) {
 				var accountID = id;

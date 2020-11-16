@@ -226,3 +226,8 @@ input[type=number] {
 .col-form-label {
 	margin-right: 5px;
 }
+
+/* REPORTING */
+.report {
+	margin-top: 7px;
+}

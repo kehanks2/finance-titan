@@ -469,6 +469,20 @@ while ($row = mysqli_fetch_array($result)) {
 				to_ledger(id, accountName);
 			});
 			
+			function approveEntry(id) {
+				$.ajax ({
+					url: 'journalize/approve.php',
+					method: 'POST',
+					dataType: 'JSON',
+					data: {
+						id: id
+					},
+					success: function(data) {
+						getAlert(data);
+					}
+				})
+			}
+			
 			// approve btn function
 			$('#journalize-table').on('click', '.approve-btn', function() {
 				var id = $(this).parents('tr').find('td').find('div').data("id");
@@ -492,7 +506,7 @@ while ($row = mysqli_fetch_array($result)) {
 				})
 			}
 			
-			// approve btn function
+			// reject btn function
 			$('#journalize-table').on('click', '.reject-btn', function() {
 				var id = $(this).parents('tr').find('td').find('div').data("id");
 				$('#ledger-entry-id').text(id);				

@@ -20,15 +20,16 @@
 		
 		if ($row['Category'] != $category) {
 			$category = 'Expense';
+			$data[] = "<div class='row report' style='margin-bottom:10px margin-top: 20px;'><div class='col-sm-5'><strong>Total Revenues</strong></div><div class='col-sm-4'></div><div class='col-sm-2' style='text-align: right; border-top: 1px solid #000; border-bottom: 1px solid #000'>$ ".number_format($totalrev, 2)."</div>";
 			$data[] = "<div class='row report'><div class='col-sm-5'><em>Expenses</em></div></div>";
 		}
 
 		if ($category == 'Revenue') {		
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='padding-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div>";
 			
 			$totalrev += (double) $curr;
 		} else {
-			$sub_array = "<div class='row report'><div class='col-sm-5' style='margin-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div><div class='col-sm-3'></div>";
+			$sub_array = "<div class='row report'><div class='col-sm-5' style='padding-left:15px;'>".$row['AccountName']."</div><div class='col-sm-3' style='text-align: right;'>".number_format($curr, 2)."</div><div class='col-sm-3'></div>";
 			
 			$totalexp += (double) $curr;
 		}
@@ -38,12 +39,12 @@
 
 	$totalexpa = number_format($totalexp, 2);
 
-	$data[] = "<div class='row report'><div class='col-sm-5'></div><div class='col-sm-3' style='text-align: right;'><strong>Total Expenses</strong></div><div class='col-sm-3' style='text-align: right;'>".$totalexpa."</div>";
+	$data[] = "<div class='row report' style='margin-bottom:10px margin-top: 20px;'><div class='col-sm-5'><strong>Total Expenses</strong></div><div class='col-sm-4'></div><div class='col-sm-2' style='text-align: right; border-top: 1px solid #000; border-bottom: 1px solid #000'>$ ".$totalexpa."</div>";
 
 	$total = $totalrev - $totalexp;
 	$total = number_format($total, 2);
 
-	$data[] = "<div class='row report' style='margin-bottom:10px;'><div class='col-sm-5'><strong>Net Income</strong></div><div class='col-sm-3'></div><div class='col-sm-3' style='text-align: right;'>".$total."</div>";
+	$data[] = "<div class='row report' style='margin-bottom:10px margin-top: 20px;'><div class='col-sm-5'><strong>Net Income</strong></div><div class='col-sm-4'></div><div class='col-sm-2' style='text-align: right; border-top: 1px solid #000; border-bottom: 3px double #000'>$ ".$total."</div>";
 
 	$output = array('Income Statement', $data);
 

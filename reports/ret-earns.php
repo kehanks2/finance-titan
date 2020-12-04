@@ -34,13 +34,13 @@
 	$total = (double) ($totalrev - $totalexp);
 	$total = number_format($total, 2);
 
-	$data[] = "<div class='row report'><div class='col-sm-5'><strong>Beg Retained Earnings</strong></div><div class='col-sm-3' style='text-align: right;'>0.00</div>";
+	$data[] = "<div class='row report'><div class='col-sm-6'><strong>Beg Retained Earnings</strong></div><div class='col-sm-1' style='text-align: right;'>$&#160&#160&#160&#160&#160&#160 0.00</div></div>";
 
-	$data[] = "<div class='row report'><div class='col-sm-5'>Add: Net Income</div><div class='col-sm-3' style='text-align: right;'>".$total."</div>";
+	$data[] = "<div class='row report'><div class='col-sm-5'>Add: Net Income</div><div class='col-sm-2' style='text-align: right;'>".$total."</div>";
 
-	$data[] = "<div class='row report'><div class='col-sm-5'>Less: Dividends</div><div class='col-sm-3' style='text-align: right;'>0</div>";
+	$data[] = "<div class='row report'><div class='col-sm-5'>Less: Dividends</div><div class='col-sm-2' style='text-align: right;'>0.00</div>";
 
-	$data[] = "<div class='row report' style='margin-bottom:10px;'><div class='col-sm-5'><strong>End Retained Earnings</strong></div><div class='col-sm-3' style='text-align: right;'>".$total."</div>";
+	$data[] = "<div class='row report' style='margin-bottom:10px;'><div class='col-sm-5'><strong>End Retained Earnings</strong></div><div class='col-sm-2' style='text-align: right; border-top: 1px solid #000; border-bottom: 3px double #000'>$ ".$total."</div>";
 
 //	$input_query = 'Insert INTO Accounts
 //						(AccountName, CurrentBalance)'

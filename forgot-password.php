@@ -14,7 +14,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Finance Titan - Forgot Password</title>
+		<title>Finance Titan - Reset Password</title>
 
 		<!-- Stylesheets -->
 		<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
@@ -34,7 +34,12 @@
 <?php include("include/banner.php"); ?>
 
 <!-- PAGE CONTENT -->
-<div class="container">
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12" id="help-modal-container">
+			<?php include('include/help-modal.php'); ?>
+		</div>
+	</div>
 	<div class="row d-flex justify-content-center">
 		<div class="col-md-6 sign-in-form">
 			<div class="form-group" id="forgot-password-form">
@@ -63,6 +68,11 @@
 <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+		// enable tooltips and popovers
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();
+	</script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var tries_remaining = 3;
@@ -141,11 +151,7 @@
 				}
 			});
 		})
-		
-		// enable tooltips and popovers
-		$('[data-toggle="tooltip"]').tooltip();
-		$('[data-toggle="popover"]').popover();
-		
+				
 		function displayReset(data) {	
 			// function called after user clicks submit
 			// errors:
@@ -167,8 +173,11 @@
 				var username = data[0];
 				var email = data[1];
 				
-				$('#input1').html('<label class="form-label" for="newpassword"><strong>Enter your new password:</strong></label></div><div class="row form-inline" style="margin-top:0px;"><div class="form-group"><input type="password" id="newpassword" class="my-auto form-control" placeholder="New Password"></div><div class="form-group"><i class="fa fa-question-circle-o" data-toggle="popover" title="Password Requirements" data-html="true" data-content="<ul><li>use 8+ characters</li><li>starts with a letter</li><li>include at least one letter, one number, and one special character (such as ! . ? * or &)</li></ul>"></i></div></div>');
-				$('#input2').html('<label class="form label" for="newpasswordcheck"><strong>Retype your password:</strong></label></div><div class="row" style="margin-top:0px;"><div class="form-group"><input type="password" id="newpasswordcheck" class="form-control col-sm-4" placeholder="Retype Password"></div></div>');
+				var input1 = '<label class="form-label" for="newpassword"><strong>Enter your new password:</strong></label></div>';
+				input1 += '<div class="row" style="margin-top:0px;"><div class="form-group col-9">';
+				input1 += '<input type="password" id="newpassword" class="form-control" placeholder="New Password"></div></div>';
+				$('#input1').html(input1);
+				$('#input2').html('<label class="form-label" for="newpasswordcheck"><strong>Retype your password:</strong></label></div><div class="row" style="margin-top:0px;"><div class="form-group col-9"><input type="password" id="newpasswordcheck" class="form-control" placeholder="Retype Password"></div></div>');
 				$('#btn1').html('<button type="button" id="changepw" class="btn btn-lg btn-primary">Submit</button>');
 				
 				var html = '<div id="username" hidden>'+username+'</div>';

@@ -51,12 +51,67 @@ if (isset($_SESSION['inactive'])) {
 			<?php include('include/help-modal.php'); ?>
 		</div>
 	</div>
+	<!-- MANAGER - NEW ENTRIES ALERT -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div id="alert-message"></div>
+		</div>
+	</div>
+	<!-- RATIO CARDS -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="card-deck">
+				<div id="current-ratio" class="card"></div>
+				<div id="debt-ratio" class="card"></div>
+				<div id="3-ratio" class="card"></div>
+				<div id="4-ratio" class="card"></div>
+			</div>
+		</div>
+	</div>
+	
 </section>
 	
     <!-- Include all compiled plugins (below), or include individual files as needed --> 
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap-4.4.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript">
+		$(function () {
+  			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			
+			// MANAGER ONLY FUNCTIONS
+			// checks database for number of pending entries...
+			getAlert();
+			function getAlert() {
+				$.ajax ({
+					url: "include/fetch-alerts.php",
+					type: "POST",
+					dataType: "JSON",
+					success: function(data) {
+						showAlert(data);
+					}
+				})
+			}
+			
+			// ...and displays a specific alert depending on if there are 0 or more than 0 pending.
+			function showAlert(data) {
+				if (data != 0) {
+					var html = '<div class="alert alert-warning"><a href="journalize.php" class="text-decoration-none" style="color:#856404;">There are '+data+' pending journal entries. Click to go to journalize.</a></div>';
+				} else {
+					var html = '<div class="alert alert-success">There are '+data+' pending journal entries.</div>';
+				}
+				$('#alert-message').html(html);
+			}
+			
+			// RATIO FUNCTIONS
+			
+		})
+	
+	</script>
   </body>
 </html>	
 	
